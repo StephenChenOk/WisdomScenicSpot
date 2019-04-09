@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--Toolbar-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_register"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:navigationIcon="@drawable/return_logo"
+        app:title="注册"
+        app:titleTextColor="#666"
+        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+
+    <EditText
+        android:id="@+id/id_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="80dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/line_et"
+        android:hint="账号"
+        android:textCursorDrawable="@drawable/cursor_et" />
+
+
+    <EditText
+        android:id="@+id/password_one_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/line_et"
+        android:hint="密码"
+        android:textCursorDrawable="@drawable/cursor_et"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/password_two_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/line_et"
+        android:hint="确认密码"
+        android:textCursorDrawable="@drawable/cursor_et"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/login_btn"
+        android:text="注册" />
+
+</LinearLayout>
