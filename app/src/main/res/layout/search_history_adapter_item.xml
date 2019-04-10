@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_history_adapter_item"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentTop="true" />
+
+    <!--图标-->
+    <ImageView
+        android:id="@+id/searchLogo_history_search_adapter_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
+        android:src="@drawable/search" />
+
+    <!--地址显示-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/searchLogo_history_search_adapter_item"
+        android:orientation="vertical">
+
+        <!--名称-->
+        <TextView
+            android:id="@+id/title_history_search_adapter_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="象山公园"
+            android:layout_marginRight="60dp"
+            android:textColor="#555"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <!--图标-->
+    <ImageView
+        android:id="@+id/enterLogo_history_search_adapter_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
+        android:src="@drawable/return_logo" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="3dp"
+        android:background="#ddd" />
+
+</RelativeLayout>

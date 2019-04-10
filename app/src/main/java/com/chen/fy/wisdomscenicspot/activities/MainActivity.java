@@ -129,7 +129,9 @@ public class MainActivity extends TakePhotoActivity {
 
     }
 
-
+    /**
+     * 初始化view
+     */
     private void initView(Bundle savedInstanceState) {
         //获取地图控件引用
         mMapView = findViewById(R.id.map);
@@ -193,7 +195,7 @@ public class MainActivity extends TakePhotoActivity {
                 if (aMapLocation != null) {
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
-                        navigateTo(aMapLocation.getLatitude(), aMapLocation.getLongitude());
+                        navigateTo(aMapLocation.getLatitude(), aMapLocation.getLongitude(), 16);
                         //drawFlowRate(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                     } else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -226,13 +228,18 @@ public class MainActivity extends TakePhotoActivity {
         }
     }
 
+    boolean flag = false;
     /**
-     * 移动到某一个位置并显示
+     * 根据经纬度移动到某一个位置并显示
      */
-    private void navigateTo(double latitude, double longitude) {
+    private void navigateTo(double latitude, double longitude, int size) {
         //aMap = mMapView.getMap();//得到aMap对象
         LatLng latLng = new LatLng(latitude, longitude);//构造一个位置
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, size));
+        if(flag){
+            drawFlowRate(latitude,longitude,3);
+        }
+        flag = true;
     }
 
     /**
@@ -258,9 +265,9 @@ public class MainActivity extends TakePhotoActivity {
     }
 
     /**
-     * 将地图移动到某个地址
+     * 通过地址查询此处的信息
      */
-    private void moveToPosition(String city, String address) {
+    private void moveToPosition(String address, String city) {
         geocoderSearch = new GeocodeSearch(this);
         geocoderSearch.setOnGeocodeSearchListener(new MyGeocodeSearchListener());
         // name表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode
@@ -272,24 +279,21 @@ public class MainActivity extends TakePhotoActivity {
     /**
      * 绘制热力图,检测人流量变化
      */
-    private void drawFlowRate(double x, double y) {
-//        //生成热力点坐标列表
-//        LatLng[] latlngs = new LatLng[500];
-//
-//        for (int i = 0; i < 500; i++) {
-//            double x_ = 0;
-//            double y_ = 0;
-//            x_ = Math.random() * 0.05 - 0.025;
-//            y_ = Math.random() * 0.05 - 0.025;
-//            latlngs[i] = new LatLng(x + x_, y + y_);
-//        }
+    private void drawFlowRate(double x, double y, int number) {
+        //生成热力点坐标列表
+        LatLng[] latlngs = new LatLng[number];
 
-        LatLng[] latLngs = new LatLng[1];
-        latLngs[0] = new LatLng(x, y);
+        for (int i = 0; i < number; i++) {
+            double x_ = 0;
+            double y_ = 0;
+            x_ = Math.random() * 0.0005 - 0.00025;
+            y_ = Math.random() * 0.0005 - 0.00025;
+            latlngs[i] = new LatLng(x + x_, y + y_);
+        }
 
         // 构建热力图 HeatmapTileProvider
         HeatmapTileProvider.Builder builder = new HeatmapTileProvider.Builder();
-        builder.data(Arrays.asList(latLngs)) // 设置热力图绘制的数据
+        builder.data(Arrays.asList(latlngs)) // 设置热力图绘制的数据
                 .gradient(DEFAULT_GRADIENT); // 设置热力图渐变，有默认值 DEFAULT_GRADIENT，可不设置该接口
         // Gradient 的设置可见参考手册
         // 构造热力图对象
@@ -309,13 +313,13 @@ public class MainActivity extends TakePhotoActivity {
     private void initSelectBox() {
         LayoutInflater inflater = LayoutInflater.from(this);
         //反射一个自定义的全新的对话框布局
-        View view = inflater.inflate(R.layout.head_icon_dialog, null);
+        View view = inflater.inflate(R.layout.photo_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
         dialog = builder.create();
         //在当前布局中找到控件对象
-        take_photo = view.findViewById(R.id.take_photo);
-        chosen_photo = view.findViewById(R.id.chosen_photo);
+        take_photo = view.findViewById(R.id.take_photo_dialog);
+        chosen_photo = view.findViewById(R.id.chosen_photo_dialog);
         //监听事件
         take_photo.setOnClickListener(new MyOnClickListener());
         chosen_photo.setOnClickListener(new MyOnClickListener());
@@ -366,6 +370,7 @@ public class MainActivity extends TakePhotoActivity {
             requestLocation();   //开始进行定位
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -399,7 +404,6 @@ public class MainActivity extends TakePhotoActivity {
         }
         return type;
     }
-
 
 
     /**
@@ -462,7 +466,10 @@ public class MainActivity extends TakePhotoActivity {
         }
     }
 
-    private class MyGeocodeSearchListener implements GeocodeSearch.OnGeocodeSearchListener{
+    /**
+     * 地理编码接口
+     */
+    private class MyGeocodeSearchListener implements GeocodeSearch.OnGeocodeSearchListener {
         /**
          * 通过经纬度获取地址
          */
@@ -483,9 +490,7 @@ public class MainActivity extends TakePhotoActivity {
                     GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
                     double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
                     double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
-                    String adcode = geocodeAddress.getAdcode();//区域编码
-                    drawFlowRate(latitude, longititude);
-                    navigateTo(latitude, longititude);
+                    navigateTo(latitude,longititude,16);
                 } else {
                     Toast.makeText(MainActivity.this, "地址名出错了!", Toast.LENGTH_SHORT).show();
                 }
@@ -501,27 +506,41 @@ public class MainActivity extends TakePhotoActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.take_photo:     //点击拍照
+                case R.id.take_photo_dialog:     //点击拍照
                     //相机获取照片并剪裁
                     takePhoto.onPickFromCaptureWithCrop(headIconUri, cropOptions);
                     dialog.dismiss();
                     break;
-                case R.id.chosen_photo:   //点击相册
+                case R.id.chosen_photo_dialog:   //点击相册
                     //相册获取照片并剪裁
                     takePhoto.onPickFromGalleryWithCrop(headIconUri, cropOptions);
                     // takePhoto.onPickFromGallery();
                     dialog.dismiss();
                     break;
                 case R.id.user_main:      //点击头像
-                    Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                    startActivity(intent);
+                    Intent intent_user = new Intent(MainActivity.this, UserActivity.class);
+                    startActivity(intent_user);
                     break;
                 case R.id.list_main:      //点击右上角列表
                     showPopupMenu(v);
                     break;
-                case R.id.top_search:
+                case R.id.top_search:     //点击搜索框
+                    Intent intent_search = new Intent(MainActivity.this, SearchActivity.class);
+                    startActivityForResult(intent_search, 1);
                     break;
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    double latitudeData = data.getDoubleExtra("latitude", 0);
+                    double longitudeData = data.getDoubleExtra("longitude", 0);
+                    navigateTo(latitudeData, longitudeData, 16);
+                }
         }
     }
 

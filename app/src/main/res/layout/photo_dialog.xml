@@ -5,13 +5,13 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/take_photo"
+        android:id="@+id/take_photo_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="拍照"/>
 
     <Button
-        android:id="@+id/chosen_photo"
+        android:id="@+id/chosen_photo_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="相册"/>

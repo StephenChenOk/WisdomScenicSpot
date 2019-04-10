@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+
+    <!--数据库名-->
+    <dbname value="WisdomScenicSpot"/>
+    <!--版本号-->
+    <version value="2"/>
+
+    <!--用于指定所有映射集合-->
+    <list>
+        <mapping class="com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo"/>
+    </list>
+
+</litepal>
