@@ -36,7 +36,7 @@
 
         <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/MainTheme">
+            android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,16 +46,24 @@
 
         <activity
             android:name=".activities.UserActivity"
-            android:theme="@style/MainTheme" />
+            android:theme="@style/MyTheme" />
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/MainTheme" />
+            android:theme="@style/MyTheme" />
         <activity
             android:name=".activities.RegisterActivity"
-            android:theme="@style/MainTheme" />
+            android:theme="@style/MyTheme" />
         <activity
             android:name=".activities.SearchActivity"
-            android:theme="@style/MainTheme" />
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.ScenicIdentifyActivity"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.FeedbackActivity"
+            android:theme="@style/MyTheme" />
+
+
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

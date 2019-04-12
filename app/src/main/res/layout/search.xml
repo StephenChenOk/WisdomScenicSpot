@@ -3,37 +3,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:background="#ddd"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <!--Toolbar-->
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_search"
-        style="@style/Toolbar.MyStyle"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:navigationIcon="@drawable/return_logo"
-        app:titleTextColor="#aaa"
-        android:fitsSystemWindows="true"
-        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+    <LinearLayout
+        android:background="#efefef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!--Toolbar-->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_search"
+            style="@style/Toolbar.MyStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:fitsSystemWindows="true"
+            app:navigationIcon="@drawable/return_logo"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:titleTextColor="#aaa" />
 
-    <!--空白view,隔开一段距离,有助于界面好看-->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        <!--空白view,隔开一段距离,有助于界面好看-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/tv_delete_history"
-        android:layout_margin="5dp"
-        android:text="清除历史记录"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_delete_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center"
+            android:text="清除历史记录"
+            android:textColor="#777"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_search_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:gravity="center"
+            android:text="无"
+            android:textColor="#777"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 
 </LinearLayout>

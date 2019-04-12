@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiResult;
@@ -50,12 +51,22 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
      */
     private ArrayList<SearchHistoryInfo> historyInfos;
     /**
+     * 历史搜索适配器
+     */
+    private SearchHistoryAdapter historyAdapter;
+    /**
      * 历史搜索时间比较器
      */
     private HistoryInfoDateComparator historyInfoDateComparator;
-    private AlertDialog dialog;
-    private Button btn_delete;
-    private Button btn_cancel;
+    /**
+     * 历史记录item点击接口
+     */
+    private ItemClickListener mItemClickListener;
+    private AlertDialog delete_one_dialog;
+    private AlertDialog delete_all_dialog;
+    private TextView tv_delete_history;
+    private TextView tv_search_empty;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,8 +93,11 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         recyclerView.setLayoutManager(layoutManager);
 
         //删除历史纪录
-        TextView tv_delete_history = findViewById(R.id.tv_delete_history);
+        tv_delete_history = findViewById(R.id.tv_delete_history);
         tv_delete_history.setOnClickListener(new MyOnClickListener());
+        //显示空的历史记录
+        tv_search_empty = findViewById(R.id.tv_search_empty);
+        tv_search_empty.setVisibility(View.GONE);
 
         //返回键
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -108,8 +122,15 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         historyInfos.clear();
         //从数据库中获取数据
         historyInfos = (ArrayList<SearchHistoryInfo>) LitePal.findAll(SearchHistoryInfo.class);
-
-        Collections.sort(historyInfos, historyInfoDateComparator);
+        //没有历史记录时,不显示删除全部历史记录信息
+        if(historyInfos.isEmpty()){
+            tv_delete_history.setVisibility(View.GONE);
+            tv_search_empty.setVisibility(View.VISIBLE);
+        }else {
+            tv_delete_history.setVisibility(View.VISIBLE);
+            tv_search_empty.setVisibility(View.GONE);
+            Collections.sort(historyInfos, historyInfoDateComparator);
+        }
     }
 
     /**
@@ -117,8 +138,11 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
      */
     private void initHistoryAdapter() {
         initHistoryData();
-        SearchHistoryAdapter historyAdapter = new SearchHistoryAdapter(historyInfos);
-        historyAdapter.setItemClickListener(new MyItemClickListener());
+        historyAdapter = new SearchHistoryAdapter(historyInfos);
+        if(mItemClickListener == null) {
+            mItemClickListener = new MyItemClickListener();
+        }
+        historyAdapter.setItemClickListener(mItemClickListener);
         recyclerView.setAdapter(historyAdapter);
     }
 
@@ -126,8 +150,14 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
      * 搜索成功后进行数据显示,设置适配器
      */
     private void initSearcherAdapter(ArrayList<PoiItem> poiItems) {
+        if(poiItems.isEmpty()){
+            tv_search_empty.setVisibility(View.VISIBLE);
+        }else {
+            tv_delete_history.setVisibility(View.GONE);
+            tv_search_empty.setVisibility(View.GONE);
+        }
         SearchAdapter searchAdapter = new SearchAdapter(poiItems);
-        searchAdapter.setItemClickListener(new MyItemClickListener());
+        searchAdapter.setItemClickListener(mItemClickListener);
         recyclerView.setAdapter(searchAdapter);
     }
 
@@ -277,26 +307,47 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
 
         @Override
         public void onLongClick(View view, int position) {
-            initLongClickSelectBox();
+            initLongClickSelectBox(position);
+            delete_one_dialog.show();
         }
     }
 
     /**
      * 长按item时弹出一个对话框,可进行删除等操作
      */
-    private void initLongClickSelectBox() {
+    private void initLongClickSelectBox(int position) {
         LayoutInflater inflater = LayoutInflater.from(this);
         //反射一个自定义的全新的对话框布局
-        View view = inflater.inflate(R.layout.delect_dialog, null);
+        View view = inflater.inflate(R.layout.delect_item_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
-        dialog = builder.create();
+        delete_one_dialog = builder.create();
         //在当前布局中找到控件对象
-        btn_delete = view.findViewById(R.id.delete_dialog);
-        btn_cancel = view.findViewById(R.id.cancel_dialog);
+        Button btn_item_delete = view.findViewById(R.id.delete_item_dialog);
+        Button btn_item_cancel = view.findViewById(R.id.cancel_item_dialog);
         //监听事件
-        btn_delete.setOnClickListener(new SearchActivity.MyOnClickListener());
-        btn_cancel.setOnClickListener(new SearchActivity.MyOnClickListener());
+        btn_item_delete.setOnClickListener(new SearchActivity.MyOnClickListener(position));
+        btn_item_cancel.setOnClickListener(new SearchActivity.MyOnClickListener(position));
+    }
+
+    /**
+     * 删除所有的历史记录
+     */
+    private void initDeleteAllSelectBox() {
+        //反射一个自定义的全新的对话框布局
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.delect_all_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        builder.setTitle("清空历史记录?");
+        delete_all_dialog = builder.create();
+        //在当前布局中找到控件对象
+        Button btn_all_delete = view.findViewById(R.id.delete_all_dialog);
+        Button btn_all_cancel = view.findViewById(R.id.cancel_all_dialog);
+        //监听事件
+        btn_all_delete.setOnClickListener(new SearchActivity.MyOnClickListener());
+        btn_all_cancel.setOnClickListener(new SearchActivity.MyOnClickListener());
+
     }
 
     /**
@@ -305,24 +356,70 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
      */
     private class MyOnClickListener implements View.OnClickListener{
 
+        /**
+         * 长按时点击的item位置
+         */
+        private int position;
+
+        MyOnClickListener(int position){
+            this.position = position;
+        }
+        MyOnClickListener(){
+        }
+
         @Override
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.tv_delete_history:
-                    LitePal.deleteAll(SearchHistoryInfo.class);
+                    //弹出一个删除全部的选择框
+                    initDeleteAllSelectBox();
+                    delete_all_dialog.show();
                     break;
-                case R.id.delete_dialog:
-
+                case R.id.delete_item_dialog:
+                    ////删除某一条历史纪录
+                    deleteOneHistory(position);
                     //弹出框关闭
-                    dialog.dismiss();
+                    delete_one_dialog.dismiss();
                     break;
-                case R.id.cancel_dialog:
+                case R.id.cancel_item_dialog:
                     //弹出框关闭
-                    dialog.dismiss();
+                    delete_one_dialog.dismiss();
+                    break;
+                case R.id.delete_all_dialog:
+                    //删除全部历史纪录
+                    deleteAllHistory();
+                    //弹出框关闭
+                    delete_all_dialog.dismiss();
+                    break;
+                case R.id.cancel_all_dialog:
+                    //弹出框关闭
+                    delete_all_dialog.dismiss();
                     break;
             }
         }
+
     }
+
+    /**
+     * 删除全部历史记录
+     */
+    private void deleteAllHistory() {
+        LitePal.deleteAll(SearchHistoryInfo.class);
+        //重新初始化
+        initHistoryAdapter();
+    }
+
+    /**
+     * 删除某一个历史记录
+     */
+    private void deleteOneHistory(int position) {
+        //删除某一个记录
+        SearchHistoryInfo historyInfo = historyInfos.get(position);
+        LitePal.delete(SearchHistoryInfo.class,historyInfo.getId());
+        //重新初始化
+        initHistoryAdapter();
+    }
+
 
     /**
      * 搜索时间比较器

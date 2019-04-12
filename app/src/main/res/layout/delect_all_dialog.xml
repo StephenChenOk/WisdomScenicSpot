@@ -5,13 +5,14 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/delete_dialog"
+        android:id="@+id/delete_all_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="删除"/>
+        android:textColor="#f00"
+        android:text="清空"/>
 
     <Button
-        android:id="@+id/cancel_dialog"
+        android:id="@+id/cancel_all_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="取消"/>

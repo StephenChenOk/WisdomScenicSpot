@@ -5,6 +5,10 @@ import org.litepal.crud.LitePalSupport;
 public class SearchHistoryInfo extends LitePalSupport{
 
     /**
+     * id表示
+     */
+    private int id;
+    /**
      * 搜索内容
      */
     private String title;
@@ -21,6 +25,14 @@ public class SearchHistoryInfo extends LitePalSupport{
      * 纬度
      */
     private double longitude;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

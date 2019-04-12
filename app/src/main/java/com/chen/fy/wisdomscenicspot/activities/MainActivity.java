@@ -2,25 +2,19 @@ package com.chen.fy.wisdomscenicspot.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +30,8 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.model.TileOverlayOptions;
 import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeQuery;
@@ -43,16 +39,7 @@ import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chen.fy.wisdomscenicspot.R;
-import com.jph.takephoto.app.TakePhoto;
-import com.jph.takephoto.app.TakePhotoActivity;
-import com.jph.takephoto.model.CropOptions;
-import com.jph.takephoto.model.InvokeParam;
-import com.jph.takephoto.model.TContextWrap;
-import com.jph.takephoto.model.TResult;
-import com.jph.takephoto.permission.PermissionManager;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +47,7 @@ import java.util.List;
 
 import static com.amap.api.maps.model.HeatmapTileProvider.DEFAULT_GRADIENT;
 
-public class MainActivity extends TakePhotoActivity {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * 地图
@@ -71,45 +58,11 @@ public class MainActivity extends TakePhotoActivity {
      */
     private AMap aMap;
     /**
-     * 定位
+     * 当前地图显示位置的经纬度
      */
-    private AMapLocationClient mLocationClient;
-    private AMapLocationListener mLocationListener;
-    private AMapLocationClientOption mLocationOption;
-    /**
-     * 实现控件交互,手势交互等
-     */
-    private UiSettings mUiSettings;
-    /**
-     * 地址转化为坐标
-     */
-    private GeocodeSearch geocoderSearch;
+    private double nowLatitude;
+    private double nowLongitude;
 
-    /**
-     * 顶部控件
-     */
-    private ImageView iv_user;
-    private ImageView iv_list;
-    private TextView tv_search;
-
-    /**
-     * 拍照控件
-     */
-    private TakePhoto takePhoto;
-    private InvokeParam invokeParam;
-
-    /**
-     * 图片剪切以及图片地址
-     */
-    private CropOptions cropOptions;
-    private Uri headIconUri;
-
-    /**
-     * 拍照,相册选择弹出框
-     */
-    private Dialog dialog;
-    private Button take_photo;
-    private Button chosen_photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +72,6 @@ public class MainActivity extends TakePhotoActivity {
 
         //初始化view并设置接口
         initView(savedInstanceState);
-        //初始化点击景物识别时弹出的对话框
-        initSelectBox();
-        //初始化TakePhoto开源库,实现拍照以及从相册中选择图片
-        initTakePhoto();
 
         //申请权限
         applyPermission();
@@ -138,9 +87,12 @@ public class MainActivity extends TakePhotoActivity {
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView.onCreate(savedInstanceState);
 
-        iv_user = findViewById(R.id.user_main);
-        iv_list = findViewById(R.id.list_main);
-        tv_search = findViewById(R.id.top_search);
+        /*
+         * 顶部控件
+         */
+        ImageView iv_user = findViewById(R.id.user_main);
+        ImageView iv_list = findViewById(R.id.list_main);
+        TextView tv_search = findViewById(R.id.top_search);
 
         iv_list.setOnClickListener(new MyOnClickListener());
         iv_user.setOnClickListener(new MyOnClickListener());
@@ -152,7 +104,10 @@ public class MainActivity extends TakePhotoActivity {
      * 控件交互,手势交互
      */
     private void initUiSettings() {
-        mUiSettings = aMap.getUiSettings();//实例化UiSettings类对象
+        /*
+      实现控件交互,手势交互等
+     */
+        UiSettings mUiSettings = aMap.getUiSettings();
 
         //1 定位按钮
         mUiSettings.setMyLocationButtonEnabled(true); //显示默认的定位按钮
@@ -187,9 +142,12 @@ public class MainActivity extends TakePhotoActivity {
      */
     private void initPosition() {
         //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
+        /*
+      定位
+     */
+        AMapLocationClient mLocationClient = new AMapLocationClient(getApplicationContext());
         //声明定位回调监听器
-        mLocationListener = new AMapLocationListener() {
+        AMapLocationListener mLocationListener = new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
                 if (aMapLocation != null) {
@@ -210,7 +168,7 @@ public class MainActivity extends TakePhotoActivity {
         mLocationClient.setLocationListener(mLocationListener);
 
         //初始化AMapLocationClientOption对象,用来设置发起定位的模式和相关参数。
-        mLocationOption = new AMapLocationClientOption();
+        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
         //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置是否返回地址信息（默认返回地址信息）
@@ -220,24 +178,27 @@ public class MainActivity extends TakePhotoActivity {
         mLocationOption.setOnceLocation(true);
 
         mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-        if (null != mLocationClient) {
-            mLocationClient.setLocationOption(mLocationOption);
-            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-            mLocationClient.stopLocation();
-            mLocationClient.startLocation();
-        }
+
+        mLocationClient.setLocationOption(mLocationOption);
+        //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+        mLocationClient.stopLocation();
+        mLocationClient.startLocation();
+
     }
 
     boolean flag = false;
+
     /**
      * 根据经纬度移动到某一个位置并显示
      */
     private void navigateTo(double latitude, double longitude, int size) {
+        nowLatitude = latitude;
+        nowLongitude = longitude;
         //aMap = mMapView.getMap();//得到aMap对象
         LatLng latLng = new LatLng(latitude, longitude);//构造一个位置
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, size));
-        if(flag){
-            drawFlowRate(latitude,longitude,3);
+        if (flag) {
+            drawFlowRate(latitude, longitude, 3);
         }
         flag = true;
     }
@@ -268,12 +229,32 @@ public class MainActivity extends TakePhotoActivity {
      * 通过地址查询此处的信息
      */
     private void moveToPosition(String address, String city) {
-        geocoderSearch = new GeocodeSearch(this);
+        /*
+      地址转化为坐标
+     */
+        GeocodeSearch geocoderSearch = new GeocodeSearch(this);
         geocoderSearch.setOnGeocodeSearchListener(new MyGeocodeSearchListener());
         // name表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode
         GeocodeQuery query = new GeocodeQuery(address, city);
 
         geocoderSearch.getFromLocationNameAsyn(query);
+    }
+
+    /**
+     * 绘制线
+     */
+    private void drawLine(double latitude, double longitude) {
+        //生成热力点坐标列表
+        List<LatLng> latLngs = new ArrayList<LatLng>();
+        for (int i = 0; i < 4; i++) {
+            double x_ = 0;
+            double y_ = 0;
+            x_ = Math.random() * 0.005 - 0.0025;
+            y_ = Math.random() * 0.005 - 0.0025;
+            latLngs.add(new LatLng(latitude + x_, longitude + y_));
+        }
+        aMap.addPolyline(new PolylineOptions().
+                addAll(latLngs).width(5).color(Color.argb(255, 1, 1, 1)));
     }
 
     /**
@@ -304,41 +285,6 @@ public class MainActivity extends TakePhotoActivity {
         tileOverlayOptions.tileProvider(heatmapTileProvider); // 设置瓦片图层的提供者
         // 向地图上添加 TileOverlayOptions 类对象
         aMap.addTileOverlay(tileOverlayOptions);
-    }
-
-
-    /***
-     *  初始化点击景物识别后显示的对话框
-     */
-    private void initSelectBox() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        //反射一个自定义的全新的对话框布局
-        View view = inflater.inflate(R.layout.photo_dialog, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        dialog = builder.create();
-        //在当前布局中找到控件对象
-        take_photo = view.findViewById(R.id.take_photo_dialog);
-        chosen_photo = view.findViewById(R.id.chosen_photo_dialog);
-        //监听事件
-        take_photo.setOnClickListener(new MyOnClickListener());
-        chosen_photo.setOnClickListener(new MyOnClickListener());
-    }
-
-    /**
-     * 初始化TakePhoto开源库,实现拍照以及从相册中选择图片
-     */
-    private void initTakePhoto() {
-        //获得对象
-        takePhoto = getTakePhoto();
-
-        //获取外部存储位置的uri
-        File file = new File(getExternalFilesDir(null), ".jpg");
-        headIconUri = Uri.fromFile(file);
-
-        //进行图片剪切
-        int size = Math.min(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
-        cropOptions = new CropOptions.Builder().setOutputX(size).setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
     }
 
     /**
@@ -391,20 +337,7 @@ public class MainActivity extends TakePhotoActivity {
                 break;
             default:
         }
-        //以下代码为处理Android6.0、7.0动态权限所需(TakePhoto所需)
-        PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionManager.handlePermissionsResult(this, type, invokeParam, this);
     }
-
-    @Override
-    public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
-        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
-        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
-            this.invokeParam = invokeParam;
-        }
-        return type;
-    }
-
 
     /**
      * 点击List后显示的popupMenu
@@ -430,13 +363,15 @@ public class MainActivity extends TakePhotoActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.take_photo:
-                        dialog.show();
+                        Intent intent1 = new Intent(MainActivity.this, ScenicIdentifyActivity.class);
+                        startActivity(intent1);
                         break;
                     case R.id.road_sign:
-
+                        drawLine(nowLatitude, nowLongitude);
                         break;
                     case R.id.feedback:
-
+                        Intent intent2 = new Intent(MainActivity.this, FeedbackActivity.class);
+                        startActivity(intent2);
                         break;
                 }
                 return true;
@@ -450,20 +385,6 @@ public class MainActivity extends TakePhotoActivity {
         });
 
         popupMenu.show();
-    }
-
-    /**
-     * 拍照成功回调
-     */
-    @Override
-    public void takeSuccess(TResult result) {
-        //将拍摄的照片显示出来
-        try {
-            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(headIconUri));
-            //imageView.setImageBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -490,7 +411,7 @@ public class MainActivity extends TakePhotoActivity {
                     GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
                     double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
                     double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
-                    navigateTo(latitude,longititude,16);
+                    navigateTo(latitude, longititude, 16);
                 } else {
                     Toast.makeText(MainActivity.this, "地址名出错了!", Toast.LENGTH_SHORT).show();
                 }
@@ -506,17 +427,6 @@ public class MainActivity extends TakePhotoActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.take_photo_dialog:     //点击拍照
-                    //相机获取照片并剪裁
-                    takePhoto.onPickFromCaptureWithCrop(headIconUri, cropOptions);
-                    dialog.dismiss();
-                    break;
-                case R.id.chosen_photo_dialog:   //点击相册
-                    //相册获取照片并剪裁
-                    takePhoto.onPickFromGalleryWithCrop(headIconUri, cropOptions);
-                    // takePhoto.onPickFromGallery();
-                    dialog.dismiss();
-                    break;
                 case R.id.user_main:      //点击头像
                     Intent intent_user = new Intent(MainActivity.this, UserActivity.class);
                     startActivity(intent_user);
