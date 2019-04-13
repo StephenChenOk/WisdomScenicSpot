@@ -16,13 +16,18 @@
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="#666" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:background="#dedede" />
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
-        android:text="一个景点一个故事"
+        android:text="一景点,一故事"
         android:textColor="@color/my_hint" />
 
     <TextView
@@ -30,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
-        android:text="使用景点识别,便可知晓故事"
+        android:text="景点识别,知晓故事"
         android:textColor="@color/my_hint" />
 
     <RelativeLayout
@@ -44,7 +49,7 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="30dp"
             android:background="@drawable/bg_scenic_identify_frame"
-            android:src="@drawable/add_logo" />
+            android:src="@drawable/camera" />
 
     </RelativeLayout>
 
