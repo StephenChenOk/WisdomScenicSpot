@@ -12,12 +12,12 @@
         android:layout_height="?attr/actionBarSize"
         android:fitsSystemWindows="true"
         app:navigationIcon="@drawable/return_logo"
-        app:title="注册"
+        app:title="游客注册"
         app:titleTextColor="#666"
         app:titleTextAppearance="@style/Toolbar.TitleText"/>
 
     <EditText
-        android:id="@+id/id_register"
+        android:id="@+id/userId_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"

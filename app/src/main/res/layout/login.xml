@@ -13,11 +13,11 @@
         android:fitsSystemWindows="true"
         app:navigationIcon="@drawable/return_logo"
         app:title="登入"
-        app:titleTextColor="#666"
-        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="#666" />
 
     <EditText
-        android:id="@+id/id_login"
+        android:id="@+id/et_userId_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
@@ -26,12 +26,12 @@
         android:background="@null"
         android:drawableBottom="@drawable/line_et"
         android:hint="账号"
-        android:textCursorDrawable="@drawable/cursor_et"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:textCursorDrawable="@drawable/cursor_et" />
 
 
     <EditText
-        android:id="@+id/password_login"
+        android:id="@+id/et_password_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
@@ -40,8 +40,37 @@
         android:background="@null"
         android:drawableBottom="@drawable/line_et"
         android:hint="密码"
-        android:textCursorDrawable="@drawable/cursor_et"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:textCursorDrawable="@drawable/cursor_et" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_visitor_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:buttonTint="@color/colorPrimary"
+            android:checked="true"
+            android:text="游客端" />
+
+        <RadioButton
+            android:id="@+id/rb_manager_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:buttonTint="@color/colorPrimary"
+            android:text="管理员端" />
+
+    </RadioGroup>
 
     <Button
         android:id="@+id/btn_login"
@@ -49,7 +78,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/login_btn"
         android:text="登入" />
 
