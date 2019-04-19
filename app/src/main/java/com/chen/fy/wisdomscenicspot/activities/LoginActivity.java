@@ -58,6 +58,9 @@ public class LoginActivity extends AppCompatActivity implements RadioGroup.OnChe
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(this);
 
+        //当前登入状态默认为游客端
+        loginType = 1;
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

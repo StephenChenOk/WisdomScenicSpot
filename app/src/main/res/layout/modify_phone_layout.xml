@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--Toolbar-->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_modify_phone"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
+        app:navigationIcon="@drawable/return_logo"
+        app:title="修改手机号码"
+        app:titleTextColor="#666"
+        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+
+    <EditText
+        android:id="@+id/modify_phone_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:drawableBottom="@drawable/line_et"
+        android:hint="电话号码"
+        android:textCursorDrawable="@drawable/cursor_et" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
+        android:text="留下电话好联系呀"
+        android:textColor="@color/my_hint"/>
+
+</LinearLayout>

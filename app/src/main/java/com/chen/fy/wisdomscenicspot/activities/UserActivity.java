@@ -1,14 +1,13 @@
 package com.chen.fy.wisdomscenicspot.activities;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.chen.fy.wisdomscenicspot.R;
@@ -16,6 +15,8 @@ import com.chen.fy.wisdomscenicspot.beans.Visitor;
 
 import org.litepal.LitePal;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -54,9 +55,16 @@ public class UserActivity extends AppCompatActivity{
                 case R.id.head_icon_mine:
                 case R.id.user_name_mine:
                 case R.id.info_text_mine:
-                    Intent intent = new Intent(UserActivity.this,LoginActivity.class);
-                    startActivityForResult(intent,1);
-                    break;
+                    if(userId == null || userId.isEmpty()) {   //当还没有登入账号,则进入登入界面
+                        Intent intent = new Intent(UserActivity.this, LoginActivity.class);
+                        startActivityForResult(intent, 1);
+                        break;
+                    }else{    //已经登入账号,则进入显示个人信息界面
+                        Intent intent = new Intent(UserActivity.this,MyInfoActivity.class);
+                        intent.putExtra("userId",userId);
+                        startActivityForResult(intent,2);
+                        break;
+                    }
             }
         }
     }
@@ -64,18 +72,29 @@ public class UserActivity extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 1:
+            case 1:   //登入成功返回账号
                 if (resultCode == RESULT_OK) {
                     userId = data.getStringExtra("userId");
-
                 }
+                break;
+            case 2:   //退出账号
+                if(resultCode == RESULT_OK){
+                    userId = "";
+                }
+                break;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //赋值
+        //显示一些简单的用户信息
+        showInfo();
+        //进行头像加载
+        loadHeadIcon();
+    }
+
+    private void showInfo() {
         if (userId != null && !userId.isEmpty()) {
             List<Visitor> visitors = LitePal.where("userId = ?", userId).find(Visitor.class);
             for (Visitor visitor : visitors) {
@@ -85,6 +104,25 @@ public class UserActivity extends AppCompatActivity{
         } else {
             userName.setText("登入/注册");
             infoText.setText("");
+        }
+    }
+
+    /**
+     * 进行头像加载
+     */
+    private void loadHeadIcon() {
+        if (userId != null && !userId.isEmpty()) {
+            //头像加载
+            File file = new File(this.getExternalFilesDir(null), userId + ".jpg");
+            Uri headIconUri = Uri.fromFile(file);
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream(this.getContentResolver().openInputStream(headIconUri));
+                headIcon.setImageBitmap(bitmap);                    //如果上面产生文件存在异常，则不执行
+            } catch (FileNotFoundException e) {
+                headIcon.setImageResource(R.drawable.user_12);   //捕获异常后，设置头像为默认头像，程序继续执行
+            }
+        }else{
+            headIcon.setImageResource(R.drawable.user_12);
         }
     }
 }

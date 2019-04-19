@@ -62,6 +62,15 @@
         <activity
             android:name=".activities.FeedbackActivity"
             android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.MyInfoActivity"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.ModifyNameActivity"
+            android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.ModifyPhotoActivity"
+            android:theme="@style/MyTheme" />
 
 
 
