@@ -6,18 +6,22 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.utils.ScenicDescribeUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.model.CropOptions;
@@ -29,8 +33,20 @@ import com.jph.takephoto.permission.PermissionManager;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class ScenicIdentifyActivity extends TakePhotoActivity {
 
+    private static final String TAG = "ScenicIdentifyActivity";
+    /**
+     * 服务器ip
+     */
+    private static final String BASE_URL = "http://10.33.23.31:8081/feedback";
     /**
      * 拍照,相册选择弹出框
      */
@@ -52,6 +68,14 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
      * 景物识别图片
      */
     private ImageView im_scenic_identify;
+    /**
+     * 景物描述信息
+     */
+    private TextView tv_scenic_describe;
+    /**
+     * 图片地址
+     */
+    private String imagePath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +95,8 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
      */
     private void initView(){
         im_scenic_identify = findViewById(R.id.im_scenic_identify);
+        tv_scenic_describe = findViewById(R.id.tv_scenic_describe);
+
         im_scenic_identify.setOnClickListener(new MyOnClickListener());
         //设置toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_scenic_identify);
@@ -111,6 +137,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
         //获取外部存储位置的uri
         File file = new File(getExternalFilesDir(null), ".jpg");
         uri = Uri.fromFile(file);
+        imagePath = uri.getPath();
 
         //进行图片剪切
         int size = Math.min(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
@@ -134,7 +161,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
     }
 
     /**
-     * 拍照成功回调
+     * 获取照片成功后成功回调
      */
     @Override
     public void takeSuccess(TResult result) {
@@ -142,8 +169,73 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
         try {
             Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
             im_scenic_identify.setImageBitmap(bitmap);
+            //上传图片到服务器
+            uploadImage();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    /***
+     * 上传图片到服务器进行处理
+     */
+    private void uploadImage() {
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.execute(imagePath);
+    }
+
+    private String doPost(String imagePath) {
+        OkHttpClient mOkHttpClient = new OkHttpClient();
+
+        //setType(MultipartBody.FORM)
+        String result = "error";
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)        //以文件形式上传
+                .addFormDataPart("info", "拍照识别")            //上传的信息
+                .addFormDataPart("image", imagePath,                  //图片
+                        RequestBody.create(MediaType.parse("image/jpg"), new File(imagePath)))
+                .build();
+        Request.Builder reqBuilder = new Request.Builder();
+        Request request = reqBuilder
+                .url(BASE_URL)
+                .post(requestBody)
+                .build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            Log.d(TAG, "响应码 " + response.code());
+            if (response.isSuccessful()) {
+                String resultValue = response.body().string();
+                Log.d(TAG, "响应体 " + resultValue);
+                if(resultValue.equals("象鼻山")){
+                    //载入象鼻山的信息
+                    tv_scenic_describe.setText(ScenicDescribeUtils.getElephantHillInfo());
+                }
+                return resultValue;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 访问网络AsyncTask,访问网络在子线程进行并返回主线程通知访问的结果
+     */
+    class NetworkTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return doPost(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "服务器响应" + result);
         }
     }
 
@@ -172,4 +264,5 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
             }
         }
     }
+
 }

@@ -15,7 +15,10 @@ import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +33,14 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.model.TileOverlayOptions;
+import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeQuery;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chen.fy.wisdomscenicspot.R;
 
@@ -58,11 +62,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private AMap aMap;
     /**
-     * 当前地图显示位置的经纬度
+     * 当前地图显示位置的经纬度和位置
      */
     private double nowLatitude;
     private double nowLongitude;
+    private String nowLocation = "";
 
+    /**
+     * 路线规划控件
+     */
+    private RelativeLayout road_sign_box;
+    private EditText ed_myLocation;
+    private EditText ed_targetLocation;
+    private ImageView iv_road_sign_logo;
+    /**
+     * 路线规划控件是否可见,默认不可见
+     */
+    private boolean isVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
         //初始化view并设置接口
         initView(savedInstanceState);
+
+        //设置路线规划空间是否显示
+        setRoadSignVisible();
 
         //申请权限
         applyPermission();
@@ -87,6 +106,11 @@ public class MainActivity extends AppCompatActivity {
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView.onCreate(savedInstanceState);
 
+        road_sign_box = findViewById(R.id.road_sign_box);
+        ed_myLocation = findViewById(R.id.road_sign_my_location);
+        ed_targetLocation = findViewById(R.id.road_sign_target_location);
+        iv_road_sign_logo = findViewById(R.id.road_sign_start_logo);
+
         /*
          * 顶部控件
          */
@@ -94,10 +118,31 @@ public class MainActivity extends AppCompatActivity {
         ImageView iv_list = findViewById(R.id.list_main);
         TextView tv_search = findViewById(R.id.top_search);
 
-        iv_list.setOnClickListener(new MyOnClickListener());
-        iv_user.setOnClickListener(new MyOnClickListener());
-        tv_search.setOnClickListener(new MyOnClickListener());
+        /**
+         * 地图上各种功能按钮
+         */
+        ImageView iv_camera = findViewById(R.id.iv_camera);
+        ImageView iv_road_sign = findViewById(R.id.iv_road_sign);
+        ImageView iv_feedback = findViewById(R.id.iv_feedback);
 
+        MyOnClickListener myOnClickListener = new MyOnClickListener();
+        iv_list.setOnClickListener(myOnClickListener);
+        iv_user.setOnClickListener(myOnClickListener);
+        tv_search.setOnClickListener(myOnClickListener);
+
+        iv_camera.setOnClickListener(myOnClickListener);
+        iv_road_sign.setOnClickListener(myOnClickListener);
+        iv_feedback.setOnClickListener(myOnClickListener);
+
+    }
+
+    /**
+     * 设置路线规划的起点和终点
+     */
+    private void setLocation() {
+        if(!nowLocation.isEmpty()) {
+            ed_myLocation.setText(nowLocation);
+        }
     }
 
     /**
@@ -133,18 +178,19 @@ public class MainActivity extends AppCompatActivity {
         initPositionDot();
         initUiSettings();
         //设置地图的放缩级别
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-        initPosition();
+       // aMap.moveCamera(CameraUpdateFactory.zoomTo(20));
+        //一开始把地图镜头设置在象山景区
+        navigateTo(25.267222,110.294322);
+        //initPosition();
     }
 
     /**
      * 初始化定位
      */
     private void initPosition() {
-        //初始化定位
         /*
-      定位
-     */
+         * 定位
+         */
         AMapLocationClient mLocationClient = new AMapLocationClient(getApplicationContext());
         //声明定位回调监听器
         AMapLocationListener mLocationListener = new AMapLocationListener() {
@@ -153,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 if (aMapLocation != null) {
                     if (aMapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
-                        navigateTo(aMapLocation.getLatitude(), aMapLocation.getLongitude(), 16);
+                        //navigateTo(aMapLocation.getLatitude(), aMapLocation.getLongitude(), 16);
                         //drawFlowRate(aMapLocation.getLatitude(), aMapLocation.getLongitude());
                     } else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -191,12 +237,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 根据经纬度移动到某一个位置并显示
      */
-    private void navigateTo(double latitude, double longitude, int size) {
+    private void navigateTo(double latitude, double longitude) {
         nowLatitude = latitude;
         nowLongitude = longitude;
         //aMap = mMapView.getMap();//得到aMap对象
         LatLng latLng = new LatLng(latitude, longitude);//构造一个位置
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, size));
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
         if (flag) {
             drawFlowRate(latitude, longitude, 3);
         }
@@ -228,16 +274,31 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 通过地址查询此处的信息
      */
-    private void moveToPosition(String address, String city) {
+    private void addressQuery(String address, String city) {
         /*
-      地址转化为坐标
-     */
+         * 地址转化为坐标
+         */
         GeocodeSearch geocoderSearch = new GeocodeSearch(this);
         geocoderSearch.setOnGeocodeSearchListener(new MyGeocodeSearchListener());
         // name表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode
         GeocodeQuery query = new GeocodeQuery(address, city);
 
         geocoderSearch.getFromLocationNameAsyn(query);
+    }
+
+    /**
+     * 通过经纬度查询此处的信息
+     */
+    private void latitudeAndLongitudeQuery(double latitude, double longitude) {
+        /*
+         * 经纬度
+         */
+        GeocodeSearch geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(new MyGeocodeSearchListener());
+        // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        LatLonPoint latLonPoint = new LatLonPoint(latitude, longitude);
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200, GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
     }
 
     /**
@@ -340,12 +401,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 点击List后显示的popupMenu
+     * 点击List后显示的popupMenu菜单
      */
     @SuppressLint("RestrictedApi")
-    private void showPopupMenu(View view) {
+    private void showListPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.list_menu, popupMenu.getMenu());
 
         try {
             Field field = popupMenu.getClass().getDeclaredField("mPopup");
@@ -367,6 +428,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent1);
                         break;
                     case R.id.road_sign:
+                        isVisible = !isVisible;
+                        setRoadSignVisible();
                         drawLine(nowLatitude, nowLongitude);
                         break;
                     case R.id.feedback:
@@ -383,8 +446,25 @@ public class MainActivity extends AppCompatActivity {
                 // 控件消失时的事件
             }
         });
-
         popupMenu.show();
+    }
+
+    /**
+     * 设置路线规划控件是否可见
+     * visible:可见    invisible:不可见，但保留所占有的空间   gone:不可见，不保留空间
+     */
+    private void setRoadSignVisible() {
+        if (isVisible) {   //可见
+            road_sign_box.setVisibility(View.GONE);
+            ed_myLocation.setVisibility(View.GONE);
+            ed_targetLocation.setVisibility(View.GONE);
+            // iv_road_sign_logo.setVisibility(View.GONE);
+        } else {
+            road_sign_box.setVisibility(View.VISIBLE);
+            ed_myLocation.setVisibility(View.VISIBLE);
+            ed_targetLocation.setVisibility(View.VISIBLE);
+            //iv_road_sign_logo.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -396,7 +476,9 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-
+            if (1000 == i) {   //成功
+                String address = regeocodeResult.getRegeocodeAddress().getDistrict();
+            }
         }
 
         /**
@@ -411,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
                     GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
                     double latitude = geocodeAddress.getLatLonPoint().getLatitude();//纬度
                     double longititude = geocodeAddress.getLatLonPoint().getLongitude();//经度
-                    navigateTo(latitude, longititude, 16);
+                    navigateTo(latitude, longititude);
                 } else {
                     Toast.makeText(MainActivity.this, "地址名出错了!", Toast.LENGTH_SHORT).show();
                 }
@@ -432,11 +514,31 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent_user);
                     break;
                 case R.id.list_main:      //点击右上角列表
-                    showPopupMenu(v);
+                    showListPopupMenu(v);
                     break;
                 case R.id.top_search:     //点击搜索框
                     Intent intent_search = new Intent(MainActivity.this, SearchActivity.class);
                     startActivityForResult(intent_search, 1);
+                    break;
+                case R.id.iv_camera:
+                    Toast.makeText(MainActivity.this, "景物识别", Toast.LENGTH_SHORT).show();
+                    Intent intent1 = new Intent(MainActivity.this, ScenicIdentifyActivity.class);
+                    startActivity(intent1);
+                    break;
+                case R.id.iv_road_sign:
+                    Toast.makeText(MainActivity.this, "路线规划", Toast.LENGTH_SHORT).show();
+                    isVisible = !isVisible;
+                    setLocation();
+                    setRoadSignVisible();
+                    //drawLine(nowLatitude, nowLongitude);
+                    break;
+                case R.id.iv_feedback:
+                    Toast.makeText(MainActivity.this, "景区反馈", Toast.LENGTH_SHORT).show();
+                    Intent intent2 = new Intent(MainActivity.this, FeedbackActivity.class);
+                    startActivity(intent2);
+                    break;
+                case R.id.road_sign_start_logo:
+                    Toast.makeText(MainActivity.this, "开始路线规划", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -449,7 +551,8 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     double latitudeData = data.getDoubleExtra("latitude", 0);
                     double longitudeData = data.getDoubleExtra("longitude", 0);
-                    navigateTo(latitudeData, longitudeData, 16);
+                    nowLocation = data.getStringExtra("nowLocation");
+                    navigateTo(latitudeData, longitudeData);
                 }
         }
     }

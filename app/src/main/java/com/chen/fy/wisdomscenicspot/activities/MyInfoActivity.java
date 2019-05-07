@@ -3,6 +3,7 @@ package com.chen.fy.wisdomscenicspot.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.beans.Visitor;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.TContextWrap;
@@ -149,8 +151,21 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
         headIconUri = Uri.fromFile(file);
 
         //进行图片剪切
-        int size = Math.min(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
-        cropOptions = new CropOptions.Builder().setOutputX(size).setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
+        int size = Math.min(getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
+        cropOptions = new CropOptions.Builder().setOutputX(size).
+                setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
+        //进行图片压缩
+        CompressConfig compressConfig=new CompressConfig.Builder().
+                setMaxSize(100).setMaxPixel(10).create();
+        /**
+         * 启用图片压缩
+         * @param config 压缩图片配置
+         * @param showCompressDialog 压缩时是否显示进度对话框
+         * @return
+         */
+        takePhoto.onEnableCompress(compressConfig,true);
+        takePhoto.onPickFromGallery();
     }
 
     @Override
@@ -210,6 +225,11 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
                 break;
             case R.id.out_my_info:               //点击退出账号
                 setResult(RESULT_OK);
+                //登入状态清空
+                SharedPreferences.Editor editor = getSharedPreferences("login_state",MODE_PRIVATE).edit();
+                editor.putString("userId","");
+                editor.putInt("loginType",-1);
+                editor.apply();
                 finish();
                 break;
         }

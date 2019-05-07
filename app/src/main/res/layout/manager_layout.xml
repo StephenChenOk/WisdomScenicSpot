@@ -13,7 +13,7 @@
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/head_icon_mine"
+            android:id="@+id/head_icon_manager"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginTop="30dp"
@@ -22,24 +22,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/user_name_mine"
+                android:id="@+id/user_name_manager"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="37dp"
-                android:text="登入/注册"
+                android:layout_marginTop="25dp"
+                android:text="管理员01"
+                android:layout_marginLeft="15dp"
                 android:textColor="#000"
-                android:textSize="17dp" />
+                android:textSize="18dp" />
 
             <TextView
-                android:id="@+id/info_text_mine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="7dp"
-                android:text="" />
+                android:text="恪尽职守,尽心尽力" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="7dp"
+                android:text="景区安全的守护者" />
 
         </LinearLayout>
 
@@ -53,7 +60,7 @@
 
     <!--离线地图-->
     <LinearLayout
-        android:id="@+id/map_mine_box"
+        android:id="@+id/map_manager_box"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"
@@ -85,9 +92,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"/>
 
-    <!--我的反馈-->
+    <!--人流显示-->
     <LinearLayout
-        android:id="@+id/feedback_mine_box"
+        android:id="@+id/show_rate_manager_box"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"
@@ -99,14 +106,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/feedback_info" />
+            android:src="@drawable/flow_rate" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:text="我的反馈"
+            android:text="人流显示"
             android:textColor="#333"
             android:textSize="17sp" />
 
@@ -120,9 +127,9 @@
         android:layout_marginRight="10dp"/>
 
 
-    <!--我的收藏-->
+    <!--工作调度-->
     <LinearLayout
-        android:id="@+id/thanking_mine_box"
+        android:id="@+id/job_manager_box"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"
@@ -134,14 +141,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/collection" />
+            android:src="@drawable/dispatch" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:text="我的收藏"
+            android:text="工作调度"
             android:textColor="#333"
             android:textSize="17sp" />
 
@@ -155,9 +162,9 @@
         android:layout_marginRight="10dp"/>
 
 
-    <!--帮助中心-->
+    <!--请求云端-->
     <LinearLayout
-        android:id="@+id/helping_mine_box"
+        android:id="@+id/request_manager_box"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"
@@ -169,14 +176,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/help" />
+            android:src="@drawable/cloud" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:gravity="center"
-            android:text="帮助中心"
+            android:text="请求云端"
             android:textColor="#333"
             android:textSize="17sp" />
 
@@ -190,9 +197,9 @@
         android:background="@color/my_hint" />
 
 
-    <!--设置-->
+    <!--设置中心-->
     <LinearLayout
-        android:id="@+id/set_mine_box"
+        android:id="@+id/setting_manager_box"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"
@@ -223,5 +230,25 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/my_hint" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/out_login_manager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/item_selector"
+            android:layout_marginBottom="10dp"
+            android:text="退出当前账号"
+            android:textColor="#ff0000"
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

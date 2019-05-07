@@ -123,10 +123,10 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         //从数据库中获取数据
         historyInfos = (ArrayList<SearchHistoryInfo>) LitePal.findAll(SearchHistoryInfo.class);
         //没有历史记录时,不显示删除全部历史记录信息
-        if(historyInfos.isEmpty()){
+        if (historyInfos.isEmpty()) {
             tv_delete_history.setVisibility(View.GONE);
             tv_search_empty.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tv_delete_history.setVisibility(View.VISIBLE);
             tv_search_empty.setVisibility(View.GONE);
             Collections.sort(historyInfos, historyInfoDateComparator);
@@ -139,7 +139,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
     private void initHistoryAdapter() {
         initHistoryData();
         historyAdapter = new SearchHistoryAdapter(historyInfos);
-        if(mItemClickListener == null) {
+        if (mItemClickListener == null) {
             mItemClickListener = new MyItemClickListener();
         }
         historyAdapter.setItemClickListener(mItemClickListener);
@@ -150,9 +150,9 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
      * 搜索成功后进行数据显示,设置适配器
      */
     private void initSearcherAdapter(ArrayList<PoiItem> poiItems) {
-        if(poiItems.isEmpty()){
+        if (poiItems.isEmpty()) {
             tv_search_empty.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             tv_delete_history.setVisibility(View.GONE);
             tv_search_empty.setVisibility(View.GONE);
         }
@@ -282,12 +282,14 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     PoiItem poiItem = poiItems.get(position);
                     double latitude = poiItem.getLatLonPoint().getLatitude();
                     double longitude = poiItem.getLatLonPoint().getLongitude();
+                    String nowLocation = poiItem.getTitle();
                     //新增一条历史记录
                     addHistory(poiItem.getTitle(), latitude, longitude);
                     //回传经纬度给谷歌地图进行显示
                     Intent intent = new Intent();
                     intent.putExtra("latitude", latitude);
                     intent.putExtra("longitude", longitude);
+                    intent.putExtra("nowLocation", nowLocation);
                     setResult(RESULT_OK, intent);
                     finish();
                     break;
@@ -352,24 +354,24 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
 
     /**
      * 点击事件
-     *
      */
-    private class MyOnClickListener implements View.OnClickListener{
+    private class MyOnClickListener implements View.OnClickListener {
 
         /**
          * 长按时点击的item位置
          */
         private int position;
 
-        MyOnClickListener(int position){
+        MyOnClickListener(int position) {
             this.position = position;
         }
-        MyOnClickListener(){
+
+        MyOnClickListener() {
         }
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tv_delete_history:
                     //弹出一个删除全部的选择框
                     initDeleteAllSelectBox();
@@ -415,7 +417,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
     private void deleteOneHistory(int position) {
         //删除某一个记录
         SearchHistoryInfo historyInfo = historyInfos.get(position);
-        LitePal.delete(SearchHistoryInfo.class,historyInfo.getId());
+        LitePal.delete(SearchHistoryInfo.class, historyInfo.getId());
         //重新初始化
         initHistoryAdapter();
     }

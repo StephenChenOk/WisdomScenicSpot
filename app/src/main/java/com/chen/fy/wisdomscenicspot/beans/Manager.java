@@ -5,26 +5,18 @@ import org.litepal.crud.LitePalSupport;
 public class Manager extends LitePalSupport {
 
     /**
-     * 用户唯一标识
+     * 唯一标识
      */
     private int id;
     /**
-     * 工作标号
+     * 管理员账号
      */
-    private String jobId;
-    /**
-     * 昵称
-     */
-    private String userName;
+    private String userId;
     /**
      * Hash加密
      */
     private String pwHash;
     private String pwSalt;
-    /**
-     * 手机号码
-     */
-    private String phone;
 
     public int getId() {
         return id;
@@ -34,20 +26,12 @@ public class Manager extends LitePalSupport {
         this.id = id;
     }
 
-    public String getJobId() {
-        return jobId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPwHash() {
@@ -66,11 +50,4 @@ public class Manager extends LitePalSupport {
         this.pwSalt = pwSalt;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

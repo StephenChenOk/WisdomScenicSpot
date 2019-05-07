@@ -44,8 +44,8 @@
 
         <ImageView
             android:id="@+id/im_scenic_identify"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="30dp"
             android:background="@drawable/bg_scenic_identify_frame"
@@ -53,19 +53,26 @@
 
     </RelativeLayout>
 
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         app:cardCornerRadius="4dp">
 
-        <TextView
-            android:id="@+id/tv_scenic_describe"
+        <!--可以滑动看布局外的数据-->
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:text="象山景区象山景区象山景区象山景区象山景区象山景区象山景区象山景区" />
+            android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/tv_scenic_describe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="象山景区象山景区象山景区象山景区象山景区象山景区象山景区象山景区" />
+
+        </ScrollView>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

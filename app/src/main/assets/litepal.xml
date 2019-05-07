@@ -4,12 +4,13 @@
     <!--数据库名-->
     <dbname value="WisdomScenicSpot"/>
     <!--版本号-->
-    <version value="4"/>
+    <version value="5"/>
 
     <!--用于指定所有映射集合-->
     <list>
         <mapping class="com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo"/>
         <mapping class="com.chen.fy.wisdomscenicspot.beans.Visitor"/>
+        <mapping class="com.chen.fy.wisdomscenicspot.beans.Manager"/>
     </list>
 
 </litepal>

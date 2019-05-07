@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,9 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.idst.nls.nlsclientsdk.requests.Constant;
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.utils.HttpUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.TContextWrap;
@@ -28,10 +33,28 @@ import com.jph.takephoto.permission.PermissionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FeedbackActivity extends TakePhotoActivity {
 
 
+    private static final String TAG = "FeedbackActivity";
+    /**
+     * 服务器url
+     */
+    private static final String BASE_URL = "http://10.33.23.31:8081/feedback";
+    /**
+     * 图片地址
+     */
+    private String imagePath;
     /**
      * 拍照,相册选择弹出框
      */
@@ -49,11 +72,21 @@ public class FeedbackActivity extends TakePhotoActivity {
     private CropOptions cropOptions;
     private Uri uri;
     private ImageView iv_photo_feedback;
-    private EditText et_address_name_feedback;
-    private EditText et_address_title_feedback;
-    private EditText et_matters_feedback;
+    private EditText et_address_feedback;
+    private EditText et_location_feedback;
+    private EditText et_title_feedback;
     private EditText et_phone_feedback;
-
+    /**
+     * 我的点击事件
+     */
+    private MyOnClickListener myOnClickListener;
+    /**
+     * 反馈需要提交的信息
+     */
+    private String address;
+    private String location;
+    private String title;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +103,17 @@ public class FeedbackActivity extends TakePhotoActivity {
         //设置toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_feedback);
 
-        et_address_name_feedback = findViewById(R.id.et_address_name_feedback);
-        et_address_title_feedback = findViewById(R.id.et_address_title_feedback);
+        et_address_feedback = findViewById(R.id.et_address_feedback);
+        et_location_feedback = findViewById(R.id.et_location_feedback);
         iv_photo_feedback = findViewById(R.id.iv_photo_feedback);
-        et_matters_feedback = findViewById(R.id.et_matters_feedback);
+        et_title_feedback = findViewById(R.id.et_title_feedback);
         et_phone_feedback = findViewById(R.id.et_phone_feedback);
         Button btn_submit = findViewById(R.id.btn_submit_feedback);
 
-        et_address_name_feedback.setOnClickListener(new MyOnClickListener());
-        et_address_title_feedback.setOnClickListener(new MyOnClickListener());
-        iv_photo_feedback.setOnClickListener(new MyOnClickListener());
-        et_matters_feedback.setOnClickListener(new MyOnClickListener());
-        et_phone_feedback.setOnClickListener(new MyOnClickListener());
-        btn_submit.setOnClickListener(new MyOnClickListener());
+        myOnClickListener = new MyOnClickListener();
+
+        iv_photo_feedback.setOnClickListener(myOnClickListener);
+        btn_submit.setOnClickListener(myOnClickListener);
 
         //自动弹出输入法
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -109,8 +140,8 @@ public class FeedbackActivity extends TakePhotoActivity {
         Button take_photo = view.findViewById(R.id.take_photo_dialog);
         Button chosen_photo = view.findViewById(R.id.chosen_photo_dialog);
         //监听事件
-        take_photo.setOnClickListener(new MyOnClickListener());
-        chosen_photo.setOnClickListener(new MyOnClickListener());
+        take_photo.setOnClickListener(myOnClickListener);
+        chosen_photo.setOnClickListener(myOnClickListener);
     }
 
     /**
@@ -121,12 +152,29 @@ public class FeedbackActivity extends TakePhotoActivity {
         takePhoto = getTakePhoto();
 
         //获取外部存储位置的uri
-        File file = new File(getExternalFilesDir(null), ".jpg");
+        File file = new File(getExternalFilesDir(null), "info.jpg");
         uri = Uri.fromFile(file);
+        imagePath = uri.getPath();
+//        String filePath = uri.getEncodedPath();
+      // imagePath = Uri.decode(filePath);
+        Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
 
         //进行图片剪切
-        int size = Math.min(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
-        cropOptions = new CropOptions.Builder().setOutputX(size).setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
+        int size = Math.min(getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
+        cropOptions = new CropOptions.Builder().setOutputX(size).
+                setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
+
+        //进行图片压缩
+        CompressConfig compressConfig = new CompressConfig.Builder().
+                setMaxSize(50 * 1024).setMaxPixel(800).create();
+        /**
+         * 启用图片压缩
+         * @param config 压缩图片配置
+         * @param showCompressDialog 压缩时是否显示进度对话框
+         * @return
+         */
+        takePhoto.onEnableCompress(compressConfig, true);
     }
 
     @Override
@@ -166,19 +214,12 @@ public class FeedbackActivity extends TakePhotoActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.et_address_name_feedback:
-                    break;
-                case R.id.et_address_title_feedback:
-                    break;
-                case R.id.iv_photo_feedback:
+                case R.id.iv_photo_feedback:      //添加图片
                     dialog.show();
                     break;
-                case R.id.et_matters_feedback:
+                case R.id.btn_submit_feedback:    //提交反馈
+                    submitFeedback();
                     break;
-                case R.id.et_phone_feedback:
-                    break;
-                case R.id.btn_submit_feedback:
-                    Toast.makeText(FeedbackActivity.this, "提交", Toast.LENGTH_SHORT).show();
                 case R.id.take_photo_dialog:
                     //相机获取照片并剪裁
                     takePhoto.onPickFromCaptureWithCrop(uri, cropOptions);
@@ -190,6 +231,75 @@ public class FeedbackActivity extends TakePhotoActivity {
                     dialog.dismiss();
                     break;
             }
+        }
+    }
+
+    private void submitFeedback() {
+        address = et_address_feedback.getText().toString();
+        location = et_location_feedback.getText().toString();
+        title = et_title_feedback.getText().toString();
+        phone = et_phone_feedback.getText().toString();
+        //判断反馈的内容是否已经全部填写完成
+        if(address.isEmpty()||location.isEmpty()||title.isEmpty()||phone.isEmpty()){
+            Toast.makeText(FeedbackActivity.this, "请填写完成再提交", Toast.LENGTH_SHORT).show();
+        }else{  //填写成功
+            Toast.makeText(FeedbackActivity.this, "提交完成", Toast.LENGTH_SHORT).show();
+            NetworkTask networkTask = new NetworkTask();
+            networkTask.execute(imagePath);
+        }
+    }
+
+    private String doPost(String imagePath) {
+        OkHttpClient mOkHttpClient = new OkHttpClient();
+
+        //setType(MultipartBody.FORM)
+        String result = "error";
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)        //以文件形式上传
+                .addFormDataPart("address", address)            //地点名称
+                .addFormDataPart("locationName", location)    //所在位置
+                .addFormDataPart("title", title)           //问题描述
+                .addFormDataPart("phone", phone)           //电话号码
+                .addFormDataPart("image", imagePath,                         //图片
+                        RequestBody.create(MediaType.parse("image/jpg"), new File(imagePath)))
+                .build();
+        Request.Builder reqBuilder = new Request.Builder();
+        Request request = reqBuilder
+                .url(BASE_URL)
+                .post(requestBody)
+                .build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            Log.d(TAG, "响应码 " + response.code());
+            if (response.isSuccessful()) {
+                String resultValue = response.body().string();
+                Log.d(TAG, "响应体 " + resultValue);
+                return resultValue;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 访问网络AsyncTask,访问网络在子线程进行并返回主线程通知访问的结果
+     */
+    class NetworkTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return doPost(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "服务器响应" + result);
         }
     }
 }

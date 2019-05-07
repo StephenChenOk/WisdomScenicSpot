@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:fitsSystemWindows="true"
         app:navigationIcon="@drawable/return_logo"
-        app:title="景物识别"
+        app:title="景区反馈"
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="#666" />
 
@@ -34,7 +34,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/et_address_name_feedback"
+            android:id="@+id/et_address_feedback"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -64,7 +64,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/et_address_title_feedback"
+            android:id="@+id/et_location_feedback"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -128,7 +128,7 @@
         android:background="#eee" />
 
     <EditText
-        android:id="@+id/et_matters_feedback"
+        android:id="@+id/et_title_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"

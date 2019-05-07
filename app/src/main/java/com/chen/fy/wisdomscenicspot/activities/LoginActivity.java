@@ -1,6 +1,7 @@
 package com.chen.fy.wisdomscenicspot.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -104,23 +105,50 @@ public class LoginActivity extends AppCompatActivity implements RadioGroup.OnChe
                 loginType = 2;
                 break;
             case R.id.btn_login:
-                if(loginType == VISITOR_LOGIN){    //登入游客端
-                    String userId = et_userId_login.getText().toString();
-                    String password = et_password_login.getText().toString();
+                String userId;
+                String password;
+                if (loginType == VISITOR_LOGIN) {    //登入游客端
+                    userId = et_userId_login.getText().toString();
+                    password = et_password_login.getText().toString();
                     //用户名存在且密码与用户名对应
-                    if(LoginRegisterUtils.userExisted(userId)&&LoginRegisterUtils.passwordCorrected(userId,password)){
-                        Toast.makeText(LoginActivity.this, "登入成功!", Toast.LENGTH_SHORT).show();
+                    if (LoginRegisterUtils.userExisted(userId, loginType) && LoginRegisterUtils.passwordCorrected(userId, password, loginType)) {
+                        Toast.makeText(LoginActivity.this, "游客登入成功!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent();
-                        intent.putExtra("userId",userId);
-                        setResult(RESULT_OK,intent);
+                        intent.putExtra("userId", userId);
+                        intent.putExtra("loginType", loginType);
+                        setResult(RESULT_OK, intent);
+                        //记录登入状态
+                        saveLoginState(userId, loginType);
                         finish();
                     }
-                }else if(loginType == MANAGER_LOGIN){  //登入管理者端
-
-                }else {
-                    Toast.makeText(MyApplication.getContext(),"登入出错!",Toast.LENGTH_SHORT).show();
+                } else if (loginType == MANAGER_LOGIN) {  //登入管理者端
+                    userId = et_userId_login.getText().toString();
+                    password = et_password_login.getText().toString();
+                    if (LoginRegisterUtils.userExisted(userId, loginType) && LoginRegisterUtils.passwordCorrected(userId, password, loginType)) {
+                        Toast.makeText(LoginActivity.this, "管理员登入成功!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("userId", userId);
+                        intent.putExtra("loginType", loginType);
+                        //记录登入状态
+                        saveLoginState(userId, loginType);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(MyApplication.getContext(), "登入出错!", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
+    }
+
+
+    /**
+     * 保存登入状态
+     */
+    private void saveLoginState(String userId, int loginType) {
+        SharedPreferences.Editor editor = getSharedPreferences("login_state", MODE_PRIVATE).edit();
+        editor.putString("userId", userId);
+        editor.putInt("loginType", loginType);
+        editor.apply();
     }
 }
