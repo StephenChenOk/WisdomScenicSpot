@@ -277,7 +277,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         @Override
         public void onItemClick(View view, int position) {
             switch (view.getId()) {
-                case R.id.view_search_adapter: {
+                case R.id.view_search_adapter: {    //点击搜索到的地点
                     //获取当前item
                     PoiItem poiItem = poiItems.get(position);
                     double latitude = poiItem.getLatLonPoint().getLatitude();
@@ -294,11 +294,12 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     finish();
                     break;
                 }
-                case R.id.view_history_adapter_item: {
+                case R.id.view_history_adapter_item: {    //点击历史搜索的地点
                     SearchHistoryInfo historyInfo = historyInfos.get(position);
                     Intent intent = new Intent();
                     intent.putExtra("latitude", historyInfo.getLatitude());
                     intent.putExtra("longitude", historyInfo.getLongitude());
+                    intent.putExtra("nowLocation", historyInfo.getTitle());
                     setResult(RESULT_OK, intent);
                     finish();
                     break;

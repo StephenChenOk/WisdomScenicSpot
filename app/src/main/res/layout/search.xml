@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="7dp"
             android:gravity="center"
+            android:visibility="gone"
             android:text="清除历史记录"
             android:textColor="#777"
             android:textSize="15sp" />

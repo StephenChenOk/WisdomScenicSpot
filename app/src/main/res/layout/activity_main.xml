@@ -65,6 +65,8 @@
             android:id="@+id/road_sign_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
             android:layout_marginRight="80dp"
             android:background="#fefefe"
             android:padding="7dp">
@@ -79,11 +81,11 @@
                 android:drawableLeft="@drawable/mylocation_icon"
                 android:drawableBottom="@drawable/line_et"
                 android:drawablePadding="10dp"
-                android:hint="象山景区（西一门）"
                 android:singleLine="true"
+                android:text="象山景区-云峰寺"
                 android:textColor="#111"
                 android:textCursorDrawable="@drawable/cursor_et"
-                android:textSize="16sp" />
+                android:textSize="17sp" />
 
             <EditText
                 android:id="@+id/road_sign_target_location"
@@ -100,7 +102,7 @@
                 android:singleLine="true"
                 android:textColor="#111"
                 android:textCursorDrawable="@drawable/cursor_et"
-                android:textSize="16sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:id="@+id/road_sign_start_logo"
@@ -110,21 +112,23 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/go" />
+
             <TextView
+                android:id="@+id/road_sign_go"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="55dp"
-                android:text="Go"
                 android:layout_marginRight="13dp"
-                android:textSize="16sp"
-                android:textColor="#555"/>
+                android:text="Go"
+                android:textColor="#555"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="220dp"
+            android:layout_height="230dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="100dp"
             android:layout_marginRight="10dp"
@@ -135,7 +139,6 @@
                 android:id="@+id/iv_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginTop="7dp"
                 android:layout_weight="1"
                 android:src="@drawable/photo3" />
 
@@ -143,8 +146,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="拍照识别"
-                android:textSize="9sp"
-                android:textColor="#444"/>
+                android:textColor="#444"
+                android:textSize="9sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -163,9 +166,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="拍照识别"
-                android:textSize="9sp"
-                android:textColor="#444"/>
+                android:text="路线规划"
+                android:textColor="#444"
+                android:textSize="9sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -184,9 +187,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="拍照识别"
-                android:textSize="9sp"
-                android:textColor="#444"/>
+                android:text="景区反馈"
+                android:textColor="#444"
+                android:textSize="9sp" />
 
         </LinearLayout>
 

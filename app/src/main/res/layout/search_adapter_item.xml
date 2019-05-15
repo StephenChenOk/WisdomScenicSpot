@@ -32,10 +32,10 @@
             android:id="@+id/title_search_adapter_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/search"
-            android:singleLine="true"
-            android:text="象山公园"
             android:layout_marginRight="60dp"
+            android:singleLine="true"
+            android:src="@drawable/search"
+            android:text="象山公园"
             android:textColor="#555"
             android:textSize="16sp" />
 
@@ -43,10 +43,10 @@
         <TextView
             android:id="@+id/address_search_adapter_item"
             android:layout_width="wrap_content"
-            android:singleLine="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:layout_marginRight="60dp"
+            android:singleLine="true"
             android:src="@drawable/search"
             android:text="广西壮族自治区-桂林市"
             android:textSize="12sp" />

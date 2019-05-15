@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.alibaba.idst.nls.nlsclientsdk.requests.Constant;
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.consts.Consts;
 import com.chen.fy.wisdomscenicspot.utils.HttpUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
@@ -34,6 +35,7 @@ import com.jph.takephoto.permission.PermissionManager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -47,10 +49,7 @@ public class FeedbackActivity extends TakePhotoActivity {
 
 
     private static final String TAG = "FeedbackActivity";
-    /**
-     * 服务器url
-     */
-    private static final String BASE_URL = "http://10.33.23.31:8081/feedback";
+
     /**
      * 图片地址
      */
@@ -156,7 +155,7 @@ public class FeedbackActivity extends TakePhotoActivity {
         uri = Uri.fromFile(file);
         imagePath = uri.getPath();
 //        String filePath = uri.getEncodedPath();
-      // imagePath = Uri.decode(filePath);
+        // imagePath = Uri.decode(filePath);
         Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
 
         //进行图片剪切
@@ -221,7 +220,7 @@ public class FeedbackActivity extends TakePhotoActivity {
                     submitFeedback();
                     break;
                 case R.id.take_photo_dialog:
-                    //相机获取照片并剪裁
+                    //拍照照片并剪裁
                     takePhoto.onPickFromCaptureWithCrop(uri, cropOptions);
                     dialog.dismiss();
                     break;
@@ -234,38 +233,45 @@ public class FeedbackActivity extends TakePhotoActivity {
         }
     }
 
+    /**
+     * 提交反馈
+     */
     private void submitFeedback() {
         address = et_address_feedback.getText().toString();
         location = et_location_feedback.getText().toString();
         title = et_title_feedback.getText().toString();
         phone = et_phone_feedback.getText().toString();
         //判断反馈的内容是否已经全部填写完成
-        if(address.isEmpty()||location.isEmpty()||title.isEmpty()||phone.isEmpty()){
+        if (address.isEmpty() || location.isEmpty() || title.isEmpty() || phone.isEmpty()) {
             Toast.makeText(FeedbackActivity.this, "请填写完成再提交", Toast.LENGTH_SHORT).show();
-        }else{  //填写成功
+        } else {  //填写成功
             Toast.makeText(FeedbackActivity.this, "提交完成", Toast.LENGTH_SHORT).show();
             NetworkTask networkTask = new NetworkTask();
             networkTask.execute(imagePath);
         }
     }
 
+    /**
+     * 进行图片上传
+     */
     private String doPost(String imagePath) {
         OkHttpClient mOkHttpClient = new OkHttpClient();
 
         //setType(MultipartBody.FORM)
         String result = "error";
         RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)        //以文件形式上传
-                .addFormDataPart("address", address)            //地点名称
-                .addFormDataPart("locationName", location)    //所在位置
-                .addFormDataPart("title", title)           //问题描述
-                .addFormDataPart("phone", phone)           //电话号码
+                .setType(MultipartBody.FORM)                    //以文件形式上传
+                .addFormDataPart("requestType","景区反馈")    //上传的类型
+                .addFormDataPart("place", address)                  //地点名称
+                .addFormDataPart("detailed_place", location)        //所在位置
+                .addFormDataPart("content", title)                  //问题描述
+                .addFormDataPart("contact_info", phone)             //电话号码
                 .addFormDataPart("image", imagePath,                         //图片
                         RequestBody.create(MediaType.parse("image/jpg"), new File(imagePath)))
                 .build();
         Request.Builder reqBuilder = new Request.Builder();
         Request request = reqBuilder
-                .url(BASE_URL)
+                .url(Consts.BASE_URL)
                 .post(requestBody)
                 .build();
         try {

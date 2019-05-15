@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.consts.Consts;
 import com.chen.fy.wisdomscenicspot.utils.ScenicDescribeUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
@@ -43,10 +44,7 @@ import okhttp3.Response;
 public class ScenicIdentifyActivity extends TakePhotoActivity {
 
     private static final String TAG = "ScenicIdentifyActivity";
-    /**
-     * 服务器ip
-     */
-    private static final String BASE_URL = "http://10.33.23.31:8081/feedback";
+
     /**
      * 拍照,相册选择弹出框
      */
@@ -76,6 +74,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
      * 图片地址
      */
     private String imagePath;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -191,13 +190,13 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
         String result = "error";
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)        //以文件形式上传
-                .addFormDataPart("info", "拍照识别")            //上传的信息
-                .addFormDataPart("image", imagePath,                  //图片
+                .addFormDataPart("requestType", "景物识别")      //上传的类型，景物识别
+                .addFormDataPart("image", imagePath,            //图片
                         RequestBody.create(MediaType.parse("image/jpg"), new File(imagePath)))
                 .build();
         Request.Builder reqBuilder = new Request.Builder();
         Request request = reqBuilder
-                .url(BASE_URL)
+                .url(Consts.BASE_URL)
                 .post(requestBody)
                 .build();
         try {
