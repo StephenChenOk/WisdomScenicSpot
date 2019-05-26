@@ -193,6 +193,15 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/iv_job_scheduling"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/message"/>
+
     </RelativeLayout>
 
 </LinearLayout>

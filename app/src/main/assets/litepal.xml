@@ -11,6 +11,7 @@
         <mapping class="com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo"/>
         <mapping class="com.chen.fy.wisdomscenicspot.beans.Visitor"/>
         <mapping class="com.chen.fy.wisdomscenicspot.beans.Manager"/>
+        <mapping class="com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo"/>
     </list>
 
 </litepal>

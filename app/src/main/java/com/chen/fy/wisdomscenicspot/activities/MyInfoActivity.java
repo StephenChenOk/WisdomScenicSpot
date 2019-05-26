@@ -165,7 +165,6 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
          * @return
          */
         takePhoto.onEnableCompress(compressConfig,true);
-        takePhoto.onPickFromGallery();
     }
 
     @Override

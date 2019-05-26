@@ -46,32 +46,6 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Manager manager = new Manager();
-        manager.setId(1);
-        manager.setUserId("1");
-        String pwSalt = UUID.randomUUID().toString().substring(0, 5);
-        manager.setPwSalt(pwSalt);
-        String pwHash = LoginRegisterUtils.getMD5("1" + pwSalt);
-        manager.setPwHash(pwHash);
-        manager.save();
-
-        Manager manager2 = new Manager();
-        manager2.setId(2);
-        manager2.setUserId("2");
-        String pwSalt2 = UUID.randomUUID().toString().substring(0, 5);
-        manager2.setPwSalt(pwSalt2);
-        String pwHash2 = LoginRegisterUtils.getMD5("2" + pwSalt2);
-        manager2.setPwHash(pwHash2);
-        manager2.save();
-
-        Manager manager3 = new Manager();
-        manager3.setId(3);
-        manager3.setUserId("3");
-        String pwSalt3 = UUID.randomUUID().toString().substring(0, 5);
-        manager3.setPwSalt(pwSalt3);
-        String pwHash3 = LoginRegisterUtils.getMD5("3" + pwSalt3);
-        manager3.setPwHash(pwHash3);
-        manager3.save();
     }
 
     @Override

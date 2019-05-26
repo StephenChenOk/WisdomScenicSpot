@@ -226,7 +226,7 @@ public class FeedbackActivity extends TakePhotoActivity {
                     break;
                 case R.id.chosen_photo_dialog:
                     //相机获取照片并剪裁
-                    takePhoto.onPickFromCaptureWithCrop(uri, cropOptions);
+                    takePhoto.onPickFromGalleryWithCrop(uri, cropOptions);
                     dialog.dismiss();
                     break;
             }

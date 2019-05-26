@@ -10,16 +10,16 @@ import android.widget.TextView;
 
 import com.amap.api.services.core.PoiItem;
 import com.chen.fy.wisdomscenicspot.R;
-
+import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
 
 import java.util.ArrayList;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+public class JobSchedulingAdapter extends RecyclerView.Adapter<JobSchedulingAdapter.ViewHolder>{
 
-    private ArrayList<PoiItem> lists;
+    private ArrayList<JobSchedulingInfo> lists;
     private ItemClickListener itemClickListener;
 
-    public SearchAdapter(ArrayList<PoiItem> lists) {
+    public JobSchedulingAdapter(ArrayList<JobSchedulingInfo> lists) {
         this.lists = lists;
     }
 
@@ -34,15 +34,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.search_adapter_item, viewGroup, false);
+                .inflate(R.layout.job_scheduling_item_layout, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
-        PoiItem poiItem = lists.get(i);
-        viewHolder.tv_title.setText(poiItem.getTitle());
-        viewHolder.tv_address.setText(String.format("%s%s%s", poiItem.getProvinceName(), poiItem.getCityName(), poiItem.getAdName()));
+        JobSchedulingInfo jobSchedulingInfo = lists.get(i);
+        String address = jobSchedulingInfo.getAddress();
+        String date = jobSchedulingInfo.getDate();
+        String title = jobSchedulingInfo.getTitle();
+        viewHolder.tv_address.setText(address);
+        viewHolder.tv_date.setText(date);
+        viewHolder.tv_title.setText(title);
 
         //实现item的点击事件
         if (itemClickListener != null) {
@@ -69,15 +73,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_title;
         private TextView tv_address;
+        private TextView tv_date;
+        private TextView tv_title;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tv_title = itemView.findViewById(R.id.title_search_adapter_item);
-            tv_address = itemView.findViewById(R.id.address_search_adapter_item);
+            tv_address = itemView.findViewById(R.id.address_job_scheduling);
+            tv_date = itemView.findViewById(R.id.date_job_scheduling);
+            tv_title = itemView.findViewById(R.id.title_job_scheduling);
         }
     }
+
 
 }

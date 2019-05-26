@@ -3,6 +3,7 @@ package com.chen.fy.wisdomscenicspot.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.nfc.Tag;
@@ -70,6 +71,15 @@ public class MainActivity extends AppCompatActivity {
     private final String Tag = "MainActivity";
 
     /**
+     * 跳转查询地点活动的请求吗
+     */
+    private final int SEARCH_REQUEST_CODE = 1;
+    /**
+     * 跳转工作调度活动的请求吗
+     */
+    private final int JOB_SCHEDULING_CODE = 2;
+
+    /**
      * 进行与服务端的实时数据交流
      */
     private WebSocket webSocket;
@@ -103,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText ed_targetLocation;
 
     /**
+     * 呼叫云端控件
+     */
+    private ImageView iv_job_scheduling;
+
+    /**
      * 路线规划控件是否可见,默认不可见
      */
     private boolean isVisible = false;
@@ -115,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
     private Circle circle1;
     private Circle circle2;
     private Circle circle3;
+    /**
+     * 当前的登入状态，游客端/管理员端
+     */
+    private int loginType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         ed_targetLocation = findViewById(R.id.road_sign_target_location);
         ImageView iv_road_sign_logo = findViewById(R.id.road_sign_start_logo);
         TextView tv_road_sign_go = findViewById(R.id.road_sign_go);
+        iv_job_scheduling = findViewById(R.id.iv_job_scheduling);
 
         /*
          * 顶部控件
@@ -179,6 +199,17 @@ public class MainActivity extends AppCompatActivity {
         iv_road_sign.setOnClickListener(myOnClickListener);
         iv_feedback.setOnClickListener(myOnClickListener);
 
+        iv_job_scheduling.setOnClickListener(myOnClickListener);
+    }
+
+    /**
+     * 获取之前的登入状态
+     */
+    private void getLoginState() {
+        SharedPreferences preferences = getSharedPreferences("login_state", MODE_PRIVATE);
+        //userId = preferences.getString("userId", "");
+        loginType = preferences.getInt("loginType", -1);
+        Log.d(Tag, "------>"+String.valueOf(loginType));
     }
 
     /**
@@ -547,24 +578,33 @@ public class MainActivity extends AppCompatActivity {
      */
 
     private void drawFlowRateCircle_Marker(String nowLocation, int number) {
+        int radius = 15;   //人流量圆的半径
         int circleNumber;
         if (number <= 20) {
-            circleNumber = 20;
+            circleNumber = 16;
         } else if (number <= 50) {
+            radius = 17;
             circleNumber = 50;
         } else if (number <= 80) {
+            radius = 18;
             circleNumber = 80;
         } else if (number <= 110) {
+            radius = 19;
             circleNumber = 110;
         } else if (number <= 140) {
+            radius = 20;
             circleNumber = 140;
         } else if (number <= 170) {
+            radius = 21;
             circleNumber = 170;
         } else if (number <= 200) {
+            radius = 22;
             circleNumber = 200;
         } else if (number <= 230) {
+            radius = 23;
             circleNumber = 230;
         } else {
+            radius = 24;
             circleNumber = 255;
         }
         switch (nowLocation) {
@@ -578,7 +618,7 @@ public class MainActivity extends AppCompatActivity {
                 LatLng latLng1 = new LatLng(25.267242, 110.296046);
                 circle1 = aMap.addCircle(new CircleOptions()
                         .center(latLng1)
-                        .radius(16)
+                        .radius(radius)
                         .fillColor(Color.argb(circleNumber, 255, 0, 0))
                         .strokeColor(Color.argb(0, 0, 0, 0)));
                 break;
@@ -592,7 +632,7 @@ public class MainActivity extends AppCompatActivity {
                 LatLng latLng2 = new LatLng(25.267088, 110.296427);
                 circle2 = aMap.addCircle(new CircleOptions()
                         .center(latLng2)
-                        .radius(16)
+                        .radius(radius)
                         .fillColor(Color.argb(circleNumber, 255, 0, 0))
                         .strokeColor(Color.argb(0, 0, 0, 0)));
 
@@ -607,7 +647,7 @@ public class MainActivity extends AppCompatActivity {
                 LatLng latLng3 = new LatLng(25.266798, 110.295988);
                 circle3 = aMap.addCircle(new CircleOptions()
                         .center(latLng3)
-                        .radius(16)
+                        .radius(radius)
                         .fillColor(Color.argb(circleNumber, 255, 0, 0))
                         .strokeColor(Color.argb(0, 0, 0, 0)));
                 break;
@@ -925,7 +965,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.top_search:     //点击搜索框
                     isVisible = false;   //返回界面时不显示布局
                     Intent intent_search = new Intent(MainActivity.this, SearchActivity.class);
-                    startActivityForResult(intent_search, 1);
+                    startActivityForResult(intent_search, SEARCH_REQUEST_CODE);
                     break;
                 case R.id.iv_camera:
                     Toast.makeText(MainActivity.this, "景物识别", Toast.LENGTH_SHORT).show();
@@ -951,6 +991,10 @@ public class MainActivity extends AppCompatActivity {
                     drawLine();
                     Toast.makeText(MainActivity.this, "开始路线规划", Toast.LENGTH_SHORT).show();
                     break;
+                case R.id.iv_job_scheduling:   //工作调度
+                    Intent intent_job_scheduling = new Intent(MainActivity.this, SearchActivity.class);
+                    startActivityForResult(intent_job_scheduling, JOB_SCHEDULING_CODE);
+                    break;
             }
         }
     }
@@ -958,7 +1002,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 1:
+            case SEARCH_REQUEST_CODE:    //从查询活动中返回
                 if (resultCode == RESULT_OK) {
                     double latitudeData = data.getDoubleExtra("latitude", 0);
                     double longitudeData = data.getDoubleExtra("longitude", 0);
@@ -967,6 +1011,16 @@ public class MainActivity extends AppCompatActivity {
                     nowLocation = data.getStringExtra("nowLocation");
                     navigateTo(latitudeData, longitudeData);
                 }
+                break;
+            case JOB_SCHEDULING_CODE:   //从工作调度活动中返回
+                if (resultCode == RESULT_OK) {
+                    double latitudeData = data.getDoubleExtra("latitude", 0);
+                    double longitudeData = data.getDoubleExtra("longitude", 0);
+                    Log.d(Tag, String.valueOf(latitudeData));
+                    Log.d(Tag, String.valueOf(longitudeData));
+                    navigateTo(latitudeData, longitudeData);
+                }
+                break;
         }
     }
 
@@ -986,6 +1040,18 @@ public class MainActivity extends AppCompatActivity {
         setRoadSignVisible();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mMapView.onResume();
+        Log.d(Tag,"onResume");
+        //获取当前登入状态
+        getLoginState();
+        //对不同的登录状态进行不同操作
+        switch (loginType) {
+            case 2:    //显示管理者
+                iv_job_scheduling.setVisibility(View.VISIBLE);   //显示 呼叫云端 功能
+                break;
+            default:   //当loginType不为2时显示常规界面
+                iv_job_scheduling.setVisibility(View.GONE);
+                break;
+        }
     }
 
     @Override

@@ -72,6 +72,9 @@
         <activity
             android:name=".activities.ModifyPhotoActivity"
             android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.JobSchedulingActivity"
+            android:theme="@style/MyTheme" />
 
 
 
