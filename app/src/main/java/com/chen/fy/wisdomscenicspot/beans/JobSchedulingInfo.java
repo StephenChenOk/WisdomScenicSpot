@@ -4,11 +4,20 @@ import org.litepal.crud.LitePalSupport;
 
 public class JobSchedulingInfo extends LitePalSupport {
 
+    private int id;
     private String address;
     private String date;
     private String title;
     private double latitude;
     private double longitude;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getAddress() {
         return address;

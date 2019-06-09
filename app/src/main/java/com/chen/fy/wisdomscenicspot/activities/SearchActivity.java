@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -290,6 +291,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     intent.putExtra("latitude", latitude);
                     intent.putExtra("longitude", longitude);
                     intent.putExtra("nowLocation", nowLocation);
+                    Log.d("chenyisheng", nowLocation + "--->" + latitude + longitude);
                     setResult(RESULT_OK, intent);
                     finish();
                     break;
@@ -300,6 +302,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     intent.putExtra("latitude", historyInfo.getLatitude());
                     intent.putExtra("longitude", historyInfo.getLongitude());
                     intent.putExtra("nowLocation", historyInfo.getTitle());
+                    Log.d("chenyisheng", historyInfo.getTitle() + "--->" + historyInfo.getLatitude() + historyInfo.getLongitude());
                     setResult(RESULT_OK, intent);
                     finish();
                     break;

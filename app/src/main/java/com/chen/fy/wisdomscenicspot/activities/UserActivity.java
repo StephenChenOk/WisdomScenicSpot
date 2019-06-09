@@ -193,7 +193,7 @@ public class UserActivity extends AppCompatActivity {
     private void loadHeadIcon() {
         if (userId != null && !userId.isEmpty()) {
             //头像加载
-            File file = new File(this.getExternalFilesDir(null), userId + ".jpg");
+            File file = new File(this.getExternalFilesDir(null), userId + "headIcon.jpg");
             Uri headIconUri = Uri.fromFile(file);
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(this.getContentResolver().openInputStream(headIconUri));

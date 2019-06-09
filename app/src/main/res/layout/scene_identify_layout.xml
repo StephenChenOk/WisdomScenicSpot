@@ -25,18 +25,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="一景点,一故事"
-        android:textColor="@color/my_hint" />
+        android:textColor="#777" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="景点识别,知晓故事"
-        android:textColor="@color/my_hint" />
+        android:textColor="#777" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,8 +44,8 @@
 
         <ImageView
             android:id="@+id/im_scenic_identify"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="30dp"
             android:background="@drawable/bg_scenic_identify_frame"
@@ -53,12 +53,11 @@
 
     </RelativeLayout>
 
-
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="7dp">
 
         <!--可以滑动看布局外的数据-->
         <ScrollView
@@ -69,8 +68,10 @@
                 android:id="@+id/tv_scenic_describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="象山景区象山景区象山景区象山景区象山景区象山景区象山景区象山景区" />
+                android:textSize="17sp"
+                android:textColor="#555"
+                android:padding="30dp"
+                android:text="未进行识别" />
 
         </ScrollView>
     </android.support.v7.widget.CardView>

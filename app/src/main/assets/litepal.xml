@@ -4,7 +4,7 @@
     <!--数据库名-->
     <dbname value="WisdomScenicSpot"/>
     <!--版本号-->
-    <version value="5"/>
+    <version value="6"/>
 
     <!--用于指定所有映射集合-->
     <list>

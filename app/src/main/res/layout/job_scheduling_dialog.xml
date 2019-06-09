@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:id="@+id/job_scheduling_dialog_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/warning_job_scheduling_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/warning_new" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:text="警告"
+            android:textColor="#FF0000"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title_job_scheduling_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/job_scheduling_dialog_box"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:textColor="#222"
+        android:padding="10dp"
+        android:textSize="17sp"
+        android:text="详细情况详细情况详细情况详细情况详细情况详细情况" />
+
+    <Button
+        android:id="@+id/receive_job_scheduling_dialog_btn"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/title_job_scheduling_dialog"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/login_btn"
+        android:text="收到" />
+
+</RelativeLayout>

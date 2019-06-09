@@ -193,15 +193,32 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_job_scheduling"
-            android:layout_marginBottom="30dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+        <LinearLayout
+            android:id="@+id/job_scheduling_box_main"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/message"/>
+            android:layout_height="70dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="400dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/function_item_bg_selector"
+            android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/iv_job_scheduling"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
+                android:src="@drawable/message" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="调度信息"
+                android:textColor="#444"
+                android:textSize="9sp" />
+
+        </LinearLayout>
     </RelativeLayout>
 
 </LinearLayout>

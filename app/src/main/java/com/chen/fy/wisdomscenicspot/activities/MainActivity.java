@@ -2,6 +2,7 @@ package com.chen.fy.wisdomscenicspot.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,8 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,11 +41,14 @@ import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.HeatmapTileProvider;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.model.TileOverlayOptions;
+import com.amap.api.maps.utils.SpatialRelationUtil;
+import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeQuery;
@@ -50,7 +57,9 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
 import com.chen.fy.wisdomscenicspot.consts.Consts;
+import com.chen.fy.wisdomscenicspot.utils.DateUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -85,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
     private WebSocket webSocket;
 
     /**
+     * 点击接口
+     */
+    private MyOnClickListener myOnClickListener;
+
+    /**
      * 部分景点的人数,普贤塔,桂林抗战遗址,象眼岩
      */
     private int[] numbers = new int[3];
@@ -111,12 +125,6 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout road_sign_box;
     private EditText ed_myLocation;
     private EditText ed_targetLocation;
-
-    /**
-     * 呼叫云端控件
-     */
-    private ImageView iv_job_scheduling;
-
     /**
      * 路线规划控件是否可见,默认不可见
      */
@@ -134,11 +142,21 @@ public class MainActivity extends AppCompatActivity {
      * 当前的登入状态，游客端/管理员端
      */
     private int loginType;
+    /**
+     * 管理员端工作调度控件
+     */
+    private LinearLayout job_scheduling_box_main;
+    /**
+     * 管理员端工作调度弹窗,以及控件
+     */
+    private AlertDialog jobSchedulingDialog;
+    private TextView title_job_scheduling_dialog_tv;
+    private Button receive_job_scheduling_dialog_btn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         //初始化view并设置接口
@@ -172,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         ed_targetLocation = findViewById(R.id.road_sign_target_location);
         ImageView iv_road_sign_logo = findViewById(R.id.road_sign_start_logo);
         TextView tv_road_sign_go = findViewById(R.id.road_sign_go);
-        iv_job_scheduling = findViewById(R.id.iv_job_scheduling);
+        job_scheduling_box_main = findViewById(R.id.job_scheduling_box_main);
 
         /*
          * 顶部控件
@@ -181,14 +199,16 @@ public class MainActivity extends AppCompatActivity {
         ImageView iv_list = findViewById(R.id.list_main);
         TextView tv_search = findViewById(R.id.top_search);
 
-        /**
+        /*
          * 地图上各种功能按钮
          */
         ImageView iv_camera = findViewById(R.id.iv_camera);
         ImageView iv_road_sign = findViewById(R.id.iv_road_sign);
         ImageView iv_feedback = findViewById(R.id.iv_feedback);
 
-        MyOnClickListener myOnClickListener = new MyOnClickListener();
+        if (myOnClickListener == null) {
+            myOnClickListener = new MyOnClickListener();
+        }
         iv_list.setOnClickListener(myOnClickListener);
         iv_user.setOnClickListener(myOnClickListener);
         tv_search.setOnClickListener(myOnClickListener);
@@ -199,7 +219,10 @@ public class MainActivity extends AppCompatActivity {
         iv_road_sign.setOnClickListener(myOnClickListener);
         iv_feedback.setOnClickListener(myOnClickListener);
 
-        iv_job_scheduling.setOnClickListener(myOnClickListener);
+        job_scheduling_box_main.setOnClickListener(myOnClickListener);
+
+        //初始化工作调度弹窗
+        initJobSchedulingDialog();
     }
 
     /**
@@ -209,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("login_state", MODE_PRIVATE);
         //userId = preferences.getString("userId", "");
         loginType = preferences.getInt("loginType", -1);
-        Log.d(Tag, "------>"+String.valueOf(loginType));
+        Log.d(Tag, "------>" + String.valueOf(loginType));
     }
 
     /**
@@ -255,8 +278,8 @@ public class MainActivity extends AppCompatActivity {
         initUiSettings();
         //设置地图的放缩级别
         // aMap.moveCamera(CameraUpdateFactory.zoomTo(20));
-        //一开始把地图镜头设置在象山景区云峰寺
-        navigateTo(25.266559, 110.295011);
+        //一开始把地图镜头设置在太平天国纪念馆
+        navigateTo(25.266431, 110.295181);
         //initPosition();
     }
 
@@ -410,14 +433,14 @@ public class MainActivity extends AppCompatActivity {
         LatLng latLng1 = new LatLng(25.267242, 110.296046);
         marker1 = aMap.addMarker(new MarkerOptions().
                 position(latLng1).title("普贤塔").snippet("人流量：10").visible(true));
-        // 2 桂林抗战遗址
-        LatLng latLng2 = new LatLng(25.266798, 110.295988);
+        // 2 象眼岩
+        LatLng latLng2 = new LatLng(25.267088, 110.296427);
         marker2 = aMap.addMarker(new MarkerOptions().
-                position(latLng2).title("桂林抗战遗址").snippet("人流量：20").visible(true));
-        // 3 象眼岩
-        LatLng latLng3 = new LatLng(25.267088, 110.296427);
+                position(latLng2).title("象眼岩").snippet("人流量：30").visible(true));
+        // 2 桂林抗战遗址
+        LatLng latLng3 = new LatLng(25.266798, 110.295988);
         marker3 = aMap.addMarker(new MarkerOptions().
-                position(latLng3).title("象眼岩").snippet("人流量：30").visible(true));
+                position(latLng3).title("桂林抗战遗址").snippet("人流量：20").visible(true));
 
         //设置接口
         aMap.setOnMarkerClickListener(markerClickListener);
@@ -438,17 +461,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         //生成路线定点坐标列表
-        List<LatLng> latLngs = new ArrayList<LatLng>();
+        List<LatLng> latLngs = new ArrayList<>();
+        //road1(latLngs);
+
         switch (locations[minFlag]) {
-            case "普贤塔":
+            case "tower":
                 road1(latLngs);
 
                 break;
-            case "象眼岩":
+            case "ruins":
                 road2(latLngs);
 
                 break;
-            case "桂林抗战遗址":
+            case "rock":
                 road3(latLngs);
 
                 break;
@@ -456,33 +481,37 @@ public class MainActivity extends AppCompatActivity {
 
         aMap.addPolyline(new PolylineOptions()
                 .addAll(latLngs)
-                .width(15)
+                .width(10)
                 .setUseTexture(true)       //使用纹理图
                 .setCustomTexture
                         (BitmapDescriptorFactory.fromResource(R.drawable.road)));
         //        aMap.addPolyline(new PolylineOptions().
         //               addAll(latLngs).width(5).color(Color.argb(255, 1, 1, 1)));
+        latLngs.clear();
+        new_road1(latLngs);
+        moveLocation(latLngs);
     }
 
     /**
-     * 云峰寺-->至象山景区路线1，途经普贤塔
+     * 醉乡-->至象山景区路线1，途经普贤塔
      *
      * @param latLngs 经过的定点坐标集合
      */
     private void road1(List<LatLng> latLngs) {
         //                             增加往上       增加往右
-        LatLng latLng1 = new LatLng(25.266559, 110.295011);      //云峰寺
-        LatLng latLng2 = new LatLng(25.266577, 110.295141);      //地标2
-        LatLng latLng3 = new LatLng(25.266780, 110.295273);      //地标3
-        LatLng latLng4 = new LatLng(25.266950, 110.295231);      //地标4
-        LatLng latLng5 = new LatLng(25.267153, 110.295631);      //地标5
-        LatLng latLng6 = new LatLng(25.267168, 110.295691);      //地标6
-        LatLng latLng7 = new LatLng(25.267109, 110.295895);      //地标7
-        LatLng latLng8 = new LatLng(25.267157, 110.296042);      //地标8
-        LatLng latLng9 = new LatLng(25.267417, 110.296342);      //地标9
-        LatLng latLng10 = new LatLng(25.267398, 110.296453);     //至象山景区
+        LatLng latLng0 = new LatLng(25.266416, 110.295621);      //醉乡
+        LatLng latLng1 = new LatLng(25.266453, 110.295620);      //地标1
+        LatLng latLng2 = new LatLng(25.266413, 110.295356);      //地标2
+        LatLng latLng3 = new LatLng(25.266510, 110.295420);      //地标3
+        LatLng latLng4 = new LatLng(25.266820, 110.295275);      //地标3
+        LatLng latLng5 = new LatLng(25.266950, 110.295231);      //地标4
+        LatLng latLng6 = new LatLng(25.267153, 110.295631);      //地标5
+        LatLng latLng7 = new LatLng(25.267168, 110.295691);      //地标6
+        LatLng latLng8 = new LatLng(25.267109, 110.295895);      //地标7
+        LatLng latLng9 = new LatLng(25.267157, 110.296042);       //地标8
+        LatLng latLng10 = new LatLng(25.267242, 110.296046);      //地标10
 
-        //LatLng latLng2 = new LatLng(25.267398,110.296453);      //至象山景区
+        latLngs.add(latLng0);
         latLngs.add(latLng1);
         latLngs.add(latLng2);
         latLngs.add(latLng3);
@@ -494,29 +523,96 @@ public class MainActivity extends AppCompatActivity {
         latLngs.add(latLng9);
         latLngs.add(latLng10);
     }
+    /**
+     * 醉乡-->至象山景区路线1，途经普贤塔, 导航用
+     *
+     * @param latLngs 经过的定点坐标集合
+     */
+    private void new_road1(List<LatLng> latLngs) {
+        //                             增加往上       增加往右
+        LatLng latLng0 = new LatLng(25.266416, 110.295621);      //醉乡
+        LatLng latLng1 = new LatLng(25.266453, 110.295620);      //地标1
+        LatLng latLng2 = new LatLng(25.266400, 110.295345);      //地标2
+        LatLng latLng3 = new LatLng(25.266490, 110.295430);      //地标3
+        LatLng latLng4 = new LatLng(25.266570, 110.295390);      //地标3
+        LatLng latLng5 = new LatLng(25.266700, 110.295320);      //地标3
+        LatLng latLng6 = new LatLng(25.266820, 110.295284);      //地标3
+        LatLng latLng7 = new LatLng(25.266963, 110.295227);      //地标4
+        LatLng latLng8 = new LatLng(25.267153, 110.295631);      //地标5
+        LatLng latLng9 = new LatLng(25.267164, 110.295690);      //地标6
+        LatLng latLng10 = new LatLng(25.267107, 110.295890);      //地标7
+        LatLng latLng11 = new LatLng(25.267166, 110.296050);       //地标8
+        LatLng latLng12 = new LatLng(25.267230, 110.296046);      //地标10
+
+        latLngs.add(latLng0);
+        latLngs.add(latLng1);
+        latLngs.add(latLng2);
+        latLngs.add(latLng3);
+        latLngs.add(latLng4);
+        latLngs.add(latLng5);
+        latLngs.add(latLng6);
+        latLngs.add(latLng7);
+        latLngs.add(latLng8);
+        latLngs.add(latLng9);
+        latLngs.add(latLng10);
+        latLngs.add(latLng11);
+        latLngs.add(latLng12);
+    }
 
     /**
-     * 云峰寺-->至象山景区路线2，途经桂林抗战遗址
+     * 醉乡-->至象山景区路线2，途经桂林抗战遗址
      *
      * @param latLngs 经过的定点坐标集合
      */
     private void road2(List<LatLng> latLngs) {
         //                             增加往上       增加往右
-        LatLng latLng1 = new LatLng(25.266559, 110.295011);      //云峰寺
-        LatLng latLng2 = new LatLng(25.266577, 110.295141);      //地标2
-        LatLng latLng3 = new LatLng(25.266403, 110.295363);      //地标3
-        LatLng latLng4 = new LatLng(25.266460, 110.295610);      //地标4
-        LatLng latLng5 = new LatLng(25.266440, 110.295681);      //地标5
-        LatLng latLng6 = new LatLng(25.266463, 110.295721);      //地标6
-        LatLng latLng7 = new LatLng(25.266735, 110.295805);      //地标7
-        LatLng latLng8 = new LatLng(25.266755, 110.295830);      //地标8
-        LatLng latLng9 = new LatLng(25.266738, 110.296025);      //地标9
-        LatLng latLng10 = new LatLng(25.266770, 110.296050);     //地标10
-        LatLng latLng11 = new LatLng(25.266930, 110.296095);     //地标11
-        LatLng latLng12 = new LatLng(25.267160, 110.296300);     //地标12
-        LatLng latLng13 = new LatLng(25.267244, 110.296480);     //地标13
-        LatLng latLng14 = new LatLng(25.267300, 110.296527);     //地标14
-        LatLng latLng15 = new LatLng(25.267398, 110.296453);     //至象山景区
+        LatLng latLng1 = new LatLng(25.266416, 110.295621);      //醉乡
+        LatLng latLng2 = new LatLng(25.266453, 110.295620);      //地标2
+        LatLng latLng3 = new LatLng(25.266440, 110.295681);      //地标3
+        LatLng latLng4 = new LatLng(25.266463, 110.295721);      //地标4
+        LatLng latLng5 = new LatLng(25.266735, 110.295805);      //地标5
+        LatLng latLng6 = new LatLng(25.266745, 110.295845);      //地标6
+        LatLng latLng7 = new LatLng(25.266745, 110.296030);      //地标6
+        LatLng latLng8 = new LatLng(25.266930, 110.296095);     //地标7
+        LatLng latLng9 = new LatLng(25.267160, 110.296300);     //地标8
+        LatLng latLng10 = new LatLng(25.267157, 110.296042);       //地标9
+        LatLng latLng11 = new LatLng(25.267242, 110.296046);      //普贤塔
+
+        latLngs.add(latLng1);
+        latLngs.add(latLng2);
+        latLngs.add(latLng3);
+        latLngs.add(latLng4);
+        latLngs.add(latLng5);
+        latLngs.add(latLng6);
+        latLngs.add(latLng7);
+        latLngs.add(latLng8);
+        latLngs.add(latLng9);
+        latLngs.add(latLng10);
+        latLngs.add(latLng11);
+    }
+
+    /**
+     * 醉乡-->至象山景区路线1，途经象眼岩
+     *
+     * @param latLngs 经过的定点坐标集合
+     */
+    private void road3(List<LatLng> latLngs) {
+        //                             增加往上       增加往右
+        LatLng latLng1 = new LatLng(25.266416, 110.295621);      //醉乡
+        LatLng latLng2 = new LatLng(25.266370, 110.295597);      //地标4
+        LatLng latLng3 = new LatLng(25.266387, 110.296083);      //地标5
+        LatLng latLng4 = new LatLng(25.266425, 110.296220);      //地标6
+        LatLng latLng5 = new LatLng(25.266415, 110.296490);      //地标7
+        LatLng latLng6 = new LatLng(25.266460, 110.296535);      //地标8
+        LatLng latLng7 = new LatLng(25.266793, 110.296583);      //地标9
+        LatLng latLng8 = new LatLng(25.267015, 110.296490);     //地标10
+        LatLng latLng9 = new LatLng(25.267215, 110.296620);     //地标11
+        LatLng latLng10 = new LatLng(25.267370, 110.296630);     //地标12
+        LatLng latLng11 = new LatLng(25.267300, 110.296520);     //地标13
+        LatLng latLng12 = new LatLng(25.267240, 110.296480);     //地标13
+        LatLng latLng13 = new LatLng(25.267160, 110.296300);     //地标13
+        LatLng latLng14 = new LatLng(25.267157, 110.296042);       //地标9
+        LatLng latLng15 = new LatLng(25.267242, 110.296046);      //普贤塔
 
         latLngs.add(latLng1);
         latLngs.add(latLng2);
@@ -535,54 +631,38 @@ public class MainActivity extends AppCompatActivity {
         latLngs.add(latLng15);
     }
 
-    /**
-     * 云峰寺-->至象山景区路线1，途经象眼岩
-     *
-     * @param latLngs 经过的定点坐标集合
-     */
-    private void road3(List<LatLng> latLngs) {
-        //                             增加往上       增加往右
-        LatLng latLng1 = new LatLng(25.266559, 110.295011);      //云峰寺
-        LatLng latLng2 = new LatLng(25.266577, 110.295141);      //地标2
-        LatLng latLng3 = new LatLng(25.266403, 110.295363);      //地标3
-        LatLng latLng4 = new LatLng(25.266373, 110.295473);      //地标4
-        LatLng latLng5 = new LatLng(25.266387, 110.296083);      //地标5
-        LatLng latLng6 = new LatLng(25.266425, 110.296220);      //地标6
-        LatLng latLng7 = new LatLng(25.266415, 110.296490);      //地标7
-        LatLng latLng8 = new LatLng(25.266460, 110.296535);      //地标8
-        LatLng latLng9 = new LatLng(25.266793, 110.296583);      //地标9
-        LatLng latLng10 = new LatLng(25.267015, 110.296490);     //地标10
-        LatLng latLng11 = new LatLng(25.267215, 110.296620);     //地标11
-        LatLng latLng12 = new LatLng(25.267370, 110.296630);     //地标12
-        LatLng latLng13 = new LatLng(25.267320, 110.296520);     //地标13
-        LatLng latLng14 = new LatLng(25.267398, 110.296453);     //至象山景区
+    private void moveLocation(List<LatLng> points){
 
-        latLngs.add(latLng1);
-        latLngs.add(latLng2);
-        latLngs.add(latLng3);
-        latLngs.add(latLng4);
-        latLngs.add(latLng5);
-        latLngs.add(latLng6);
-        latLngs.add(latLng7);
-        latLngs.add(latLng8);
-        latLngs.add(latLng9);
-        latLngs.add(latLng10);
-        latLngs.add(latLng11);
-        latLngs.add(latLng12);
-        latLngs.add(latLng13);
-        latLngs.add(latLng14);
+        LatLngBounds bounds = new LatLngBounds(points.get(0), points.get(points.size() - 2));
+        aMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+
+        SmoothMoveMarker smoothMarker = new SmoothMoveMarker(aMap);
+        // 设置滑动的图标
+        smoothMarker.setDescriptor(BitmapDescriptorFactory.fromResource(R.drawable.locations_1));
+
+        LatLng drivePoint = points.get(0);
+        Pair<Integer, LatLng> pair = SpatialRelationUtil.calShortestDistancePoint(points, drivePoint);
+        points.set(pair.first, drivePoint);
+        List<LatLng> subList = points.subList(pair.first, points.size());
+        // 设置滑动的轨迹左边点
+        smoothMarker.setPoints(subList);
+        // 设置滑动的总时间
+        smoothMarker.setTotalDuration(20);
+        // 开始滑动
+        smoothMarker.startSmoothMove();
     }
 
     /**
      * 根据人流量变化画出显示人流量多少的圆形
      */
-
     private void drawFlowRateCircle_Marker(String nowLocation, int number) {
         int radius = 15;   //人流量圆的半径
         int circleNumber;
-        if (number <= 20) {
-            circleNumber = 16;
-        } else if (number <= 50) {
+        if (number <= 5) {
+            circleNumber = 10;
+        } else if (number <= 15) {
+            circleNumber = 30;
+        } else if (number <= 30) {
             radius = 17;
             circleNumber = 50;
         } else if (number <= 80) {
@@ -608,9 +688,7 @@ public class MainActivity extends AppCompatActivity {
             circleNumber = 255;
         }
         switch (nowLocation) {
-            case "普贤塔":
-                Log.d(Tag, "普贤塔:" + number);
-                //drawFlowRate(25.267242, 110.296046, numbers[t]);   //普贤塔
+            case "tower":       //普贤塔
                 marker1.setSnippet("人流量：" + number);
                 if (circle1 != null) {
                     circle1.remove();
@@ -622,9 +700,7 @@ public class MainActivity extends AppCompatActivity {
                         .fillColor(Color.argb(circleNumber, 255, 0, 0))
                         .strokeColor(Color.argb(0, 0, 0, 0)));
                 break;
-            case "象眼岩":
-                Log.d(Tag, "象眼岩:" + number);
-                //drawFlowRate(25.266798, 110.296038, numbers[t]);   //象眼岩
+            case "rock":            //象眼岩
                 marker2.setSnippet("人流量：" + number);
                 if (circle2 != null) {
                     circle2.remove();
@@ -637,9 +713,7 @@ public class MainActivity extends AppCompatActivity {
                         .strokeColor(Color.argb(0, 0, 0, 0)));
 
                 break;
-            case "桂林抗战遗址":
-                Log.d(Tag, "桂林抗战遗址:" + number);
-                //drawFlowRate(25.267088, 110.296427, numbers[t]);   //桂林抗战遗址
+            case "ruins":       //桂林抗战遗址
                 marker3.setSnippet("人流量：" + number);
                 if (circle3 != null) {
                     circle3.remove();
@@ -918,12 +992,13 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param text 人数信息
      */
+    private boolean is_show_dialog = true;
     private void updateMap(final String text) {
-
+        //Log.d("updateMap",text);
         int i, j = 0, k = 0;   //循环参数
         //格式：  地点/人数/地点/人数
-        String[] s = text.split("/");
-        for (i = 0; i < s.length; i++) {
+        String[] s = text.split(",");
+        for (i = 0; i < 6; i++) {
             if (i % 2 == 0) {    //地点获取
                 locations[j] = s[i];
                 j++;
@@ -937,14 +1012,69 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                //获取登入状态
+                getLoginState();
                 //各个景区人流量显示
                 for (int t = 0; t < locations.length; t++) {
-                    Log.d("chenyisheng", locations[t] + "---->" + numbers[t]);
+                    //画出人流量圆形
                     drawFlowRateCircle_Marker(locations[t], numbers[t]);
+                    if (2 == loginType && numbers[t] >= 10 && is_show_dialog) {
+                        is_show_dialog = false;
+                        JobSchedulingInfo info = new JobSchedulingInfo();
+                        long time = System.currentTimeMillis();
+                        switch (locations[t]) {
+                            case "tower":
+                                title_job_scheduling_dialog_tv.setText("普贤塔:出现人流量过多情况，请工作人员前去引导疏通");
+                                info.setDate(DateUtils.dateToString(time));
+                                info.setAddress("普贤塔");
+                                info.setTitle("出现人流量过多情况，请工作人员前去引导疏通");
+                                info.setLatitude(25.267242);
+                                info.setLongitude(110.296046);
+                                break;
+                            case "rock":
+                                title_job_scheduling_dialog_tv.setText("象眼岩:出现人流量过多情况，请工作人员前去引导疏通");
+                                info.setDate(DateUtils.dateToString(time));
+                                info.setAddress("象眼岩");
+                                info.setTitle("出现人流量过多情况，请工作人员前去引导疏通");
+                                info.setLatitude(25.267088);
+                                info.setLongitude(110.296427);
+                                break;
+                            case "ruins":
+                                title_job_scheduling_dialog_tv.setText("桂林抗战景区:出现人流量过多情况，请工作人员前去引导疏通");
+                                info.setDate(DateUtils.dateToString(time));
+                                info.setTitle("桂林抗战景区");
+                                info.setAddress("出现人流量过多情况，请工作人员前去引导疏通");
+                                info.setLatitude(25.266798);
+                                info.setLongitude(110.295988);
+                                break;
+                        }
+                        jobSchedulingDialog.show();
+                    }
                 }
             }
         });
 
+    }
+
+
+    /**
+     * 初始化工作调度弹窗
+     */
+    private void initJobSchedulingDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        //反射一个自定义的全新的对话框布局
+        View view = inflater.inflate(R.layout.job_scheduling_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        jobSchedulingDialog = builder.create();
+        //设置不可以点击弹窗之后进行取消
+        jobSchedulingDialog.setCanceledOnTouchOutside(false);
+        //在当前布局中找到控件对象
+        title_job_scheduling_dialog_tv = view.findViewById(R.id.title_job_scheduling_dialog);
+        receive_job_scheduling_dialog_btn = view.findViewById(R.id.receive_job_scheduling_dialog_btn);
+
+        //监听事件
+        receive_job_scheduling_dialog_btn.setOnClickListener(myOnClickListener);
     }
 
     /**
@@ -991,12 +1121,25 @@ public class MainActivity extends AppCompatActivity {
                     drawLine();
                     Toast.makeText(MainActivity.this, "开始路线规划", Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.iv_job_scheduling:   //工作调度
-                    Intent intent_job_scheduling = new Intent(MainActivity.this, SearchActivity.class);
+                case R.id.job_scheduling_box_main:   //工作调度
+                    Intent intent_job_scheduling = new Intent(MainActivity.this, JobSchedulingActivity.class);
                     startActivityForResult(intent_job_scheduling, JOB_SCHEDULING_CODE);
+                    break;
+                case R.id.title_job_scheduling_dialog: //工作调度弹窗详细情况说明
+
+                    break;
+                case R.id.receive_job_scheduling_dialog_btn:    //工作调度弹窗收到按钮
+                    addJobScheduling();
+                    jobSchedulingDialog.dismiss();
                     break;
             }
         }
+    }
+
+    /**
+     * 增加工作调度安排
+     */
+    private void addJobScheduling() {
     }
 
     @Override
@@ -1040,16 +1183,16 @@ public class MainActivity extends AppCompatActivity {
         setRoadSignVisible();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mMapView.onResume();
-        Log.d(Tag,"onResume");
+        Log.d(Tag, "onResume");
         //获取当前登入状态
         getLoginState();
         //对不同的登录状态进行不同操作
         switch (loginType) {
             case 2:    //显示管理者
-                iv_job_scheduling.setVisibility(View.VISIBLE);   //显示 呼叫云端 功能
+                job_scheduling_box_main.setVisibility(View.VISIBLE);   //显示 呼叫云端 功能
                 break;
             default:   //当loginType不为2时显示常规界面
-                iv_job_scheduling.setVisibility(View.GONE);
+                job_scheduling_box_main.setVisibility(View.GONE);
                 break;
         }
     }

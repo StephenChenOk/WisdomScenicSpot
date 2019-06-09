@@ -13,6 +13,7 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.JobSchedulingAdapter;
 import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
+import com.chen.fy.wisdomscenicspot.utils.DateUtils;
 
 import org.litepal.LitePal;
 
@@ -32,6 +33,7 @@ public class JobSchedulingActivity extends AppCompatActivity {
         setContentView(R.layout.job_scheduling_layout);
 
         initView();
+
     }
 
     private void initView() {
@@ -62,33 +64,10 @@ public class JobSchedulingActivity extends AppCompatActivity {
     }
 
     private void initData() {
+
         if (lists == null) {
             lists = new ArrayList<>();
         }
-        JobSchedulingInfo jobSchedulingInfo1 = new JobSchedulingInfo();
-        jobSchedulingInfo1.setAddress("普贤塔");
-        jobSchedulingInfo1.setDate("2019-5-26 15:00");
-        jobSchedulingInfo1.setTitle("人流量太大，请速去疏通，以免发生安全事故");
-        jobSchedulingInfo1.setLatitude(25.267242);
-        jobSchedulingInfo1.setLatitude(110.296046);
-        jobSchedulingInfo1.save();
-
-        JobSchedulingInfo jobSchedulingInfo2 = new JobSchedulingInfo();
-        jobSchedulingInfo2.setAddress("云峰寺");
-        jobSchedulingInfo2.setDate("2019-5-26 15:05");
-        jobSchedulingInfo2.setTitle("路口人多，拥挤，有车辆停放在入口");
-        jobSchedulingInfo1.setLatitude(25.266559);
-        jobSchedulingInfo1.setLatitude(110.295011);
-        jobSchedulingInfo2.save();
-
-        JobSchedulingInfo jobSchedulingInfo3 = new JobSchedulingInfo();
-        jobSchedulingInfo3.setAddress("桂林抗战景区");
-        jobSchedulingInfo3.setDate("2019-5-26 15:30");
-        jobSchedulingInfo3.setTitle("有人员受伤，请速去查看情况");
-        jobSchedulingInfo1.setLatitude(25.266798);
-        jobSchedulingInfo1.setLatitude(110.295988);
-        jobSchedulingInfo3.save();
-
         //清除数据,以免重复
         lists.clear();
         //从数据库中获取数据

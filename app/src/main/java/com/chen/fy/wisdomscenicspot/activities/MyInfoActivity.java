@@ -147,24 +147,24 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
         //获得对象
         takePhoto = getTakePhoto();
         //获取外部存储位置的uri
-        File file = new File(getExternalFilesDir(null), userId + ".jpg");
+        File file = new File(getExternalFilesDir(null), userId + "headIcon.jpg");
         headIconUri = Uri.fromFile(file);
 
         //进行图片剪切
         int size = Math.min(getResources().getDisplayMetrics().widthPixels,
                 getResources().getDisplayMetrics().heightPixels);
         cropOptions = new CropOptions.Builder().setOutputX(size).
-                setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
-        //进行图片压缩
-        CompressConfig compressConfig=new CompressConfig.Builder().
-                setMaxSize(100).setMaxPixel(10).create();
+                setOutputX(size).setWithOwnCrop(false).create();  //true表示使用TakePhoto自带的裁剪工具
+//        //进行图片压缩
+//        CompressConfig compressConfig=new CompressConfig.Builder().
+//                setMaxSize(100).setMaxPixel(10).create();
         /**
          * 启用图片压缩
          * @param config 压缩图片配置
          * @param showCompressDialog 压缩时是否显示进度对话框
          * @return
          */
-        takePhoto.onEnableCompress(compressConfig,true);
+//        takePhoto.onEnableCompress(compressConfig,true);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.alibaba.idst.nls.nlsclientsdk.requests.Constant;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.consts.Consts;
-import com.chen.fy.wisdomscenicspot.utils.HttpUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.compress.CompressConfig;
@@ -34,10 +31,7 @@ import com.jph.takephoto.permission.PermissionManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
-import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -151,7 +145,7 @@ public class FeedbackActivity extends TakePhotoActivity {
         takePhoto = getTakePhoto();
 
         //获取外部存储位置的uri
-        File file = new File(getExternalFilesDir(null), "info.jpg");
+        File file = new File(getExternalFilesDir(null), "feedback.jpg");
         uri = Uri.fromFile(file);
         imagePath = uri.getPath();
 //        String filePath = uri.getEncodedPath();
@@ -162,12 +156,12 @@ public class FeedbackActivity extends TakePhotoActivity {
         int size = Math.min(getResources().getDisplayMetrics().widthPixels,
                 getResources().getDisplayMetrics().heightPixels);
         cropOptions = new CropOptions.Builder().setOutputX(size).
-                setOutputX(size).setWithOwnCrop(true).create();  //true表示使用TakePhoto自带的裁剪工具
+                setOutputX(size).setWithOwnCrop(false).create();  //true表示使用TakePhoto自带的裁剪工具
 
         //进行图片压缩
         CompressConfig compressConfig = new CompressConfig.Builder().
                 setMaxSize(50 * 1024).setMaxPixel(800).create();
-        /**
+        /*
          * 启用图片压缩
          * @param config 压缩图片配置
          * @param showCompressDialog 压缩时是否显示进度对话框
@@ -293,16 +287,27 @@ public class FeedbackActivity extends TakePhotoActivity {
      */
     class NetworkTask extends AsyncTask<String, Integer, String> {
 
+        /**
+         * 后台任务开始之前调用，通常用来初始化界面操作
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
+        /**
+         * 执行后台耗时操作，已在子线程中执行
+         * @return   对结果进行返回
+         */
         @Override
         protected String doInBackground(String... params) {
             return doPost(params[0]);
         }
 
+        /**
+         * 当后台任务执行完毕时调用
+         * @param result  后台执行任务的返回值
+         */
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, "服务器响应" + result);
