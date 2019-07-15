@@ -8,25 +8,21 @@ public class Consts {
     /**
      * 熊：服务器url
      */
-    public static final String ALL_URL = "http://47.102.153.115";
-
-    /**
-     * 熊：服务器url
-     */
-    public static final String BASE_URL = "http://47.102.153.115:8081/feedback";
+    public static final String FEEDBACK_SERVER_URL = "http://47.100.218.190:8081/feedback";
     /**
      * 熊：WebSocket的url
      */
-    public static final String WEBSOCKET_URL = "ws://47.102.153.115:8081/websocket";
+    public static final String RATE_FLOW_URL = "ws://47.100.218.190:8081/websocket";
 
     /**
-     * 冯：服务器ip
+     * 拍照识别服务器
      */
-    public static final String SERVER_ADDRESS = "47.102.153.115";
+    public static final String SCENIC_IDENTIFY_SERVER_URL = "http://47.102.153.115:8989/infer";
 
     /**
-     * 冯：服务器端口号
+     * 普通socket上传图片实现拍照识别
      */
-    public  static final int PORT = 8989;
+    public static final String SOCKET_URL = "47.102.153.115";
+    public static final int PORT = 8989;
 
 }

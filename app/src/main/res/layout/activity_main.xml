@@ -82,7 +82,7 @@
                 android:drawableBottom="@drawable/line_et"
                 android:drawablePadding="10dp"
                 android:singleLine="true"
-                android:text="象山景区-云峰寺"
+                android:text="醉乡"
                 android:textColor="#111"
                 android:textCursorDrawable="@drawable/cursor_et"
                 android:textSize="17sp" />

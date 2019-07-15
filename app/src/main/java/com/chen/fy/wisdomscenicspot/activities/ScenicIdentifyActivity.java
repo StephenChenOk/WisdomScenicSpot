@@ -31,6 +31,7 @@ import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.permission.PermissionManager;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +41,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Arrays;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ScenicIdentifyActivity extends TakePhotoActivity {
 
@@ -99,8 +107,6 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
         initSelectBox();
         //初始化TakePhoto开源库,实现拍照以及从相册中选择图片
         initTakePhoto();
-        //初始化图形进度条
-        initProcessCircle();
     }
 
     /**
@@ -143,24 +149,26 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
     /*
      *  初始化圆形进度条
      */
-    private void initProcessCircle() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        //反射一个自定义的全新的对话框布局
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.process_circle_dialog, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        CircleDialog = builder.create();
-        //设置不可以点击弹窗之后进行取消
-        CircleDialog.setCanceledOnTouchOutside(false);
-        //设置旋转
-        Animation animation = new RotateAnimation(0.0f,720.0f,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        animation.setFillAfter(true);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.setDuration(1200);
-        animation.setRepeatCount(Animation.INFINITE);
-        animation.setRepeatMode(Animation.RESTART);
-        ImageView iv_process_circle = view.findViewById(R.id.iv_process_circle);
-        iv_process_circle.setAnimation(animation);
+    private void getProcessCircle() {
+        if (CircleDialog == null) {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            //反射一个自定义的全新的对话框布局
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.process_circle_dialog, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(view);
+            CircleDialog = builder.create();
+            //设置不可以点击弹窗之后进行取消
+            CircleDialog.setCanceledOnTouchOutside(false);
+            //设置旋转
+            Animation animation = new RotateAnimation(0.0f, 720.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animation.setFillAfter(true);
+            animation.setInterpolator(new LinearInterpolator());
+            animation.setDuration(1200);
+            animation.setRepeatCount(Animation.INFINITE);
+            animation.setRepeatMode(Animation.RESTART);
+            ImageView iv_process_circle = view.findViewById(R.id.iv_process_circle);
+            iv_process_circle.setAnimation(animation);
+        }
     }
 
     /**
@@ -181,16 +189,16 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
         cropOptions = new CropOptions.Builder().setOutputX(size).setOutputX(size).setWithOwnCrop(false).create();  //true表示使用TakePhoto自带的裁剪工具
 
         //进行图片压缩
-        CompressConfig compressConfig=new CompressConfig.Builder().
+        CompressConfig compressConfig = new CompressConfig.Builder().
                 //大小            像素
-                setMaxSize(1024).setMaxPixel(400).create();
-        /**
+                        setMaxSize(512).setMaxPixel(200).create();
+        /*
          * 启用图片压缩
          * @param config 压缩图片配置
          * @param showCompressDialog 压缩时是否显示进度对话框
          * @return
          */
-        takePhoto.onEnableCompress(compressConfig,true);
+        takePhoto.onEnableCompress(compressConfig, true);
     }
 
     /**
@@ -200,17 +208,19 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
      */
     private void getScenicDescribeInfo(String serverBack) {
         switch (serverBack) {
-            case "rock":   //象山
+            case "象山岩":   //象山
                 tv_scenic_describe.setText(ScenicDescribeUtils.getElephantHillInfo());
                 break;
-            case "tower":  //普贤塔
+            case "普贤塔":  //普贤塔
                 tv_scenic_describe.setText(ScenicDescribeUtils.getTown());
+                break;
+            case "timeout":
+                tv_scenic_describe.setText("上传超时....");
                 break;
             default:
                 tv_scenic_describe.setText("识别失败...请重新识别");
         }
     }
-
 
 
     @Override
@@ -239,6 +249,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
             Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
             im_scenic_identify.setImageBitmap(bitmap);
             //显示进度条
+            getProcessCircle();
             CircleDialog.show();
             //上传图片到服务器
             uploadImage();
@@ -256,10 +267,74 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
     }
 
     private String doPost(String imagePath) {
+        OkHttpClient mOkHttpClient = new OkHttpClient();
 
+        //setType(MultipartBody.FORM)
+        String result = "error";
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)                    //以文件形式上传
+                .addFormDataPart("img", imagePath,                         //图片
+                        RequestBody.create(MediaType.parse("image/jpg"), new File(imagePath)))
+                .build();
+        Request.Builder reqBuilder = new Request.Builder();
+        Request request = reqBuilder
+                .url(Consts.SCENIC_IDENTIFY_SERVER_URL)
+                .post(requestBody)
+                .build();
+        try {
+            Response response = mOkHttpClient.newCall(request).execute();
+            long startTime = System.currentTimeMillis();
+            while (!response.isSuccessful()) {   //如果还没有返回数据
+                long tempTime = System.currentTimeMillis();
+                //超时
+                if ((tempTime - startTime) >= 8000) {
+                    //跳到UI线程进行UI操作
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //得到景物识别的结果
+                            getScenicDescribeInfo("timeout");
+                            //进度条消失
+                            CircleDialog.dismiss();
+                            CircleDialog = null;
+                        }
+                    });
+                    return "timeout";
+                }
+            }
+
+            assert response.body() != null;
+            String resultValue = response.body().string().replace("\"","");
+            String[] result_1 = resultValue.split(",");
+            final String[] result_2 = result_1[1].split(":");
+            //跳到UI线程进行UI操作
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //得到景物识别的结果
+                    getScenicDescribeInfo(result_2[1]);
+                    //进度条消失
+                    CircleDialog.dismiss();
+                    CircleDialog = null;
+                }
+            });
+            return "success";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 使用普通的socket将图片的字节一一的上传到服务器
+     */
+    @NonNull
+    private String socket_post(String imagePath) {
+        long time = System.currentTimeMillis();
         Socket s = null;
         try {
-            s = new Socket(Consts.SERVER_ADDRESS, Consts.PORT);
+            s = new Socket(Consts.SOCKET_URL, Consts.PORT);
             OutputStream out = s.getOutputStream();
 
             //读照片流
@@ -280,11 +355,44 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
             //获取服务器传送的信息
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String serverBack = "";
+            boolean flag = false;
+            boolean flag_1 = false;
+            long temp = System.currentTimeMillis();
             do {
+                temp = System.currentTimeMillis();
+                Log.d("timeout", String.valueOf(temp));
+                Log.d("timeout", String.valueOf(time));
+                Log.d("timeout", String.valueOf(temp - time));
                 serverBack = reader.readLine();
-            } while (serverBack.isEmpty());
+                switch (serverBack) {
+                    case "rock":   //象山
+                        flag_1 = true;
+                        break;
+                    case "tower":  //普贤塔
+                        flag_1 = true;
+                        break;
+                    case "null":   //识别错误
+                        flag_1 = true;
+                        break;
+                }
+                if (flag_1) {
+                    break;
+                }
+                //超时
+                if ((temp - time) >= 15000) {
+                    Log.d("timeout", "flag1111");
+                    flag = true;
+                    break;
+                }
+            } while (true);
+            final String finalServerBack;
+            if (flag) {  //超时
+                Log.d("timeout", "flag22222");
+                finalServerBack = "timeout";
+            } else {
+                finalServerBack = serverBack;
+            }
             //跳到UI线程进行UI操作
-            final String finalServerBack = serverBack;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -292,6 +400,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
                     getScenicDescribeInfo(finalServerBack);
                     //进度条消失
                     CircleDialog.dismiss();
+                    CircleDialog = null;
                 }
             });
             return "success";
@@ -357,7 +466,6 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
                 case R.id.chosen_photo_dialog:          //点击相册
                     //相册获取照片并剪裁
                     takePhoto.onPickFromGalleryWithCrop(uri, cropOptions);
-                    // takePhoto.onPickFromGallery();
                     takePhotoDialog.dismiss();
                     break;
             }

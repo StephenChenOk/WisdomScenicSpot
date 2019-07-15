@@ -150,7 +150,6 @@ public class FeedbackActivity extends TakePhotoActivity {
         imagePath = uri.getPath();
 //        String filePath = uri.getEncodedPath();
         // imagePath = Uri.decode(filePath);
-        Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
 
         //进行图片剪切
         int size = Math.min(getResources().getDisplayMetrics().widthPixels,
@@ -158,16 +157,16 @@ public class FeedbackActivity extends TakePhotoActivity {
         cropOptions = new CropOptions.Builder().setOutputX(size).
                 setOutputX(size).setWithOwnCrop(false).create();  //true表示使用TakePhoto自带的裁剪工具
 
-        //进行图片压缩
-        CompressConfig compressConfig = new CompressConfig.Builder().
-                setMaxSize(50 * 1024).setMaxPixel(800).create();
-        /*
-         * 启用图片压缩
-         * @param config 压缩图片配置
-         * @param showCompressDialog 压缩时是否显示进度对话框
-         * @return
-         */
-        takePhoto.onEnableCompress(compressConfig, true);
+//        //进行图片压缩
+//        CompressConfig compressConfig = new CompressConfig.Builder().
+//                setMaxSize(50 * 1024).setMaxPixel(800).create();
+//        /*
+//         * 启用图片压缩
+//         * @param config 压缩图片配置
+//         * @param showCompressDialog 压缩时是否显示进度对话框
+//         * @return
+//         */
+//        takePhoto.onEnableCompress(compressConfig, true);
     }
 
     @Override
@@ -242,6 +241,7 @@ public class FeedbackActivity extends TakePhotoActivity {
             Toast.makeText(FeedbackActivity.this, "提交完成", Toast.LENGTH_SHORT).show();
             NetworkTask networkTask = new NetworkTask();
             networkTask.execute(imagePath);
+            finish();
         }
     }
 
@@ -265,7 +265,7 @@ public class FeedbackActivity extends TakePhotoActivity {
                 .build();
         Request.Builder reqBuilder = new Request.Builder();
         Request request = reqBuilder
-                .url(Consts.BASE_URL)
+                .url(Consts.FEEDBACK_SERVER_URL)
                 .post(requestBody)
                 .build();
         try {

@@ -301,7 +301,6 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     Intent intent = new Intent();
                     intent.putExtra("latitude", historyInfo.getLatitude());
                     intent.putExtra("longitude", historyInfo.getLongitude());
-                    intent.putExtra("nowLocation", historyInfo.getTitle());
                     Log.d("chenyisheng", historyInfo.getTitle() + "--->" + historyInfo.getLatitude() + historyInfo.getLongitude());
                     setResult(RESULT_OK, intent);
                     finish();
