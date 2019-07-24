@@ -274,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         //一开始把地图镜头设置在太平天国纪念馆
         navigateTo(25.266431, 110.295181);
         //initPosition();
+        aMap.showIndoorMap(true);
     }
 
     /**
@@ -446,18 +447,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private void drawLine() {
         //得到最少的人数
-        int temp = numbers[0];
-        int minFlag = 0;
-        for (int i = 0; i < numbers.length; i++) {
-            if (numbers[i] < temp) {
-                temp = numbers[i];
-                minFlag = i;
-            }
-        }
+//        int temp = numbers[0];
+//        int minFlag = 0;
+//        for (int i = 0; i < numbers.length; i++) {
+//            if (numbers[i] < temp) {
+//                temp = numbers[i];
+//                minFlag = i;
+//            }
+//        }
+
         //生成路线定点坐标列表
         List<LatLng> latLngs = new ArrayList<>();
 
-        switch (locations[minFlag]) {
+        switch (locations[A_star()]) {
             case "tower":
                 road1(latLngs);
 
@@ -484,6 +486,99 @@ public class MainActivity extends AppCompatActivity {
         // new_road1(latLngs);
         moveLocation(latLngs);
         // smoothMarker.startSmoothMove();
+    }
+
+    /**
+     * A*算法实现路径规划
+     * 1）f(n)是节点n的综合优先级（节点n到终点的代价）,当我们选择下一个要遍历的节点时，我们总会选取综合优先级最高（值最小）的节点。
+     * 2）g(n)是节点n距离终点的实际代价。这里采用两点之间的距离（经纬度）
+     * 3）h(n)是节点n距离终点的预计代价，这也就是A*算法的启发函数。
+     */
+    private int A_star() {
+        double g_n, h_n = 0;
+        double[] f_n = new double[3];
+        int number;
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            g_n = 0;
+            switch (i) {
+                case 0:     //求出到普贤塔的代价
+                    number = numbers[i];
+                    //求 g(n)
+                    latLngs.clear();
+                    road1(latLngs);
+                    for (int j = 1; j < latLngs.size(); j++) {
+                        LatLng latLng = latLngs.get(j);
+                        LatLng latLng_pre = latLngs.get(j - 1);
+                        g_n += Math.sqrt((latLng.latitude - latLng_pre.latitude) * (latLng.latitude - latLng_pre.latitude)
+                                + (latLng.longitude - latLng_pre.longitude) * (latLng.longitude - latLng_pre.longitude));
+                    }
+                    //求 h(n)
+                    number = number / 10;
+                    if (number == 0) {
+                        number = 1;
+                    }
+                    h_n = number * Math.sqrt((25.267168 - 25.267242) * (25.267168 - 25.267242)
+                            + (110.295691 - 110.296046) * (110.295691 - 110.296046));
+                    //得 f(n)
+                    f_n[i] = g_n + h_n;
+                    Log.d("chenyisheng...", String.valueOf(f_n[i]));
+                    break;
+                case 1:     //求出到象眼岩的代价
+                    number = numbers[i];
+                    //求 g(n)
+                    latLngs.clear();
+                    road3(latLngs);
+                    for (int j = 1; j < latLngs.size(); j++) {
+                        LatLng latLng = latLngs.get(j);
+                        LatLng latLng_pre = latLngs.get(j - 1);
+                        g_n += Math.sqrt((latLng.latitude - latLng_pre.latitude) * (latLng.latitude - latLng_pre.latitude)
+                                + (latLng.longitude - latLng_pre.longitude) * (latLng.longitude - latLng_pre.longitude));
+                    }
+                    //求 h(n)
+                    number = number / 10;
+                    if (number == 0) {
+                        number = 1;
+                    }
+                    h_n = number * Math.sqrt((25.267088 - 25.267242) * (25.267088 - 25.267242)
+                            + (110.296427 - 110.296046) * (110.296427 - 110.296046));
+                    //得 f(n)
+                    f_n[i] = g_n + h_n;
+                    Log.d("chenyisheng...", String.valueOf(f_n[i]));
+                    break;
+                case 2:     //求出到桂林抗战遗址的代价
+                    number = numbers[i];
+                    //求 g(n)
+                    latLngs.clear();
+                    road2(latLngs);
+                    for (int j = 1; j < latLngs.size(); j++) {
+                        LatLng latLng = latLngs.get(j);
+                        LatLng latLng_pre = latLngs.get(j - 1);
+                        g_n += Math.sqrt((latLng.latitude - latLng_pre.latitude) * (latLng.latitude - latLng_pre.latitude)
+                                + (latLng.longitude - latLng_pre.longitude) * (latLng.longitude - latLng_pre.longitude));
+                    }
+                    //求 h(n)
+                    number = number / 10;
+                    if (number == 0) {
+                        number = 1;
+                    }
+                    h_n = number * Math.sqrt((25.266798 - 25.267242) * (25.266798 - 25.267242)
+                            + (110.295988 - 110.296046) * (110.295988 - 110.296046));
+                    //得 f(n)
+                    f_n[i] = g_n + h_n;
+                    Log.d("chenyisheng...", String.valueOf(f_n[i]));
+                    break;
+            }
+        }
+        double temp = f_n[0];
+        int minFlag = 0;
+        for (int i = 0; i < f_n.length; i++) {
+            if (f_n[i] < temp) {
+                temp = f_n[i];
+                minFlag = i;
+            }
+        }
+        return minFlag;
     }
 
     /**
@@ -606,22 +701,22 @@ public class MainActivity extends AppCompatActivity {
      * @param latLngs 经过的定点坐标集合
      */
     private void road3(List<LatLng> latLngs) {
-        //                             增加往上       增加往右
+        //                            增加往上       增加往右
         LatLng latLng1 = new LatLng(25.266416, 110.295621);      //醉乡
-        LatLng latLng2 = new LatLng(25.266370, 110.295597);      //地标4
-        LatLng latLng3 = new LatLng(25.266387, 110.296083);      //地标5
-        LatLng latLng4 = new LatLng(25.266425, 110.296220);      //地标6
-        LatLng latLng5 = new LatLng(25.266415, 110.296490);      //地标7
-        LatLng latLng6 = new LatLng(25.266460, 110.296535);      //地标8
-        LatLng latLng7 = new LatLng(25.266793, 110.296583);      //地标9
-        LatLng latLng8 = new LatLng(25.267015, 110.296490);     //地标10
-        LatLng latLng9 = new LatLng(25.267215, 110.296620);     //地标11
-        LatLng latLng10 = new LatLng(25.267370, 110.296630);     //地标12
-        LatLng latLng11 = new LatLng(25.267300, 110.296520);     //地标13
-        LatLng latLng12 = new LatLng(25.267240, 110.296480);     //地标13
+        LatLng latLng2 = new LatLng(25.266370, 110.295597);      //地标2
+        LatLng latLng3 = new LatLng(25.266387, 110.296083);      //地标3
+        LatLng latLng4 = new LatLng(25.266425, 110.296220);      //地标4
+        LatLng latLng5 = new LatLng(25.266415, 110.296490);      //地标5
+        LatLng latLng6 = new LatLng(25.266460, 110.296535);      //地标6
+        LatLng latLng7 = new LatLng(25.266793, 110.296583);      //地标7
+        LatLng latLng8 = new LatLng(25.267015, 110.296490);      //地标8
+        LatLng latLng9 = new LatLng(25.267215, 110.296620);      //地标9
+        LatLng latLng10 = new LatLng(25.267370, 110.296630);     //地标10
+        LatLng latLng11 = new LatLng(25.267300, 110.296520);     //地标11
+        LatLng latLng12 = new LatLng(25.267240, 110.296480);     //地标12
         LatLng latLng13 = new LatLng(25.267160, 110.296300);     //地标13
-        LatLng latLng14 = new LatLng(25.267157, 110.296042);       //地标9
-        LatLng latLng15 = new LatLng(25.267242, 110.296046);      //普贤塔
+        LatLng latLng14 = new LatLng(25.267157, 110.296042);     //地标14
+        LatLng latLng15 = new LatLng(25.267242, 110.296046);     //普贤塔
 
         latLngs.add(latLng1);
         latLngs.add(latLng2);
@@ -1000,13 +1095,13 @@ public class MainActivity extends AppCompatActivity {
         client.dispatcher().executorService().shutdown();
     }
 
+    private boolean is_show_dialog = true;
+
     /**
      * 通过webSocket获取服务端传来的信息后在地图上进行实时更新
      *
      * @param text 人数信息
      */
-    private boolean is_show_dialog = true;
-
     private void updateMap(final String text) {
         //Log.d("updateMap",text);
         int i, j = 0, k = 0;   //循环参数

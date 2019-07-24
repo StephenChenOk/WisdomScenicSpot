@@ -8,11 +8,11 @@ public class Consts {
     /**
      * 熊：服务器url
      */
-    public static final String FEEDBACK_SERVER_URL = "http://47.100.218.190:8081/feedback";
+    public static final String FEEDBACK_SERVER_URL = "http://47.102.153.115:8081/feedback";
     /**
      * 熊：WebSocket的url
      */
-    public static final String RATE_FLOW_URL = "ws://47.100.218.190:8081/websocket";
+    public static final String RATE_FLOW_URL = "ws://47.102.153.115:8081/websocket";
 
     /**
      * 拍照识别服务器
