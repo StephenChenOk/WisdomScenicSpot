@@ -142,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private int loginType;
     /**
-     * 管理员端工作调度控件
+     * 室内定位
      */
-    private LinearLayout job_scheduling_box_main;
+    private LinearLayout indoor_position_box;
     /**
      * 管理员端工作调度弹窗,以及控件
      */
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         ed_myLocation = findViewById(R.id.road_sign_my_location);
         ImageView iv_road_sign_logo = findViewById(R.id.road_sign_start_logo);
         TextView tv_road_sign_go = findViewById(R.id.road_sign_go);
-        job_scheduling_box_main = findViewById(R.id.job_scheduling_box_main);
+        indoor_position_box = findViewById(R.id.indoor_position_box);
 
         /*
          * 顶部控件
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         iv_road_sign.setOnClickListener(myOnClickListener);
         iv_feedback.setOnClickListener(myOnClickListener);
 
-        job_scheduling_box_main.setOnClickListener(myOnClickListener);
+        indoor_position_box.setOnClickListener(myOnClickListener);
 
         //初始化工作调度弹窗
         initJobSchedulingDialog();
@@ -1231,9 +1231,9 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "请输入：醉乡-->普贤塔", Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case R.id.job_scheduling_box_main:   //工作调度
-                    Intent intent_job_scheduling = new Intent(MainActivity.this, JobSchedulingActivity.class);
-                    startActivityForResult(intent_job_scheduling, JOB_SCHEDULING_CODE);
+                case R.id.indoor_position_box:   //室内定位
+                    Intent indoorPositionIntent = new Intent(MainActivity.this, IndoorPositionActivity.class);
+                    startActivity(indoorPositionIntent);
                     break;
                 case R.id.title_job_scheduling_dialog: //工作调度弹窗详细情况说明
 
@@ -1282,7 +1282,7 @@ public class MainActivity extends AppCompatActivity {
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
         mMapView.onDestroy();
         //关闭webSocket连接
-        webSocket.close(1000, "再见");
+        webSocket.close(1000, "WebSocket已断开连接。。。");
     }
 
     @Override
@@ -1296,14 +1296,14 @@ public class MainActivity extends AppCompatActivity {
         //获取当前登入状态
         getLoginState();
         //对不同的登录状态进行不同操作
-        switch (loginType) {
-            case 2:    //显示管理者
-                job_scheduling_box_main.setVisibility(View.VISIBLE);   //显示 呼叫云端 功能
-                break;
-            default:   //当loginType不为2时显示常规界面
-                job_scheduling_box_main.setVisibility(View.GONE);
-                break;
-        }
+//        switch (loginType) {
+//            case 2:    //显示管理者
+//                job_scheduling_box_main.setVisibility(View.VISIBLE);   //显示 呼叫云端 功能
+//                break;
+//            default:   //当loginType不为2时显示常规界面
+//                job_scheduling_box_main.setVisibility(View.GONE);
+//                break;
+//        }
     }
 
     @Override

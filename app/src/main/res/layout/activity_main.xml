@@ -194,7 +194,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/job_scheduling_box_main"
+            android:id="@+id/indoor_position_box"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:layout_alignParentRight="true"
@@ -204,17 +204,17 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_job_scheduling"
+                android:id="@+id/iv_indoor_position"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginLeft="2dp"
                 android:layout_weight="1"
-                android:src="@drawable/message" />
+                android:src="@drawable/indoor_position" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="调度信息"
+                android:text="室内定位"
                 android:textColor="#444"
                 android:textSize="9sp" />
 
