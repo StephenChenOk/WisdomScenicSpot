@@ -20,8 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="7dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/user"
             android:textSize="23sp" />
 
@@ -29,8 +28,8 @@
             android:id="@+id/top_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/search_bg_selector"
             android:clickable="true"
@@ -45,9 +44,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/list" />
+            android:src="@drawable/sunny" />
+
+        <TextView
+            android:layout_width="18dp"
+            android:layout_height="wrap_content"
+            android:text="晴天"
+            android:layout_marginRight="8dp"
+            android:textColor="#fff"/>
 
     </LinearLayout>
 

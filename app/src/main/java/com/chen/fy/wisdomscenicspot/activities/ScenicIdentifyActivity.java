@@ -218,7 +218,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
                 tv_scenic_describe.setText("上传超时....");
                 break;
             default:
-                tv_scenic_describe.setText("识别失败...请重新识别");
+                tv_scenic_describe.setText("您所拍摄的图片可能不是景物，请重新拍摄...");
         }
     }
 
@@ -304,7 +304,7 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
             }
 
             assert response.body() != null;
-            String resultValue = response.body().string().replace("\"","");
+            String resultValue = response.body().string().replace("\"", "");
             String[] result_1 = resultValue.split(",");
             final String[] result_2 = result_1[1].split(":");
             //跳到UI线程进行UI操作
