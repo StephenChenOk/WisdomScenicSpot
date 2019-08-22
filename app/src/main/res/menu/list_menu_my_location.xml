@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/zx_my_location"
+        android:title="醉乡" />
+
+    <item
+        android:id="@+id/yfs_my_location"
+        android:title="云峰寺" />
+
+    <item
+        android:id="@+id/zy_my_location"
+        android:title="象山钟韵" />
+
+</menu>

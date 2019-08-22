@@ -268,6 +268,9 @@ public class MainActivity extends AppCompatActivity {
         iv_road_sign.setOnClickListener(myOnClickListener);
         iv_feedback.setOnClickListener(myOnClickListener);
 
+        ed_myLocation.setOnClickListener(myOnClickListener);
+        ed_targetLocation.setOnClickListener(myOnClickListener);
+
         indoor_position_box.setOnClickListener(myOnClickListener);
 
         //初始化工作调度弹窗
@@ -758,9 +761,9 @@ public class MainActivity extends AppCompatActivity {
      * 点击List后显示的popupMenu菜单
      */
     @SuppressLint("RestrictedApi")
-    private void showListPopupMenu(View view) {
+    private void showListPopupMenu_MyLocation(View view) {
         PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.list_menu, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(R.menu.list_menu_my_location, popupMenu.getMenu());
 
         try {
             Field field = popupMenu.getClass().getDeclaredField("mPopup");
@@ -777,18 +780,55 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.take_photo:
-                        Intent intent1 = new Intent(MainActivity.this, ScenicIdentifyActivity.class);
-                        startActivity(intent1);
+                    case R.id.zx_my_location:
+                        ed_myLocation.setText("醉乡");
                         break;
-                    case R.id.road_sign:
-                        isVisible = !isVisible;
-                        setRoadSignVisible();
-                        //drawLine(nowLatitude, nowLongitude);
+                    case R.id.yfs_my_location:
+                        ed_myLocation.setText("云峰寺");
                         break;
-                    case R.id.feedback:
-                        Intent intent2 = new Intent(MainActivity.this, FeedbackActivity.class);
-                        startActivity(intent2);
+                    case R.id.zy_my_location:
+                        ed_myLocation.setText("象山钟韵");
+                        break;
+                }
+                return true;
+            }
+        });
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                // 控件消失时的事件
+            }
+        });
+        popupMenu.show();
+    }
+    @SuppressLint("RestrictedApi")
+    private void showListPopupMenu_TargetLocation(View view) {
+        PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.list_menu_target_location, popupMenu.getMenu());
+
+        try {
+            Field field = popupMenu.getClass().getDeclaredField("mPopup");
+            field.setAccessible(true);
+            MenuPopupHelper helper = (MenuPopupHelper) field.get(popupMenu);
+            helper.setForceShowIcon(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.town_target_location:
+                        ed_targetLocation.setText("普贤塔");
+                        break;
+                    case R.id.rock_target_location:
+                        ed_targetLocation.setText("象眼岩");
+                        break;
+                    case R.id.ruins_target_location:
+                        ed_targetLocation.setText("桂林抗战遗址");
                         break;
                 }
                 return true;
@@ -1032,7 +1072,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent_user);
                     break;
                 case R.id.list_main:      //点击右上角列表
-                    showListPopupMenu(v);
+                    //showListPopupMenu(v);
                     break;
                 case R.id.top_search:     //点击搜索框
                     isVisible = false;   //返回界面时不显示布局
@@ -1049,6 +1089,12 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.iv_feedback:
                     Intent intent2 = new Intent(MainActivity.this, FeedbackActivity.class);
                     startActivity(intent2);
+                    break;
+                case R.id.road_sign_target_location:
+                    showListPopupMenu_TargetLocation(v);
+                    break;
+                case R.id.road_sign_my_location:
+                    showListPopupMenu_MyLocation(v);
                     break;
                 case R.id.road_sign_start_logo:    //开始进行路线规划
                 case R.id.road_sign_go:

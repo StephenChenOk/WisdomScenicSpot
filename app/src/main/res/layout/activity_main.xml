@@ -49,9 +49,9 @@
         <TextView
             android:layout_width="18dp"
             android:layout_height="wrap_content"
-            android:text="晴天"
             android:layout_marginRight="8dp"
-            android:textColor="#fff"/>
+            android:text="晴天"
+            android:textColor="#fff" />
 
     </LinearLayout>
 
@@ -86,7 +86,7 @@
                 android:drawableBottom="@drawable/line_et"
                 android:drawablePadding="10dp"
                 android:singleLine="true"
-                android:text="醉乡"
+                android:hint="输入起点"
                 android:textColor="#111"
                 android:textCursorDrawable="@drawable/cursor_et"
                 android:textSize="17sp" />

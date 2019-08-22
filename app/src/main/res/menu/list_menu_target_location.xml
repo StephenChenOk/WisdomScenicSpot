@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/town_target_location"
+        android:title="普贤塔" />
+
+    <item
+        android:id="@+id/rock_target_location"
+        android:title="象眼岩" />
+
+    <item
+        android:id="@+id/ruins_target_location"
+        android:title="桂林抗战遗址" />
+
+</menu>
