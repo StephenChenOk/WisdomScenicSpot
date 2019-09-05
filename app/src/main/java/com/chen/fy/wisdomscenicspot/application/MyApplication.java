@@ -2,13 +2,14 @@ package com.chen.fy.wisdomscenicspot.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import org.litepal.LitePal;
 
 /**
  * 全局获取当前app的Context的方法
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     private static Context context;
 

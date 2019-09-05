@@ -50,10 +50,10 @@ public class IndoorPositionActivity extends AppCompatActivity {
     private BleManager bleManager;
 
     //各个蓝牙节点的坐标
-    MyPoint mPoint1 = new MyPoint(0.2, 0.3);
-    MyPoint mPoint2 = new MyPoint(4.2, 0.2);
-    MyPoint mPoint3 = new MyPoint(0.2, 8.3);
-    MyPoint mPoint4 = new MyPoint(4.1, 8.4);
+    MyPoint mPoint1 = new MyPoint(0.1, 0.1);
+    MyPoint mPoint2 = new MyPoint(4.2, 0.3);
+    MyPoint mPoint3 = new MyPoint(1.0, 9.5);
+    MyPoint mPoint4 = new MyPoint(4.1, 10.0);
 
     //测试的总长度和宽度
     private int mWidth = 0;
@@ -61,15 +61,6 @@ public class IndoorPositionActivity extends AppCompatActivity {
 
     //Animation 移动单位
     private int mItem_Animation = 800;
-
-    int j = 0;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            startAnimation(set, startX, startY, endX, endY);
-        }
-    };
     private BluetoothAdapter mBluetoothAdapter;
 
     @Override
@@ -81,10 +72,10 @@ public class IndoorPositionActivity extends AppCompatActivity {
         getWH();
         checkPermissions();
 
-        kalman1 = new Kalman(9.0, 100.0);//预测误差的方差,噪声误差的方差
-        kalman2 = new Kalman(9.0, 100.0);
-        kalman3 = new Kalman(9.0, 100.0);
-        kalman4 = new Kalman(9.0, 100.0);
+        kalman1 = new Kalman(70, 100.0);//预测误差的方差,噪声误差的方差
+        kalman2 = new Kalman(70, 100.0);
+        kalman3 = new Kalman(70, 100.0);
+        kalman4 = new Kalman(70, 100.0);
 
         set = new AnimatorSet();
     }
@@ -196,80 +187,80 @@ public class IndoorPositionActivity extends AppCompatActivity {
         @Override
         public void onLeScan(BleDevice bleDevice) {
             super.onLeScan(bleDevice);
-            startAnimation(set, 0, 0, mWidth, mHeight);
+            //startAnimation(set, 0, 0, mWidth, mHeight);
             if (bleDevice.getName() != null) {
                 switch (bleDevice.getName()) {
                     case "1836242":
-                        if (flag1) {
-                            flag1 = false;
-                            RSSI[0] = kalman1.KalmanFilter(bleDevice.getRssi());
-                            getLocation();
-                        }
-//
 //                        if (flag1) {
-//                            temp1 += kalman1.KalmanFilter(bleDevice.getRssi());
-//                            i1++;
-//                            if (i1 % 2 == 0) {
-//                                flag1 = false;
-//                                RSSI[0] = temp1 / 2;
-//                                getLocation();
-//                                temp1 = 0;
-//                            }
+//                            flag1 = false;
+//                            RSSI[0] = kalman1.KalmanFilter(bleDevice.getRssi());
+//                            getLocation();
 //                        }
+//
+                        if (flag1) {
+                            temp1 += kalman1.KalmanFilter(bleDevice.getRssi());
+                            i1++;
+                            if (i1 % 2 == 0) {
+                                flag1 = false;
+                                RSSI[0] = temp1 / 2;
+                                getLocation();
+                                temp1 = 0;
+                            }
+                        }
                         break;
                     case "1836157":
-                        if (flag2) {
-                            flag2 = false;
-                            RSSI[1] = kalman2.KalmanFilter(bleDevice.getRssi());
-                            getLocation();
-                        }
-
 //                        if (flag2) {
-//                            temp2 += kalman2.KalmanFilter(bleDevice.getRssi());
-//                            i2++;
-//                            if (i2 % 2 == 0) {
-//                                flag2 = false;
-//                                RSSI[1] = temp2 / 2;
-//                                getLocation();
-//                                temp2 = 0;
-//                            }
+//                            flag2 = false;
+//                            RSSI[1] = kalman2.KalmanFilter(bleDevice.getRssi());
+//                            getLocation();
 //                        }
+
+                        if (flag2) {
+                            temp2 += kalman2.KalmanFilter(bleDevice.getRssi());
+                            i2++;
+                            if (i2 % 2 == 0) {
+                                flag2 = false;
+                                RSSI[1] = temp2 / 2;
+                                getLocation();
+                                temp2 = 0;
+                            }
+                        }
                         break;
                     case "1836027":
-                        if (flag3) {
-                            flag3 = false;
-                            RSSI[2] = kalman3.KalmanFilter(bleDevice.getRssi());
-                            getLocation();
-                        }
-
 //                        if (flag3) {
-//                            temp3 += kalman3.KalmanFilter(bleDevice.getRssi());
-//                            i3++;
-//                            if (i3 % 2 == 0) {
-//                                flag3 = false;
-//                                RSSI[2] = temp3 / 2;
-//                                getLocation();
-//                                temp3 = 0;
-//                            }
-                        //}
+//                            flag3 = false;
+//                            RSSI[2] = kalman3.KalmanFilter(bleDevice.getRssi());
+//                            getLocation();
+//                        }
+
+                        if (flag3) {
+                            temp3 += kalman3.KalmanFilter(bleDevice.getRssi());
+                            i3++;
+                            if (i3 % 2 == 0) {
+                                flag3 = false;
+                                RSSI[2] = temp3 / 2;
+                                getLocation();
+                                temp3 = 0;
+                            }
+                        }
                         break;
                     case "1836072":
-                        if (flag4) {
-                            flag4 = false;
-                            RSSI[3] = kalman4.KalmanFilter(bleDevice.getRssi());
-                            getLocation();
-                        }
-
 //                        if (flag4) {
-//                            temp4 += kalman4.KalmanFilter(bleDevice.getRssi());
-//                            i4++;
-//                            if (i4 % 2 == 0) {
-//                                flag4 = false;
-//                                RSSI[3] = temp4 / 2;
-//                                getLocation();
-//                                temp4 = 0;
-//                            }
+//                            flag4 = false;
+//                            RSSI[3] = kalman4.KalmanFilter(bleDevice.getRssi());
+//                            getLocation();
 //                        }
+
+                        if (flag4) {
+                            temp4 += kalman4.KalmanFilter(bleDevice.getRssi());
+                            i4++;
+                            if (i4 % 2 == 0) {
+                                flag4 = false;
+                                RSSI[3] = temp4 / 2;
+                                getLocation();
+                                temp4 = 0;
+                            }
+                        }
                         break;
                 }
             }
@@ -311,11 +302,7 @@ public class IndoorPositionActivity extends AppCompatActivity {
             startY = img.getY();
             endX = (float) (p.x * (mWidth / mPoint2.x));
             endY = (float) (mHeight - (p.y * (mHeight / mPoint3.y)));
-            Log.d("startAnimation::", decimalFormat.format(endX) + "," + decimalFormat.format(endY));
-//            mHandler.removeCallbacksAndMessages(null);
-//            mHandler.sendEmptyMessage(0);
-            //startAnimation(set, startX, startY, endX, endY);
-            //startAnimation(set, 0, 0, mWidth, mHeight);
+            startAnimation(set, startX, startY, endX, endY);
         }
     }
 
@@ -324,7 +311,7 @@ public class IndoorPositionActivity extends AppCompatActivity {
      */
     private void setScanRule() {
         //获取蓝牙设备名称
-        String[] names = {"1836242", "1836157", "1836027"};
+        String[] names = {"1836242", "1836157", "1836027", "1836072"};
 
         //设置扫描规则
         BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
@@ -372,7 +359,7 @@ public class IndoorPositionActivity extends AppCompatActivity {
             P = 10;//下一时刻的协方差，初始化随意
             this.Q = Q;
             this.R = R;
-            startValue = 50;
+            startValue = 70;
         }
 
         double KalmanFilter(double value) {
@@ -393,16 +380,16 @@ public class IndoorPositionActivity extends AppCompatActivity {
 
     public MyPoint getCenterPoint() {
 
-        double r1 = Math.pow(10, (Math.abs(RSSI[0]) - 62) / (10 * 2.5));
-        double r2 = Math.pow(10, (Math.abs(RSSI[1]) - 62) / (10 * 2.5));
-        double r3 = Math.pow(10, (Math.abs(RSSI[2]) - 63) / (10 * 2.5));
-        double r4 = Math.pow(10, (Math.abs(RSSI[3]) - 62) / (10 * 2.5));
+        double r1 = Math.pow(10, (Math.abs(RSSI[0]) - 62) / (10 * 4.5));
+        double r2 = Math.pow(10, (Math.abs(RSSI[1]) - 62) / (10 * 4));
+        double r3 = Math.pow(10, (Math.abs(RSSI[2]) - 63) / (10 * 2.9));
+        double r4 = Math.pow(10, (Math.abs(RSSI[3]) - 62) / (10 * 3.3));
 
         Log.d("ridus::", decimalFormat.format(r1) + "," + decimalFormat.format(r2)
                 + "," + decimalFormat.format(r3) + "," + decimalFormat.format(r4));
 
         //三点定位
-        //return ThreadPoint(r1, r2, r3);
+       // return ThreadPoint(r1, r2, r3);
 
         //改进的质心算法
         return focusPoint(r1, r2, r3, r4);
@@ -540,17 +527,17 @@ public class IndoorPositionActivity extends AppCompatActivity {
             locationY = mPoint3.y - 0.1;
         }
 
-        if (preX - locationX > 0.2) {
-            locationX = preX - 0.2;
+        if (preX - locationX > 0.3) {
+            locationX = preX - 0.3;
         }
-        if (preX - locationX < -0.2) {
-            locationX = preX + 0.2;
+        if (preX - locationX < -0.3) {
+            locationX = preX + 0.3;
         }
-        if (preY - locationY > 0.4) {
-            locationY = preY - 0.4;
+        if (preY - locationY > 0.7) {
+            locationY = preY - 0.7;
         }
-        if (preY - locationY < -0.4) {
-            locationY = preY + 0.4;
+        if (preY - locationY < -0.7) {
+            locationY = preY + 0.7;
         }
         return new MyPoint(locationX, locationY);
     }

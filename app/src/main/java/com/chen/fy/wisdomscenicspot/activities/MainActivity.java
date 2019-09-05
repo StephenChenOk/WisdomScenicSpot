@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -67,6 +69,13 @@ import com.chen.fy.wisdomscenicspot.consts.Consts;
 import com.chen.fy.wisdomscenicspot.utils.AStarUtils;
 import com.chen.fy.wisdomscenicspot.utils.DateUtils;
 import com.chen.fy.wisdomscenicspot.utils.RoadPlanningUtils;
+import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleScanCallback;
+import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.scan.BleScanRuleConfig;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
+import com.lxj.xpopup.interfaces.SimpleCallback;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -191,38 +200,8 @@ public class MainActivity extends AppCompatActivity {
         //webSocket连接
         webSocketConnect();
 
-        //天气获取
-        getWeather();
-    }
-
-    Handler handler = new Handler(){
-        public void handleMessage(Message msg){
-            //接受到服务器信息时执行
-            Toast.makeText(MainActivity.this,(msg.obj).toString(),Toast.LENGTH_LONG).show();
-            Log.d("tianqi",msg.toString());
-        }
-    };
-
-    private void getWeather() {
-        Log.d("getWeather","getWeather");
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Socket socket = new Socket("192.168.2.102", 555);
-                    InputStream is = socket.getInputStream();
-                    byte[] bytes = new byte[1024];
-                    int n = is.read(bytes);
-                    Message msg = handler.obtainMessage(0, new String(bytes, 0, n));
-                    msg.sendToTarget();
-                    is.close();
-                    socket.close();
-                    Log.d("tianqi",msg.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        //发消息
+        //sendMessage("22");
     }
 
     /**
@@ -276,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         //初始化工作调度弹窗
         initJobSchedulingDialog();
 
-        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(ed_targetLocation.getWindowToken(), 0);
     }
 
@@ -287,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("login_state", MODE_PRIVATE);
         //userId = preferences.getString("userId", "");
         loginType = preferences.getInt("loginType", -1);
-        Log.d(Tag, "------>" + String.valueOf(loginType));
     }
 
     /**
@@ -727,6 +705,10 @@ public class MainActivity extends AppCompatActivity {
                 WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.
+                SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.SEND_SMS);
+        }
         if (!permissionList.isEmpty()) {
             String[] permissions = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
@@ -801,6 +783,7 @@ public class MainActivity extends AppCompatActivity {
         });
         popupMenu.show();
     }
+
     @SuppressLint("RestrictedApi")
     private void showListPopupMenu_TargetLocation(View view) {
         PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
@@ -913,7 +896,17 @@ public class MainActivity extends AppCompatActivity {
             new Thread() {
                 @Override
                 public void run() {
-                    updateMap(text);
+                    //根据实时人流量更新地图
+                    String[] s = text.split(",");
+                    String flag = s[s.length - 1];
+                    if (flag.equals("0")) {
+                        //根据人流量信息更新地图
+                        updateMap(text);
+                    } else if (flag.equals("1")) {
+                        Log.d("发短息信息", text);
+                        //发短信
+                        sendMessage(text);
+                    }
                 }
             }.start();
         }
@@ -966,6 +959,39 @@ public class MainActivity extends AppCompatActivity {
         webSocket = client.newWebSocket(request, webSocketListener);
 
         client.dispatcher().executorService().shutdown();
+    }
+
+    private void sendMessage(String text) {
+//        1跳转界面进行发送
+//        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+//        sendIntent.setData(Uri.parse("smsto:" + 18074845457L));
+//        sendIntent.putExtra("sms_body", "消息消息");
+//        startActivity(sendIntent);
+
+//      2后台发送
+//        String messageInfo = "【桂林象山智慧景区】 无人值守助理：{普贤塔}地点出现人流量爆发情况，人数为{50},请及时处理";
+//        SmsManager.getDefault().sendTextMessage("18074845457",
+//                null, messageInfo, null, null);
+
+        String[] s = text.split(",");
+        String phone = s[0];
+        String address = "";
+        switch (s[1]) {
+            case "town":
+                address = "普贤塔";
+                break;
+            case "rock":
+                address = "象鼻山";
+                break;
+            case "ruins":
+                address = "桂林抗战遗址";
+                break;
+        }
+        String number = s[2];
+        String messageInfo = "【桂林象山智慧景区】 无人值守助理：{" + address + "}地点出现人流量爆发情况，人数为{" + number + "},请及时处理";
+        SmsManager.getDefault().sendTextMessage(phone,
+                null, messageInfo, null, null);
+        Log.d("sendMessage..Info","sendSuccess!");
     }
 
     private boolean is_show_dialog = true;
@@ -1099,16 +1125,18 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.road_sign_start_logo:    //开始进行路线规划
                 case R.id.road_sign_go:
                     //获取终点的位置
-                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(ed_targetLocation.getWindowToken(), 0);
                     imm.hideSoftInputFromWindow(ed_myLocation.getWindowToken(), 0);
                     targetLocation = ed_targetLocation.getText().toString();
                     myLocation = ed_myLocation.getText().toString();
                     drawLine();
                     break;
-                case R.id.indoor_position_box:   //室内定位
-                    Intent indoorPositionIntent = new Intent(MainActivity.this, IndoorPositionActivity.class);
-                    startActivity(indoorPositionIntent);
+                case R.id.indoor_position_box:   //景物推送
+//                    Intent indoorPositionIntent = new Intent(MainActivity.this, IndoorPositionActivity.class);
+//                    startActivity(indoorPositionIntent);
+                    Toast.makeText(MainActivity.this, "开启景物推送", Toast.LENGTH_SHORT).show();
+                    initBle();
                     break;
                 case R.id.title_job_scheduling_dialog: //工作调度弹窗详细情况说明
 
@@ -1120,6 +1148,118 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private BleManager bleManager;
+
+    private void initBle() {
+        bleManager = BleManager.getInstance();
+        bleManager.init(getApplication());
+        setScanRule();
+        //开始扫描
+        bleManager.scan(bleScanCallback);
+    }
+
+    private void setScanRule() {
+        //获取蓝牙设备名称
+        String[] names = {"1836242", "1836157", "1836027"};
+
+        //设置扫描规则
+        BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
+                .setDeviceName(true, names)   // 只扫描指定广播名的设备，可选
+                .setScanTimeOut(0)              // 扫描超时时间，可选，默认10秒
+                .build();
+        bleManager.initScanRule(scanRuleConfig);
+    }
+
+    BleScanCallback bleScanCallback = new BleScanCallback() {
+        @Override
+        public void onScanStarted(boolean success) {
+        }
+
+        @Override
+        public void onLeScan(BleDevice bleDevice) {
+            super.onLeScan(bleDevice);
+            if (bleDevice.getName() != null) {
+                switch (bleDevice.getName()) {
+                    case "1836242":
+                        startPushScenic(bleDevice.getRssi(), "狮岭朝霞");
+                        break;
+                    case "1836157":
+                        startPushScenic(bleDevice.getRssi(), "水晶宫");
+                        break;
+                    case "1836027":
+                        startPushScenic(bleDevice.getRssi(), "红罗宝帐");
+                        break;
+                }
+            }
+        }
+
+        @Override
+        public void onScanning(final BleDevice bleDevice) {
+        }
+
+        @Override
+        public void onScanFinished(List<BleDevice> scanResultList) {
+        }
+    };
+
+    /**
+     * 开始进行景物推送
+     */
+    boolean pushFlag = true;
+
+    private long preTime;
+
+    private void startPushScenic(int RSSI, String scenery) {
+        long currentTime = System.currentTimeMillis();
+        Log.d("startPushScenic:", String.valueOf(RSSI));
+        if (RSSI > -53 && pushFlag && (currentTime - preTime) > 2 * 1000) {
+            initXPopup(scenery);
+            pushFlag = false;
+            preTime = System.currentTimeMillis();
+        }
+    }
+
+    private XPopup.Builder builder;
+
+    private void initXPopup(final String scenery) {
+        builder = new XPopup.Builder(this);
+        builder
+//                         .dismissOnTouchOutside(false)
+//                         .autoDismiss(true)
+//                        .popupAnimation(PopupAnimation.NoAnimation)
+                .setPopupCallback(new SimpleCallback() {
+                    @Override
+                    public void onCreated() {
+                    }
+
+                    @Override
+                    public void onShow() {
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                        pushFlag = true;
+                    }
+
+                    //如果你自己想拦截返回按键事件，则重写这个方法，返回true即可
+                    @Override
+                    public boolean onBackPressed() {
+                        return false;
+                    }
+                }).asConfirm("景物推送", "附近可能存在景物{ *" + scenery + "* },请选择是否查看",
+                "取消", "查看",
+                new OnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        Intent intent = new Intent(MainActivity.this, PushSceneryActivity.class);
+                        intent.putExtra("scenery", scenery);
+                        startActivity(intent);
+                    }
+                }, null, false)
+                .show();
+    }
+
 
     /**
      * 设置路径规划的各种图标和布局显示情况
