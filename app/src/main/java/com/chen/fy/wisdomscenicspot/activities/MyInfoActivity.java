@@ -50,8 +50,6 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
     private Uri headIconUri;
     private CircleImageView headIcon;
 
-    private Button take_photo;
-    private Button chosen_photo;
     private Dialog dialog;
 
     /**
@@ -133,8 +131,8 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
         builder.setView(view);
         dialog = builder.create();
         //在当前布局中找到控件对象
-        take_photo = view.findViewById(R.id.take_photo_dialog);
-        chosen_photo = view.findViewById(R.id.chosen_photo_dialog);
+        Button take_photo = view.findViewById(R.id.take_photo_dialog);
+        Button chosen_photo = view.findViewById(R.id.chosen_photo_dialog);
         //监听事件
         take_photo.setOnClickListener(this);
         chosen_photo.setOnClickListener(this);
@@ -155,16 +153,6 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
                 getResources().getDisplayMetrics().heightPixels);
         cropOptions = new CropOptions.Builder().setOutputX(size).
                 setOutputX(size).setWithOwnCrop(false).create();  //true表示使用TakePhoto自带的裁剪工具
-//        //进行图片压缩
-//        CompressConfig compressConfig=new CompressConfig.Builder().
-//                setMaxSize(100).setMaxPixel(10).create();
-        /**
-         * 启用图片压缩
-         * @param config 压缩图片配置
-         * @param showCompressDialog 压缩时是否显示进度对话框
-         * @return
-         */
-//        takePhoto.onEnableCompress(compressConfig,true);
     }
 
     @Override
@@ -227,7 +215,6 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
                 //登入状态清空
                 SharedPreferences.Editor editor = getSharedPreferences("login_state",MODE_PRIVATE).edit();
                 editor.putString("userId","");
-                editor.putInt("loginType",-1);
                 editor.apply();
                 finish();
                 break;

@@ -100,5 +100,15 @@ public class JobSchedulingActivity extends AppCompatActivity {
         public void onLongClick(View view, int position) {
 
         }
+
+        @Override
+        public void onItemClick(int i) {
+
+        }
+
+        @Override
+        public void onLongClick(int i) {
+
+        }
     }
 }

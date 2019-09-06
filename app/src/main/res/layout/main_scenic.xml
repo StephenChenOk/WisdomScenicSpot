@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--上部分的fragment-->
+    <FrameLayout
+        android:id="@+id/fragment_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bbb" />
+
+
+    <!--底部导航栏-->
+    <RadioGroup
+        android:id="@+id/radio_group_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/home_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/bg_home"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@drawable/bottom_bar_text_color" />
+
+        <RadioButton
+            android:id="@+id/found_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/bg_found"
+            android:gravity="center"
+            android:text="发现"
+            android:textColor="@drawable/bottom_bar_text_color" />
+
+        <RadioButton
+            android:id="@+id/mine_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/bg_mine"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@drawable/bottom_bar_text_color" />
+
+    </RadioGroup>
+
+</LinearLayout>

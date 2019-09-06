@@ -51,7 +51,7 @@
         </activity>
 
         <activity
-            android:name=".activities.UserActivity"
+            android:name=".activities.MapActivity"
             android:theme="@style/MyTheme" />
         <activity
             android:name=".activities.LoginActivity"

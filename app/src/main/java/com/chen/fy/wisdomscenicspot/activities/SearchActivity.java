@@ -287,22 +287,19 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     //新增一条历史记录
                     addHistory(poiItem.getTitle(), latitude, longitude);
                     //回传经纬度给谷歌地图进行显示
-                    Intent intent = new Intent();
-                    intent.putExtra("latitude", latitude);
-                    intent.putExtra("longitude", longitude);
-                    intent.putExtra("nowLocation", nowLocation);
-                    Log.d("chenyisheng", nowLocation + "--->" + latitude + longitude);
-                    setResult(RESULT_OK, intent);
+                    Intent intent = new Intent(SearchActivity.this, MapActivity.class);
+                    intent.putExtra("Latitude", latitude);
+                    intent.putExtra("Longitude", longitude);
+                    startActivity(intent);
                     finish();
                     break;
                 }
                 case R.id.view_history_adapter_item: {    //点击历史搜索的地点
                     SearchHistoryInfo historyInfo = historyInfos.get(position);
-                    Intent intent = new Intent();
-                    intent.putExtra("latitude", historyInfo.getLatitude());
-                    intent.putExtra("longitude", historyInfo.getLongitude());
-                    Log.d("chenyisheng", historyInfo.getTitle() + "--->" + historyInfo.getLatitude() + historyInfo.getLongitude());
-                    setResult(RESULT_OK, intent);
+                    Intent intent = new Intent(SearchActivity.this, MapActivity.class);
+                    intent.putExtra("Latitude", historyInfo.getLatitude());
+                    intent.putExtra("Longitude", historyInfo.getLongitude());
+                    startActivity(intent);
                     finish();
                     break;
                 }
@@ -314,6 +311,16 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         public void onLongClick(View view, int position) {
             initLongClickSelectBox(position);
             delete_one_dialog.show();
+        }
+
+        @Override
+        public void onItemClick(int i) {
+
+        }
+
+        @Override
+        public void onLongClick(int i) {
+
         }
     }
 

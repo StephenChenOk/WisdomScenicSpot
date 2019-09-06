@@ -1,192 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <!--Toolbar-->
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_my_info"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:navigationIcon="@drawable/return_logo"
-        app:title="我的信息"
-        app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="#666" />
+        android:orientation="vertical">
 
-    <!--间隔-->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#eee" />
-
-    <!--头像-->
-    <LinearLayout
-        android:id="@+id/head_icon_my_info_box"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/item_selector"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="头像"
-            android:textColor="#666"
-            android:textSize="17sp" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/head_icon_my_info"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="270dp"
-            android:src="@drawable/user_12" />
-
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:src="@drawable/into_my_info" />
-
-    </LinearLayout>
-
-    <!--昵称-->
-    <LinearLayout
-        android:id="@+id/name_my_info_box"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/item_selector"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="昵称"
-            android:textColor="#666"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/name_my_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="匿名网友" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:src="@drawable/into_my_info" />
-
-    </LinearLayout>
-
-    <!--账号-->
-    <LinearLayout
-        android:id="@+id/id_my_info_box"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/item_selector"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="账号"
-            android:textColor="#666"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/id_my_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="123" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:src="@drawable/into_my_info" />
-
-    </LinearLayout>
-
-    <!--手机号-->
-    <LinearLayout
-        android:id="@+id/phone_my_info_box"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/item_selector"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="手机号"
-            android:textColor="#666"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/phone_my_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="123" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:src="@drawable/into_my_info" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <Button
-            android:id="@+id/out_my_info"
+        <!--Toolbar-->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_my_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_height="?attr/actionBarSize"
+            android:fitsSystemWindows="true"
+            app:navigationIcon="@drawable/return_logo"
+            app:title="我的信息"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:titleTextColor="#666" />
+
+        <!--间隔-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="#eee" />
+
+        <!--头像-->
+        <LinearLayout
+            android:id="@+id/head_icon_my_info_box"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/item_selector"
-            android:layout_marginBottom="10dp"
-            android:text="退出当前账号"
-            android:textColor="#ff0000"
-            android:textSize="16sp"/>
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-    </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="头像"
+                android:textColor="#666"
+                android:textSize="17sp" />
 
-</LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/head_icon_my_info"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="270dp"
+                android:src="@drawable/user_12" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:src="@drawable/into_my_info" />
+
+        </LinearLayout>
+
+        <!--昵称-->
+        <LinearLayout
+            android:id="@+id/name_my_info_box"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/item_selector"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="昵称"
+                android:textColor="#666"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/name_my_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="匿名网友" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:src="@drawable/into_my_info" />
+
+        </LinearLayout>
+
+        <!--账号-->
+        <LinearLayout
+            android:id="@+id/id_my_info_box"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/item_selector"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="账号"
+                android:textColor="#666"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/id_my_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="123" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:src="@drawable/into_my_info" />
+
+        </LinearLayout>
+
+        <!--手机号-->
+        <LinearLayout
+            android:id="@+id/phone_my_info_box"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/item_selector"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="手机号"
+                android:textColor="#666"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/phone_my_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="123" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:src="@drawable/into_my_info" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/out_my_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/item_selector"
+                android:text="退出当前账号"
+                android:textColor="#ff0000"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

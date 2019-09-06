@@ -21,4 +21,7 @@ public interface ItemClickListener {
      */
     void onLongClick(View view, int position);
 
+    void onItemClick(int i);
+
+    void onLongClick(int i);
 }
