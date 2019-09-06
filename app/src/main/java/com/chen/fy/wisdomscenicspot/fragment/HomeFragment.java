@@ -27,6 +27,7 @@ import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.SceneryAdapter;
 import com.chen.fy.wisdomscenicspot.beans.SceneryInfo;
 import com.chen.fy.wisdomscenicspot.adapter.MyPagerAdapter;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,8 +96,11 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         super.onViewCreated(view, savedInstanceState);
 
         initView(view);
-
+        //设置手机应用内部状态栏字体图标为白色
+        changeStatusBarTextImgColor(false);
     }
+
+
 
     private void initView(@NonNull View view) {
         //寻找控件
@@ -189,6 +193,22 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         list.add(sceneryInfo3);
     }
 
+
+    /**
+     * 界面设置状态栏字体颜色
+     */
+    public void changeStatusBarTextImgColor(boolean isBlack) {
+        if(getActivity()!=null) {
+            if (isBlack) {
+                //设置状态栏黑色字体
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else {
+                //恢复状态栏白色字体
+                getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            }
+        }
+    }
+
     /**
      * 当页面滚动时回调这个方法
      *
@@ -238,16 +258,22 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if(getActivity()!=null) {
+            UiUtils.changeStatusBarTextImgColor(getActivity(), false);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.weather_home_tv:
-                Toast.makeText(getContext(),"天气...",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.wc_home_tv:
-                Toast.makeText(getContext(),"厕所...",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.search_home:
-                Toast.makeText(getContext(),"搜索...",Toast.LENGTH_SHORT).show();
                 if(getActivity()!=null) {
                     Intent intent = new Intent(getActivity(), SearchActivity.class);
                     startActivity(intent);
@@ -270,7 +296,6 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     public void onItemClick(int position) {
         switch (list.get(position).getName()){
             case "象鼻山":
-                Toast.makeText(getContext(),"象鼻山...",Toast.LENGTH_SHORT).show();
                 if(getActivity()!=null) {
                     Intent intent = new Intent(getActivity(), MapActivity.class);
                     intent.putExtra("Latitude",25.267088);
@@ -279,7 +304,6 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
                 }
                 break;
             case "普贤塔":
-                Toast.makeText(getContext(),"普贤塔...",Toast.LENGTH_SHORT).show();
                 if(getActivity()!=null) {
                     Intent intent = new Intent(getActivity(), MapActivity.class);
                     intent.putExtra("Latitude",25.267242);
@@ -289,7 +313,6 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
 
                 break;
             case "桂林抗战遗址":
-                Toast.makeText(getContext(),"桂林抗战遗址...",Toast.LENGTH_SHORT).show();
                 if(getActivity()!=null) {
                     Intent intent = new Intent(getActivity(), MapActivity.class);
                     intent.putExtra("Latitude",25.266798);

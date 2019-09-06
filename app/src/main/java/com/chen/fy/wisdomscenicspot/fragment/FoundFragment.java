@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 public class FoundFragment extends Fragment {
 
@@ -21,6 +22,15 @@ public class FoundFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(getActivity()!=null) {
+            UiUtils.changeStatusBarTextImgColor(getActivity(), true);
+        }
     }
 
 }

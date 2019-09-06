@@ -13,6 +13,7 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.fragment.FoundFragment;
 import com.chen.fy.wisdomscenicspot.fragment.HomeFragment;
 import com.chen.fy.wisdomscenicspot.fragment.MineFragment;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener{
 
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 commitAllowingStateLoss();
 
         radioGroup.setOnCheckedChangeListener(this);
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     @Override

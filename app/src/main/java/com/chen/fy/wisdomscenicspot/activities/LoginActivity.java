@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.application.MyApplication;
 import com.chen.fy.wisdomscenicspot.utils.LoginRegisterUtils;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 public class LoginActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
@@ -51,6 +52,9 @@ public class LoginActivity extends AppCompatActivity implements RadioGroup.OnChe
                 finish();
             }
         });
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     //反射右上角菜单项

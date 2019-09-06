@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.utils.ScenicDescribeUtils;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 public class PushSceneryActivity extends AppCompatActivity {
 
@@ -59,5 +60,8 @@ public class PushSceneryActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 }

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.consts.Consts;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.compress.CompressConfig;
@@ -117,6 +118,9 @@ public class FeedbackActivity extends TakePhotoActivity {
                 finish();
             }
         });
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     /***

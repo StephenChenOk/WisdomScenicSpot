@@ -25,4 +25,5 @@ public class MyApplication extends MultiDexApplication {
     public static Context getContext(){
         return context;
     }
+
 }

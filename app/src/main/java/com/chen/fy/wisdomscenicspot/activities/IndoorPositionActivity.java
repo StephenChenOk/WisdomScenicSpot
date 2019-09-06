@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.utils.DensityUtil;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
@@ -110,6 +111,9 @@ public class IndoorPositionActivity extends AppCompatActivity {
             }
         });
         Log.d("getHeight()", String.valueOf(toolbar.getMeasuredHeight()));
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     private void initBle() {

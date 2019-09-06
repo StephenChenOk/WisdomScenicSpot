@@ -27,6 +27,7 @@ import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.SearchAdapter;
 import com.chen.fy.wisdomscenicspot.adapter.SearchHistoryAdapter;
 import com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import org.litepal.LitePal;
 
@@ -107,6 +108,9 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                 finish();
             }
         });
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     /**

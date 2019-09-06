@@ -19,9 +19,9 @@ import android.widget.Toast;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.activities.LoginActivity;
 import com.chen.fy.wisdomscenicspot.activities.MyInfoActivity;
-import com.chen.fy.wisdomscenicspot.activities.UserActivity;
 import com.chen.fy.wisdomscenicspot.beans.Manager;
 import com.chen.fy.wisdomscenicspot.beans.Visitor;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import org.litepal.LitePal;
 
@@ -57,11 +57,16 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if(getActivity()!=null) {
+            UiUtils.changeStatusBarTextImgColor(getActivity(), true);
+        }
 
         //显示一些简单的用户信息
         //获取之前的登入状态

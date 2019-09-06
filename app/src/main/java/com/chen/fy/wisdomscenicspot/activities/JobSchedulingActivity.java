@@ -13,6 +13,7 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.JobSchedulingAdapter;
 import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import org.litepal.LitePal;
 
@@ -60,6 +61,9 @@ public class JobSchedulingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     private void initData() {

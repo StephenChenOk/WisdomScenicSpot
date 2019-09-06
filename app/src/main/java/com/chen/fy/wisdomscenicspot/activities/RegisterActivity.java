@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.beans.Visitor;
 import com.chen.fy.wisdomscenicspot.utils.LoginRegisterUtils;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import java.util.UUID;
 
@@ -52,6 +53,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 finish();
             }
         });
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);
     }
 
     @Override

@@ -3,11 +3,14 @@ package com.chen.fy.wisdomscenicspot.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -59,6 +62,7 @@ import com.chen.fy.wisdomscenicspot.consts.Consts;
 import com.chen.fy.wisdomscenicspot.utils.AStarUtils;
 import com.chen.fy.wisdomscenicspot.utils.DateUtils;
 import com.chen.fy.wisdomscenicspot.utils.RoadPlanningUtils;
+import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
@@ -83,6 +87,8 @@ import static com.amap.api.maps.model.HeatmapTileProvider.DEFAULT_GRADIENT;
 
 public class MapActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_OPEN_BLUE_TOOTH = 1;
+    private static final int REQUEST_CODE_OPEN_GPS = 2;
     private final String Tag = "MapActivity";
 
     /**
@@ -146,6 +152,7 @@ public class MapActivity extends AppCompatActivity {
      * 室内定位
      */
     private LinearLayout indoor_position_box;
+    private BluetoothAdapter mBluetoothAdapter;
 
 
     @Override
@@ -176,6 +183,10 @@ public class MapActivity extends AppCompatActivity {
      * 初始化view
      */
     private void initView(Bundle savedInstanceState) {
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this,true);//将状态栏字体变为黑色
+
         //获取地图控件引用
         mMapView = findViewById(R.id.map);
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
@@ -997,12 +1008,76 @@ public class MapActivity extends AppCompatActivity {
 //                    Intent indoorPositionIntent = new Intent(MapActivity.this, IndoorPositionActivity.class);
 //                    startActivity(indoorPositionIntent);
                     Toast.makeText(MapActivity.this, "开启景物推送", Toast.LENGTH_SHORT).show();
-                    initBle();
+                    checkPermissions();
                     break;
                 case R.id.title_job_scheduling_dialog: //工作调度弹窗详细情况说明
 
                     break;
             }
+        }
+    }
+
+    private void checkPermissions() {
+        //判断是否已经打开蓝牙
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!mBluetoothAdapter.isEnabled()) {
+            Toast.makeText(this, "请先打开蓝牙...", Toast.LENGTH_LONG).show();
+            //1 隐式打开蓝牙
+            //mBluetoothAdapter.enable();
+
+            //2 弹出对话框供用户选择是否打开蓝牙
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_CODE_OPEN_BLUE_TOOTH);
+        } else {
+            if (checkGPSIsOpen()) {
+                Toast.makeText(this, "开始扫描", Toast.LENGTH_LONG).show();
+                initBle();
+            } else {
+                Toast.makeText(this, "请先打开GPS", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent();
+                intent.setAction(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
+            }
+        }
+    }
+
+    /**
+     * 检查GPS定位是否已经打开
+     */
+    private boolean checkGPSIsOpen() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null)
+            return false;
+        return locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_OPEN_BLUE_TOOTH:   //打开蓝牙
+                if (mBluetoothAdapter.isEnabled()) {
+                    if (checkGPSIsOpen()) {
+                        Toast.makeText(this, "开始扫描", Toast.LENGTH_LONG).show();
+                        initBle();
+                    } else {
+                        Toast.makeText(this, "请先打开GPS", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.setAction(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
+                    }
+                } else {
+                    Toast.makeText(this, "请先打开蓝牙", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case REQUEST_CODE_OPEN_GPS:         //打开GPS
+                if (checkGPSIsOpen()) {
+                    Toast.makeText(this, "开始扫描", Toast.LENGTH_LONG).show();
+                    initBle();
+                } else {
+                    Toast.makeText(this, "请先打开GPS", Toast.LENGTH_LONG).show();
+                }
+                break;
         }
     }
 
@@ -1148,10 +1223,6 @@ public class MapActivity extends AppCompatActivity {
             endMarker.remove();
             endMarker = null;
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
     @Override
