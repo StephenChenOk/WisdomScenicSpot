@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     private LinearLayout box;
     private TextView search_tv;
     private TextView weather_tv;
+    private TextView translation_home_tv;
     private TextView wc_tv;
 
     private RecyclerView recyclerView;
@@ -109,12 +110,14 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         box = view.findViewById(R.id.box_home);
         search_tv = view.findViewById(R.id.search_home);
         weather_tv = view.findViewById(R.id.weather_home_tv);
+        translation_home_tv = view.findViewById(R.id.translation_home_tv);
         wc_tv = view.findViewById(R.id.wc_home_tv);
         recyclerView = view.findViewById(R.id.rv_home);
 
         //设置点击事件
         search_tv.setOnClickListener(this);
         weather_tv.setOnClickListener(this);
+        translation_home_tv.setOnClickListener(this);
         wc_tv.setOnClickListener(this);
     }
 
@@ -272,6 +275,8 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
             case R.id.weather_home_tv:
                 break;
             case R.id.wc_home_tv:
+                break;
+            case R.id.translation_home_tv:
                 break;
             case R.id.search_home:
                 if(getActivity()!=null) {

@@ -1,7 +1,6 @@
 package com.chen.fy.wisdomscenicspot.activities;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,15 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiResult;
@@ -35,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import me.shaohui.bottomdialog.BottomDialog;
 
 public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoiSearchListener, SearchView.OnQueryTextListener {
 
@@ -64,10 +61,12 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
      * 历史记录item点击接口
      */
     private ItemClickListener mItemClickListener;
-    private AlertDialog delete_one_dialog;
-    private AlertDialog delete_all_dialog;
     private TextView tv_delete_history;
     private TextView tv_search_empty;
+
+    //底部弹出框
+    private BottomDialog bottomOneDialog;
+    private BottomDialog bottomAllDialog;
 
 
     @Override
@@ -110,7 +109,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         });
 
         //将状态栏字体变为黑色
-        UiUtils.changeStatusBarTextImgColor(this,true);
+        UiUtils.changeStatusBarTextImgColor(this, true);
     }
 
     /**
@@ -314,7 +313,6 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
         @Override
         public void onLongClick(View view, int position) {
             initLongClickSelectBox(position);
-            delete_one_dialog.show();
         }
 
         @Override
@@ -331,39 +329,38 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
     /**
      * 长按item时弹出一个对话框,可进行删除等操作
      */
-    private void initLongClickSelectBox(int position) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        //反射一个自定义的全新的对话框布局
-        View view = inflater.inflate(R.layout.delect_item_dialog, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        delete_one_dialog = builder.create();
-        //在当前布局中找到控件对象
-        Button btn_item_delete = view.findViewById(R.id.delete_item_dialog);
-        Button btn_item_cancel = view.findViewById(R.id.cancel_item_dialog);
-        //监听事件
-        btn_item_delete.setOnClickListener(new SearchActivity.MyOnClickListener(position));
-        btn_item_cancel.setOnClickListener(new SearchActivity.MyOnClickListener(position));
+    private void initLongClickSelectBox(final int position) {
+
+        bottomOneDialog = BottomDialog.create(getSupportFragmentManager())
+                .setViewListener(new BottomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View v) {
+                        v.findViewById(R.id.search_one_dialog_delete).setOnClickListener(new MyOnClickListener(position));
+                        v.findViewById(R.id.search_one_dialog_cancel).setOnClickListener(new MyOnClickListener(position));
+                    }
+                })
+                .setLayoutRes(R.layout.search_one_bottom_dialog_layout)
+                .setDimAmount(0.4f)            // 背景亮暗程度
+                .setCancelOutside(true);     // 点击view外是否可以取消
+        bottomOneDialog.show();
     }
 
     /**
      * 删除所有的历史记录
      */
     private void initDeleteAllSelectBox() {
-        //反射一个自定义的全新的对话框布局
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.delect_all_dialog, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        builder.setTitle("清空历史记录?");
-        delete_all_dialog = builder.create();
-        //在当前布局中找到控件对象
-        Button btn_all_delete = view.findViewById(R.id.delete_all_dialog);
-        Button btn_all_cancel = view.findViewById(R.id.cancel_all_dialog);
-        //监听事件
-        btn_all_delete.setOnClickListener(new SearchActivity.MyOnClickListener());
-        btn_all_cancel.setOnClickListener(new SearchActivity.MyOnClickListener());
-
+        bottomAllDialog = BottomDialog.create(getSupportFragmentManager())
+                .setViewListener(new BottomDialog.ViewListener() {
+                    @Override
+                    public void bindView(View v) {
+                        v.findViewById(R.id.search_all_dialog_delete).setOnClickListener(new MyOnClickListener());
+                        v.findViewById(R.id.search_all_dialog_cancel).setOnClickListener(new MyOnClickListener());
+                    }
+                })
+                .setLayoutRes(R.layout.search_all_bottom_dialog_layout)
+                .setDimAmount(0.4f)            // 背景亮暗程度
+                .setCancelOutside(true);     // 点击view外是否可以取消
+        bottomAllDialog.show();
     }
 
     /**
@@ -389,27 +386,22 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                 case R.id.tv_delete_history:
                     //弹出一个删除全部的选择框
                     initDeleteAllSelectBox();
-                    delete_all_dialog.show();
                     break;
-                case R.id.delete_item_dialog:
-                    ////删除某一条历史纪录
+                case R.id.search_one_dialog_delete:
+                    //删除某一条历史纪录
                     deleteOneHistory(position);
-                    //弹出框关闭
-                    delete_one_dialog.dismiss();
+                    bottomOneDialog.dismiss();
                     break;
-                case R.id.cancel_item_dialog:
-                    //弹出框关闭
-                    delete_one_dialog.dismiss();
+                case R.id.search_one_dialog_cancel:
+                    bottomOneDialog.dismiss();
                     break;
-                case R.id.delete_all_dialog:
-                    //删除全部历史纪录
+                case R.id.search_all_dialog_delete:
+                    //删除某一条历史纪录
                     deleteAllHistory();
-                    //弹出框关闭
-                    delete_all_dialog.dismiss();
+                    bottomAllDialog.dismiss();
                     break;
-                case R.id.cancel_all_dialog:
-                    //弹出框关闭
-                    delete_all_dialog.dismiss();
+                case R.id.search_all_dialog_cancel:
+                    bottomAllDialog.dismiss();
                     break;
             }
         }

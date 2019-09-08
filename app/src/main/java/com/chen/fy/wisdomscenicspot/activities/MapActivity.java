@@ -167,7 +167,7 @@ public class MapActivity extends AppCompatActivity {
         setRoadSignVisible();
 
         //申请权限
-        applyPermission();
+        requestLocation();
 
         //绘制Marker
         drawMarker();
@@ -185,7 +185,7 @@ public class MapActivity extends AppCompatActivity {
     private void initView(Bundle savedInstanceState) {
 
         //将状态栏字体变为黑色
-        UiUtils.changeStatusBarTextImgColor(this,true);//将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this, true);//将状态栏字体变为黑色
 
         //获取地图控件引用
         mMapView = findViewById(R.id.map);
@@ -257,9 +257,9 @@ public class MapActivity extends AppCompatActivity {
         //设置地图的放缩级别
         // aMap.moveCamera(CameraUpdateFactory.zoomTo(20));
         //一开始把地图镜头设置在太平天国纪念馆
-        if(getIntent()!=null) {
-            navigateTo(getIntent().getDoubleExtra("Latitude",25.266431),
-                    getIntent().getDoubleExtra("Longitude",110.295181));
+        if (getIntent() != null) {
+            navigateTo(getIntent().getDoubleExtra("Latitude", 25.266431),
+                    getIntent().getDoubleExtra("Longitude", 110.295181));
         }
         aMap.showIndoorMap(true);
     }
@@ -461,7 +461,9 @@ public class MapActivity extends AppCompatActivity {
                 RoadPlanningUtils.zyToRuins_road3(latLngs);
                 end = "桂林抗战遗址";
                 break;
-
+            default:
+                Toast.makeText(this,"输入错误...",Toast.LENGTH_SHORT).show();
+                return;
         }
         if (polyline != null) {
             polyline.remove();
@@ -640,63 +642,6 @@ public class MapActivity extends AppCompatActivity {
         // 向地图上添加 TileOverlayOptions 类对象
         aMap.addTileOverlay(tileOverlayOptions);
         aMap.removecache();
-
-    }
-
-    /**
-     * 动态申请危险权限
-     */
-    private void applyPermission() {
-        //权限集合
-        List<String> permissionList = new ArrayList<>();
-        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.
-                ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.
-                ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.
-                READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        }
-        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.
-                WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.
-                SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            permissionList.add(Manifest.permission.SEND_SMS);
-        }
-        if (!permissionList.isEmpty()) {
-            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
-            ActivityCompat.requestPermissions(MapActivity.this, permissions, 1);
-        } else {    //已经全部授权
-            requestLocation();   //开始进行定位
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0) {
-                    for (int result : grantResults) {
-                        if (result != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(MapActivity.this, "必须同意所有权限才可以使用本程序!", Toast.LENGTH_SHORT).show();
-                            finish();
-                            return;
-                        }
-                    }
-                    requestLocation();   //权限已经被全部授权
-                } else {
-                    Toast.makeText(MapActivity.this, "发生未知错误", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                break;
-            default:
-        }
     }
 
     /**
@@ -843,8 +788,8 @@ public class MapActivity extends AppCompatActivity {
          */
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
-
         }
+
         /**
          * 当接受到服务端传来的信息时回调，消息内容为String类型
          */
@@ -857,23 +802,18 @@ public class MapActivity extends AppCompatActivity {
                 public void run() {
                     //根据实时人流量更新地图
                     String[] s = text.split(",");
-                    String flag = s[s.length - 1];
-                    if (flag.equals("0")) {
-                        //根据人流量信息更新地图
-                        updateMap(text);
-                    } else if (flag.equals("1")) {
-                        Log.d("发短息信息", text);
-                        //发短信
-                        sendMessage(text);
-                    }
+                    updateMap(text);
                 }
             }.start();
         }
+
         /**
          * 当接受到服务端传来的信息时回调，消息内容为ByteString类型
          */
         @Override
-        public void onMessage(WebSocket webSocket, ByteString bytes) { }
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
+        }
+
         /**
          * 当服务端暗示没有数据交互时回调（即此时准备关闭，但连接还没有关闭）
          */
@@ -882,6 +822,7 @@ public class MapActivity extends AppCompatActivity {
             webSocket.close(1000, null);
             Log.d(Tag, "正在关闭");
         }
+
         /**
          * 当连接已经释放的时候被回调
          */
@@ -889,6 +830,7 @@ public class MapActivity extends AppCompatActivity {
         public void onClosed(WebSocket webSocket, int code, String reason) {
             Log.d(Tag, "关闭");
         }
+
         /**
          * 失败时被回调（包括连接失败，发送失败等）。
          */
@@ -910,29 +852,6 @@ public class MapActivity extends AppCompatActivity {
         webSocket = client.newWebSocket(request, webSocketListener);
 
         client.dispatcher().executorService().shutdown();
-    }
-
-    private void sendMessage(String text) {
-
-        String[] s = text.split(",");
-        String phone = s[0];
-        String address = "";
-        switch (s[1]) {
-            case "town":
-                address = "普贤塔";
-                break;
-            case "rock":
-                address = "象鼻山";
-                break;
-            case "ruins":
-                address = "桂林抗战遗址";
-                break;
-        }
-        String number = s[2];
-        String messageInfo = "【桂林象山智慧景区】 无人值守助理：{" + address + "}地点出现人流量爆发情况，人数为{" + number + "},请及时处理";
-        SmsManager.getDefault().sendTextMessage(phone,
-                null, messageInfo, null, null);
-        Log.d("sendMessage..Info","sendSuccess!");
     }
 
     /**

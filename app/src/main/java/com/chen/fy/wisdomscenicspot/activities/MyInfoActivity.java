@@ -17,13 +17,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.FragmentManager;
 
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.beans.Visitor;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
-import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.TContextWrap;
@@ -37,6 +37,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.shaohui.bottomdialog.BottomDialog;
 
 public class MyInfoActivity extends TakePhotoActivity implements View.OnClickListener {
 
@@ -53,9 +54,8 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
 
     private Dialog dialog;
 
-    /**
-     * 当前用户登入的账号
-     */
+
+    //当前用户登入的账号
     private String userId;
 
     @Override

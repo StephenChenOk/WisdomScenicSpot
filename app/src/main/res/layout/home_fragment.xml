@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/home_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
+        android:layout_height="300dp"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -32,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/viewpager_home"
-                android:layout_marginTop="280dp"
+                android:layout_marginTop="240dp"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -49,6 +47,7 @@
                     android:id="@+id/box_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:orientation="horizontal" />
 
@@ -88,34 +87,46 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                android:orientation="horizontal"
+                android:padding="20dp">
 
                 <TextView
                     android:id="@+id/weather_home_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="70dp"
+                    android:layout_weight="1"
                     android:drawableTop="@drawable/weather_logo"
+                    android:gravity="center"
                     android:text="实时天气"
                     android:textColor="#333"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/translation_home_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/translation_logo"
+                    android:gravity="center"
+                    android:text="在线翻译"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/wc_home_tv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="70dp"
+                    android:layout_weight="1"
                     android:drawableTop="@drawable/wc_logo"
+                    android:gravity="center"
                     android:text="附近厕所"
                     android:textColor="#333"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

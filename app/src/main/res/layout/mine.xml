@@ -1,73 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/home_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical">
+        android:layout_height="220dp"
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginLeft="15dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_height="220dp"
+            android:background="@drawable/mine_bg_1"
+            android:fitsSystemWindows="true"
+            android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/head_icon_mine"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="30dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="60dp"
+                android:fitsSystemWindows="true"
                 android:src="@drawable/user_12" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="5dp">
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/user_name_mine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="37dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="70dp"
                     android:text="登入/注册"
                     android:textColor="#000"
-                    android:textSize="17dp" />
+                    android:textSize="19dp" />
 
                 <TextView
                     android:id="@+id/info_text_mine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:text="" />
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:text=""
+                    android:textSize="15sp"/>
 
             </LinearLayout>
-
         </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
 
-        <!--间隔-->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:background="#eee" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="220dp"
+        android:orientation="vertical">
 
         <!--离线地图-->
         <LinearLayout
             android:id="@+id/map_mine_box"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/item_selector"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="20dp"
+            android:clickable="true">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -83,25 +86,29 @@
                 android:textColor="#333"
                 android:textSize="17sp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="205dp"
+                android:src="@drawable/into_my_info"/>
+
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/my_hint" />
+            android:layout_height="15dp"
+            android:background="#eee" />
 
         <!--我的反馈-->
         <LinearLayout
             android:id="@+id/feedback_mine_box"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/item_selector"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:clickable="true"
+            android:padding="20dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -117,6 +124,12 @@
                 android:textColor="#333"
                 android:textSize="17sp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="205dp"
+                android:src="@drawable/into_my_info"/>
+
         </LinearLayout>
 
         <View
@@ -124,19 +137,19 @@
             android:layout_height="1dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@color/my_hint" />
+            android:background="#eee" />
 
 
         <!--我的收藏-->
         <LinearLayout
             android:id="@+id/thanking_mine_box"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/item_selector"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:clickable="true"
+            android:padding="20dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -152,26 +165,30 @@
                 android:textColor="#333"
                 android:textSize="17sp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="205dp"
+                android:src="@drawable/into_my_info"/>
+
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/my_hint" />
+            android:layout_height="15dp"
+            android:background="#eee" />
 
 
         <!--帮助中心-->
         <LinearLayout
             android:id="@+id/helping_mine_box"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/item_selector"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:clickable="true"
+            android:padding="20dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -187,6 +204,12 @@
                 android:textColor="#333"
                 android:textSize="17sp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="205dp"
+                android:src="@drawable/into_my_info"/>
+
         </LinearLayout>
 
         <View
@@ -194,19 +217,19 @@
             android:layout_height="1dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@color/my_hint" />
+            android:background="#eee" />
 
 
         <!--设置-->
         <LinearLayout
             android:id="@+id/set_mine_box"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/item_selector"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:clickable="true"
+            android:padding="20dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -222,14 +245,20 @@
                 android:textColor="#333"
                 android:textSize="17sp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="205dp"
+                android:src="@drawable/into_my_info"/>
+
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/my_hint" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#eee" />
 
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
