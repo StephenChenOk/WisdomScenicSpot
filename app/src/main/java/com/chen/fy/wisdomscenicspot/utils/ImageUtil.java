@@ -17,7 +17,8 @@ public class ImageUtil {
     static {
         imageMap.put("象鼻山", R.drawable.elephant_hill);
         imageMap.put("普贤塔", R.drawable.px_town);
-        imageMap.put("桂林抗战遗址", R.drawable.kz_ruins);
+        imageMap.put("太平天国纪念馆", R.drawable.jng);
+        imageMap.put("云峰寺", R.drawable.yfs);
     }
 
     //获取相应的图片资源id

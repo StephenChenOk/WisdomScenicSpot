@@ -272,7 +272,7 @@ public class MapActivity extends AppCompatActivity {
         nowLongitude = longitude;
         //aMap = mMapView.getMap();//得到aMap对象
         LatLng latLng = new LatLng(latitude, longitude);//构造一个位置
-        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
     }
 
     /**

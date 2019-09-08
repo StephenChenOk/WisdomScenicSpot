@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
             R.drawable.elephant_hill,
             R.drawable.sjg,
             R.drawable.slzx,
+            R.drawable.bsh,
             R.drawable.px_town
     };
     //图片标题
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
             "象鼻山",
             "水晶宫",
             "狮岭朝霞",
+            "八路军桂林办事处纪念馆",
             "普贤塔"
     };
 
@@ -130,7 +132,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         viewPager.setAdapter(new MyPagerAdapter(getContext()));
         viewPager.addOnPageChangeListener(this);
         //设置当前页面在中间位置,保证可以实现左右滑动的效果
-        viewPager.setCurrentItem(100);           //要保证是实际图片数量的整数倍,也就是保证每次进入都是先显示的第一张图片
+        viewPager.setCurrentItem(250);           //要保证是实际图片数量的整数倍,也就是保证每次进入都是先显示的第一张图片
         title.setText(imagesTitle[prePosition]);
         //第一次进入时延迟发消息
         handler.sendEmptyMessageDelayed(0,3000);
@@ -186,14 +188,21 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
         sceneryInfo2.setDistance(29.11);
 
         SceneryInfo sceneryInfo3 = new SceneryInfo();
-        sceneryInfo3.setName("桂林抗战遗址");
+        sceneryInfo3.setName("太平天国纪念馆");
         sceneryInfo3.setAddress("广西省桂林市象山景区");
         sceneryInfo3.setNumber(124);
         sceneryInfo3.setDistance(28.31);
 
+        SceneryInfo sceneryInfo4 = new SceneryInfo();
+        sceneryInfo4.setName("云峰寺");
+        sceneryInfo4.setAddress("广西省桂林市象山景区");
+        sceneryInfo4.setNumber(91);
+        sceneryInfo4.setDistance(27.55);
+
         list.add(sceneryInfo1);
         list.add(sceneryInfo2);
         list.add(sceneryInfo3);
+        list.add(sceneryInfo4);
     }
 
 
@@ -315,16 +324,22 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
                     intent.putExtra("Longitude",110.296046);
                     startActivity(intent);
                 }
-
                 break;
-            case "桂林抗战遗址":
+            case "太平天国纪念馆":
                 if(getActivity()!=null) {
                     Intent intent = new Intent(getActivity(), MapActivity.class);
-                    intent.putExtra("Latitude",25.266798);
-                    intent.putExtra("Longitude",110.295988);
+                    intent.putExtra("Latitude",25.266431);
+                    intent.putExtra("Longitude",110.295181);
                     startActivity(intent);
                 }
-
+                break;
+            case "云峰寺":
+                if(getActivity()!=null) {
+                    Intent intent = new Intent(getActivity(), MapActivity.class);
+                    intent.putExtra("Latitude",25.266559);
+                    intent.putExtra("Longitude",110.295011);
+                    startActivity(intent);
+                }
                 break;
         }
     }

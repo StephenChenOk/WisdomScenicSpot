@@ -25,7 +25,7 @@ public class MyPagerAdapter extends PagerAdapter {
      */
     @Override
     public int getCount() {
-        return 200;            //实现左右无限滑动   数值可以任意调动
+        return 500;            //实现左右无限滑动   数值可以任意调动
     }
 
     /**
@@ -77,7 +77,6 @@ public class MyPagerAdapter extends PagerAdapter {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(myContext, HomeFragment.imagesTitle[position % HomeFragment.images.size()], Toast.LENGTH_SHORT).show();
             }
         });
         if (imageView.getParent() != null) {
