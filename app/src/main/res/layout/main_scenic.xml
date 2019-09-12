@@ -47,7 +47,7 @@
             android:button="@null"
             android:drawableTop="@drawable/bg_found"
             android:gravity="center"
-            android:text="发现"
+            android:text="目的地"
             android:textColor="@drawable/bottom_bar_text_color" />
 
         <RadioButton

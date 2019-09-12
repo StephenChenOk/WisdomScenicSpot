@@ -83,7 +83,6 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
     private void initView() {
         //设置toolbar
         Toolbar toolbar = findViewById(R.id.toolbar_my_info);
-
         //找到控件
         LinearLayout head_icon_my_info_box = findViewById(R.id.head_icon_my_info_box);
         LinearLayout name_my_info_box = findViewById(R.id.name_my_info_box);

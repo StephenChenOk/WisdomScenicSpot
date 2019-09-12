@@ -86,6 +86,10 @@
         <activity
             android:name=".activities.PushSceneryActivity"
             android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.ViewPointActivity"
+            android:theme="@style/MyTheme" />
+
 
 
 
