@@ -52,7 +52,7 @@
                 android:id="@+id/head_icon_my_info"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginLeft="270dp"
+                android:layout_marginLeft="258dp"
                 android:src="@drawable/user_12" />
 
 
@@ -91,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="匿名网友" />
+                android:text="匿名网友"
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -128,7 +129,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="123" />
+                android:text="123"
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -165,7 +167,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="123" />
+                android:text="123"
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -188,11 +191,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/item_selector"
                 android:text="退出当前账号"
                 android:textColor="#ff0000"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
         </RelativeLayout>
     </LinearLayout>

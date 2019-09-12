@@ -37,8 +37,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void initView(){
         //设置toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar_register);
-        setSupportActionBar(toolbar);
+       // Toolbar toolbar = findViewById(R.id.toolbar_register);
+        //setSupportActionBar(toolbar);
 
         et_userId = findViewById(R.id.userId_register);
         et_passwdOne = findViewById(R.id.password_one_register);
@@ -47,12 +47,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         btn_register.setOnClickListener(this);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
 
         //将状态栏字体变为黑色
         UiUtils.changeStatusBarTextImgColor(this,true);
