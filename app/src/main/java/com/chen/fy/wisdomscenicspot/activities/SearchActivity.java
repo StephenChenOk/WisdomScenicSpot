@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -293,6 +294,7 @@ public class SearchActivity extends AppCompatActivity implements PoiSearch.OnPoi
                     Intent intent = new Intent(SearchActivity.this, MapActivity.class);
                     intent.putExtra("Latitude", latitude);
                     intent.putExtra("Longitude", longitude);
+                    Log.d("经纬度：", latitude + "," + longitude);
                     startActivity(intent);
                     finish();
                     break;

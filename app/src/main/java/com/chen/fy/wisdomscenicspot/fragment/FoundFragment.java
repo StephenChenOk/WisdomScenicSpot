@@ -1,5 +1,6 @@
 package com.chen.fy.wisdomscenicspot.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.activities.ViewPointActivity;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 public class FoundFragment extends Fragment implements View.OnClickListener{
@@ -50,7 +52,9 @@ public class FoundFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.chongqi_cd:
-
+                Intent intent = new Intent(getActivity(), ViewPointActivity.class);
+                intent.putExtra("目的地","重庆");
+                startActivity(intent);
                 break;
             case R.id.beijing_cd:
                 break;

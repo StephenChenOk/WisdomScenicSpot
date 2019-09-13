@@ -22,8 +22,13 @@
             app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleTextColor="#666" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eee"/>
+
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_home"
+            android:id="@+id/rv_viewpoint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp">

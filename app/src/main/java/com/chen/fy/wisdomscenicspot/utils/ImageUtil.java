@@ -19,6 +19,14 @@ public class ImageUtil {
         imageMap.put("普贤塔", R.drawable.px_town);
         imageMap.put("太平天国纪念馆", R.drawable.jng);
         imageMap.put("云峰寺", R.drawable.yfs);
+
+        imageMap.put("磁器口古镇", R.drawable.ci_qi_kou);
+        imageMap.put("解放碑步行街", R.drawable.jie_fang_bei);
+        imageMap.put("武隆天生三桥", R.drawable.san_qiao);
+        imageMap.put("大足石刻", R.drawable.shi_ke);
+        imageMap.put("白公馆", R.drawable.bai_gong_guan);
+        imageMap.put("长江索道", R.drawable.suo_dao);
+        imageMap.put("南山风景区", R.drawable.nan_shan);
     }
 
     //获取相应的图片资源id

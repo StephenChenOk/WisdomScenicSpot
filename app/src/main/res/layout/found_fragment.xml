@@ -31,7 +31,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
+                    android:layout_marginLeft="143dp"
                     android:layout_marginTop="195dp"
                     android:text="重庆"
                     android:textColor="#000"
@@ -55,7 +55,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
+                    android:layout_marginLeft="143dp"
                     android:layout_marginTop="195dp"
                     android:text="北京"
                     android:textColor="#000"
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
+                    android:layout_marginLeft="143dp"
                     android:layout_marginTop="195dp"
                     android:text="上海"
                     android:textColor="#000"

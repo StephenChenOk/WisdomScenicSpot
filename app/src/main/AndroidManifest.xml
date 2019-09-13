@@ -89,6 +89,9 @@
         <activity
             android:name=".activities.ViewPointActivity"
             android:theme="@style/MyTheme" />
+        <activity
+            android:name=".activities.ViewPointDetailActivity"
+            android:theme="@style/MyTheme" />
 
 
 

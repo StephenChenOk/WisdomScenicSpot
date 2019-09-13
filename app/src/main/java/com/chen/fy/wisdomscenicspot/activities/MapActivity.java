@@ -256,7 +256,6 @@ public class MapActivity extends AppCompatActivity {
         initUiSettings();
         //设置地图的放缩级别
         // aMap.moveCamera(CameraUpdateFactory.zoomTo(20));
-        //一开始把地图镜头设置在太平天国纪念馆
         if (getIntent() != null) {
             navigateTo(getIntent().getDoubleExtra("Latitude", 25.266431),
                     getIntent().getDoubleExtra("Longitude", 110.295181));
