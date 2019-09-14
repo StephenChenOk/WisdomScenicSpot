@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.activities.ViewPointDetailActivity;
 import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
@@ -17,7 +18,7 @@ import com.chen.fy.wisdomscenicspot.utils.ImageUtil;
 
 import java.util.List;
 
-public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.ViewHolder> implements View.OnClickListener {
+public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.ViewHolder>{
 
     private List<ViewPointInfo> list;
     private ItemClickListener itemClickLister;
@@ -49,14 +50,15 @@ public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.View
 
         ViewPointInfo viewPointInfo = list.get(i);
 
-        viewHolder.image_iv.setImageResource(ImageUtil.getImageId(viewPointInfo.getName()));
+        //viewHolder.image_iv.setImageResource(ImageUtil.getImageId(viewPointInfo.getName()));
+        Glide.with(myContext).load(ImageUtil.getImageId(viewPointInfo.getName())).into(viewHolder.image_iv);
         viewHolder.name_tv.setText(viewPointInfo.getName());
         viewHolder.address_tv.setText(viewPointInfo.getAddress());
         viewHolder.number_tv.setText(viewPointInfo.getNumber() + "");
         viewHolder.distance_tv.setText(String.format("%skm", viewPointInfo.getDistance()));
 
-        viewHolder.detail_iv.setOnClickListener(this);
-        viewHolder.detail_tv.setOnClickListener(this);
+        viewHolder.detail_iv.setOnClickListener(new MyOnClickListener(i));
+        viewHolder.detail_tv.setOnClickListener(new MyOnClickListener(i));
 
         if (itemClickLister != null) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -80,17 +82,6 @@ public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.View
         return list.size();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.detail_iv_viewpoint:
-            case R.id.detail_tv_viewpoint:
-                Intent intent = new Intent(myContext, ViewPointDetailActivity.class);
-                myContext.startActivity(intent);
-                break;
-        }
-    }
-
     /**
      * 内部类,获取各控件的对象
      */
@@ -107,13 +98,35 @@ public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.View
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            image_iv = itemView.findViewById(R.id.image_scenery);
-            name_tv = itemView.findViewById(R.id.name_scenery);
-            address_tv = itemView.findViewById(R.id.address_scenery);
-            number_tv = itemView.findViewById(R.id.number_scenery);
-            distance_tv = itemView.findViewById(R.id.distance_scenery);
+            image_iv = itemView.findViewById(R.id.image_viewpoint);
+            name_tv = itemView.findViewById(R.id.name_viewpoint);
+            address_tv = itemView.findViewById(R.id.address_viewpoint);
+            number_tv = itemView.findViewById(R.id.number_viewpoint);
+            distance_tv = itemView.findViewById(R.id.distance_viewpoint);
             detail_iv = itemView.findViewById(R.id.detail_iv_viewpoint);
             detail_tv = itemView.findViewById(R.id.detail_tv_viewpoint);
+        }
+    }
+
+    class MyOnClickListener implements View.OnClickListener{
+
+        private int i;
+
+        public MyOnClickListener(int i){
+            this.i = i;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.detail_iv_viewpoint:
+                case R.id.detail_tv_viewpoint:
+                    ViewPointInfo viewPointInfo = list.get(i);
+                    Intent intent = new Intent(myContext, ViewPointDetailActivity.class);
+                    intent.putExtra("ViewPointName", viewPointInfo.getName());
+                    myContext.startActivity(intent);
+                    break;
+            }
         }
     }
 

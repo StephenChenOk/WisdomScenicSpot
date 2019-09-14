@@ -8,13 +8,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.ViewPointAdapter;
-import com.chen.fy.wisdomscenicspot.beans.SceneryInfo;
 import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
@@ -24,7 +21,7 @@ import java.util.List;
 /**
  * 景点推荐活动
  */
-public class ViewPointActivity extends AppCompatActivity implements ItemClickListener, View.OnClickListener {
+public class ViewPointActivity extends AppCompatActivity implements ItemClickListener{
 
     private RecyclerView recyclerView;
     private List<ViewPointInfo> list;
@@ -52,7 +49,12 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
     private void initView() {
         recyclerView = findViewById(R.id.rv_viewpoint);
         toolbar = findViewById(R.id.toolbar_view_point);
-        toolbar.setNavigationOnClickListener(this);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
@@ -129,23 +131,9 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.toolbar_view_point:
-                finish();
-                break;
-        }
-    }
-
+    public void onItemClick(View view, int position) { }
     @Override
-    public void onItemClick(View view, int position) {
-
-    }
-
-    @Override
-    public void onLongClick(View view, int position) {
-
-    }
+    public void onLongClick(View view, int position) { }
 
     @Override
     public void onItemClick(int i) {
@@ -195,9 +183,6 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
                 break;
         }
     }
-
     @Override
-    public void onLongClick(int i) {
-
-    }
+    public void onLongClick(int i) { }
 }

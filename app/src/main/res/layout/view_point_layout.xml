@@ -20,7 +20,7 @@
             app:navigationIcon="@drawable/return_logo"
             app:title=""
             app:titleTextAppearance="@style/Toolbar.TitleText"
-            app:titleTextColor="#666" />
+            app:titleTextColor="#111" />
 
         <View
             android:layout_width="match_parent"

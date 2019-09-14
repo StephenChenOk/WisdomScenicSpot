@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.beans.SceneryInfo;
 import com.chen.fy.wisdomscenicspot.utils.ImageUtil;
@@ -45,9 +46,10 @@ public class SceneryAdapter extends RecyclerView.Adapter<SceneryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
-
         SceneryInfo sceneryInfo = list.get(i);
-        viewHolder.image_iv.setImageResource(ImageUtil.getImageId(sceneryInfo.getName()));
+
+        //viewHolder.image_iv.setImageResource(ImageUtil.getImageId(sceneryInfo.getName()));
+        Glide.with(myContext).load(ImageUtil.getImageId(sceneryInfo.getName())).into(viewHolder.image_iv);
         viewHolder.name_tv.setText(sceneryInfo.getName());
         viewHolder.address_tv.setText(sceneryInfo.getAddress());
         viewHolder.number_tv.setText(sceneryInfo.getNumber()+"");
