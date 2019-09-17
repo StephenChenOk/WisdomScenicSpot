@@ -20,6 +20,11 @@ public class Consts {
     public static final String SCENIC_IDENTIFY_SERVER_URL = "http://47.102.153.115:8989/infer";
 
     /**
+     * 大数据服务器
+     */
+    public static final String BIG_DATA_SERVER_URL = "http://47.102.153.115:8877/pre";
+
+    /**
      * 普通socket上传图片实现拍照识别
      */
     public static final String SOCKET_URL = "47.102.153.115";
