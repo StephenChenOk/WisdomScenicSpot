@@ -1,6 +1,7 @@
 package com.chen.fy.wisdomscenicspot.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,21 +17,11 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.ViewPointAdapter;
 import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
-import com.chen.fy.wisdomscenicspot.consts.Consts;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
-import org.litepal.util.Const;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * 景点推荐活动
@@ -58,9 +49,14 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         viewPointAdapter.setItemClickLister(this);
         recyclerView.setAdapter(viewPointAdapter);
 
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.execute();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getDates();
+//            }
+//        }).start();
 
+        getDates();
     }
 
     private void initView() {
@@ -147,65 +143,17 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         list.add(viewPointInfo7);
     }
 
-    private String doPost() {
-
-        //setType(MultipartBody.FORM)
-        String result = "error";
-        OkHttpClient client = new OkHttpClient();
-        //真机访问电脑本机地址
-        Request request = new Request.Builder().url(Consts.BIG_DATA_SERVER_URL).build();
-        //发送请求并获取服务器返回的数据
-        try {
-            Response response = client.newCall(request).execute();
-            Log.d("chenyisheng", "响应码:" + response.code());
-            if (response.body() != null) {
-                String responseData = response.body().string();
-                Log.d("chenyisheng", "responseData:" + response.code());
-            } else {
-                Log.d("chenyisheng", "请求失败！");
-            }
-        } catch (Exception e) {
-            Log.d("chenyisheng", "无响应码!!");
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     /**
-     * 访问网络AsyncTask,访问网络在子线程进行并返回主线程通知访问的结果
+     * 获取天气数据
      */
-    class NetworkTask extends AsyncTask<String, Integer, String> {
-
-        /**
-         * 后台任务开始之前调用，通常用来初始化界面操作
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        /**
-         * 执行后台耗时操作，已在子线程中执行
-         *
-         * @return 对结果进行返回
-         */
-        @Override
-        protected String doInBackground(String... params) {
-            return doPost();
-        }
-
-        /**
-         * 当后台任务执行完毕时调用
-         *
-         * @param result 后台执行任务的返回值
-         */
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i("chenyisheng", "服务器响应" + result);
-        }
-
+    private void getDates() {
+        SharedPreferences preferences = getSharedPreferences("BigDates", MODE_PRIVATE);
+        Log.d("BigDates",preferences.getString("temperature", ""));
+        Log.d("BigDates",preferences.getString("humidity", ""));
+        Log.d("BigDates",preferences.getString("pressure", ""));
+        Log.d("BigDates",preferences.getString("visibility", ""));
+        Log.d("BigDates",preferences.getString("rainfall", ""));
     }
-
 
     @Override
     public void onItemClick(View view, int position) {

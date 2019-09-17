@@ -19,12 +19,13 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.fragment.FoundFragment;
 import com.chen.fy.wisdomscenicspot.fragment.HomeFragment;
 import com.chen.fy.wisdomscenicspot.fragment.MineFragment;
+import com.chen.fy.wisdomscenicspot.services.BigDatesIntentServices;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
     private HomeFragment homeFragment;
     private FoundFragment foundFragment;
@@ -36,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //将状态栏字体变为黑色
+        UiUtils.changeStatusBarTextImgColor(this, true);
+
         setContentView(R.layout.main_scenic);
 
         this.getFilesDir();
@@ -51,13 +56,13 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         mineFragment = new MineFragment();
 
         //第一次进入时显示home界面
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_main,homeFragment).
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_main, homeFragment).
                 commitAllowingStateLoss();
 
         radioGroup.setOnCheckedChangeListener(this);
 
-        //将状态栏字体变为黑色
-        UiUtils.changeStatusBarTextImgColor(this,true);
+        Intent intent = new Intent(this, BigDatesIntentServices.class);
+        startService(intent);
     }
 
     @Override
@@ -71,24 +76,24 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     public void onClick(View v) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.home_main:
-                transaction.replace(R.id.fragment_main,homeFragment);
+                transaction.replace(R.id.fragment_main, homeFragment);
                 transaction.commitAllowingStateLoss();
                 break;
             case R.id.found_main:
-                transaction.replace(R.id.fragment_main,foundFragment);
+                transaction.replace(R.id.fragment_main, foundFragment);
                 transaction.commitAllowingStateLoss();
                 break;
             case R.id.mine_main:
-                transaction.replace(R.id.fragment_main,mineFragment);
+                transaction.replace(R.id.fragment_main, mineFragment);
                 transaction.commitAllowingStateLoss();
                 break;
         }
     }
 
     //跳转登录界面,方便返回值
-    public void jumpLoginActivity(){
+    public void jumpLoginActivity() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivityForResult(intent, 1);
     }

@@ -92,7 +92,7 @@
         <activity
             android:name=".activities.ViewPointDetailActivity"
             android:theme="@style/MyTheme" />
-
+        <service android:name=".services.BigDatesIntentServices"/>
 
 
 
