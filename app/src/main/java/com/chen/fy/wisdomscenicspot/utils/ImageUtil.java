@@ -27,6 +27,7 @@ public class ImageUtil {
         imageMap.put("白公馆", R.drawable.bai_gong_guan);
         imageMap.put("长江索道", R.drawable.suo_dao);
         imageMap.put("南山风景区", R.drawable.nan_shan);
+        imageMap.put("白帝城景区", R.drawable.bai_di_cheng);
     }
 
     //获取相应的图片资源id

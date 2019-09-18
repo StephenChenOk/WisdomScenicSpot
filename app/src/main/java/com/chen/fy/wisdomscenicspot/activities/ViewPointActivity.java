@@ -96,43 +96,49 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         viewPointInfo1.setName("磁器口古镇");
         viewPointInfo1.setAddress("重庆市沙坪坝区磁器口古镇");
         viewPointInfo1.setNumber(10719);
-        viewPointInfo1.setDistance(30.15);
+        viewPointInfo1.setDistance(325.15);
 
         ViewPointInfo viewPointInfo2 = new ViewPointInfo();
         viewPointInfo2.setName("解放碑步行街");
         viewPointInfo2.setAddress("重庆市渝中区解放碑周边区域");
         viewPointInfo2.setNumber(7825);
-        viewPointInfo2.setDistance(30.15);
+        viewPointInfo2.setDistance(219.15);
 
         ViewPointInfo viewPointInfo3 = new ViewPointInfo();
         viewPointInfo3.setName("武隆天生三桥");
         viewPointInfo3.setAddress("重庆市武隆区仙女山镇游客接待中心");
         viewPointInfo3.setNumber(5950);
-        viewPointInfo3.setDistance(30.15);
+        viewPointInfo3.setDistance(200.13);
 
         ViewPointInfo viewPointInfo4 = new ViewPointInfo();
         viewPointInfo4.setName("大足石刻");
         viewPointInfo4.setAddress("重庆市大足区宝顶镇大足石刻风景区");
         viewPointInfo4.setNumber(3550);
-        viewPointInfo4.setDistance(30.15);
+        viewPointInfo4.setDistance(30.17);
 
         ViewPointInfo viewPointInfo5 = new ViewPointInfo();
         viewPointInfo5.setName("白公馆");
         viewPointInfo5.setAddress("沙坪坝区壮志路治法三村63号");
         viewPointInfo5.setNumber(2550);
-        viewPointInfo5.setDistance(30.15);
+        viewPointInfo5.setDistance(138.15);
 
         ViewPointInfo viewPointInfo6 = new ViewPointInfo();
         viewPointInfo6.setName("长江索道");
         viewPointInfo6.setAddress("重庆市渝中区新华路151号");
         viewPointInfo6.setNumber(4550);
-        viewPointInfo6.setDistance(30.15);
+        viewPointInfo6.setDistance(177.15);
 
         ViewPointInfo viewPointInfo7 = new ViewPointInfo();
         viewPointInfo7.setName("南山风景区");
         viewPointInfo7.setAddress("重庆市南岸区南山镇南山公园附近");
         viewPointInfo7.setNumber(1550);
-        viewPointInfo7.setDistance(30.15);
+        viewPointInfo7.setDistance(240.15);
+
+        ViewPointInfo viewPointInfo8 = new ViewPointInfo();
+        viewPointInfo8.setName("白帝城景区");
+        viewPointInfo8.setAddress("奉节县夔门街道办事处瞿塘峡社区白帝城景区");
+        viewPointInfo8.setNumber(1715);
+        viewPointInfo8.setDistance(260.15);
 
         list.add(viewPointInfo1);
         list.add(viewPointInfo2);
@@ -141,6 +147,7 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         list.add(viewPointInfo5);
         list.add(viewPointInfo6);
         list.add(viewPointInfo7);
+        list.add(viewPointInfo8);
     }
 
     /**
@@ -207,6 +214,12 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
                 intent = new Intent(this, MapActivity.class);
                 intent.putExtra("Latitude", 29.556989);
                 intent.putExtra("Longitude", 106.623053);
+                startActivity(intent);
+                break;
+            case "白帝城景区":
+                intent = new Intent(this, MapActivity.class);
+                intent.putExtra("Latitude", 31.045283);
+                intent.putExtra("Longitude", 109.571948);
                 startActivity(intent);
                 break;
         }

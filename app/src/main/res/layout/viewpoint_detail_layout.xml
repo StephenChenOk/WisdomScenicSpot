@@ -23,8 +23,8 @@
                 android:id="@+id/iv_viewpoint_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
                 android:fitsSystemWindows="true"
+                android:scaleType="fitXY"
                 android:src="@drawable/ci_qi_kou"
                 app:layout_collapseMode="parallax" />
 
@@ -64,23 +64,91 @@
                 android:layout_height="7dp"
                 android:background="#ddd" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="170dp"
-                android:layout_marginTop="5dp"
-                android:text="当前气候"
-                android:textColor="#333"
-                android:textSize="17sp" />
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="10dp">-->
 
+            <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="今日天气"-->
+            <!--android:clickable="true"-->
+            <!--android:checked="true"-->
+            <!--android:textColor="@drawable/bottom_bar_text_color"-->
+            <!--android:textSize="17sp" />-->
+
+            <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="#eee" />-->
+
+            <!--<TextView-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="明日天气"-->
+            <!--android:textColor="@drawable/bottom_bar_text_color"-->
+            <!--android:textSize="17sp" />-->
+
+            <!--</LinearLayout>-->
+
+            <!--底部导航栏-->
+            <RadioGroup
+                android:id="@+id/viewpoint_detail_group_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/btn_today_weather"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="今日天气"
+                    android:textSize="18sp"
+                    android:textColor="@drawable/bottom_bar_text_color" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#ddd" />
+
+                <RadioButton
+                    android:id="@+id/btn_tomorrow_weather"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:text="明日天气"
+                    android:textColor="@drawable/bottom_bar_text_color" />
+            </RadioGroup>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ddd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
                 <TextView
+                    android:id="@+id/tv_rainfall_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,6 +160,7 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/tv_temperature_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -111,7 +180,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/weather_home_tv"
+                    android:id="@+id/tv_humidity_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -123,7 +192,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/translation_home_tv"
+                    android:id="@+id/tv_visibility_detail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

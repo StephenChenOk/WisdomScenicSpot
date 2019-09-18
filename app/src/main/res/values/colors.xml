@@ -8,4 +8,5 @@
     <color name="my_hint">#aaa</color>
     <color name="color_text_normal">#aaa</color>
     <color name="color_text_selected">#1296db</color>
+    <color name="color_text_normal_viewpoint_detail">#333</color>
 </resources>
