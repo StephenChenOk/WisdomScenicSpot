@@ -3,11 +3,9 @@ package com.chen.fy.wisdomscenicspot.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.chen.fy.wisdomscenicspot.activities.ViewPointActivity;
 import com.chen.fy.wisdomscenicspot.consts.Consts;
 
 import java.util.concurrent.TimeUnit;
@@ -29,7 +27,7 @@ public class BigDatesIntentServices extends IntentService {
         super(name);
     }
 
-    public BigDatesIntentServices(){
+    public BigDatesIntentServices() {
         super("BigDatesIntentServices");
     }
 
@@ -68,17 +66,44 @@ public class BigDatesIntentServices extends IntentService {
     /**
      * 保存从服务器返回的天气数据
      * 温度/湿度/大气压/能见度/降雨情况（0为不降雨1为降雨）
-     * 24/82/914/11584/1
+     * 今天                                              明日
+     * 24/82/914/11584/1，24/82/914/11584/1，24/82/914/11584/1；24/82/914/11584/1，24/82/914/11584/1，24/82/914/11584/1
      */
     private void saveDates(String responseData) {
 
-        String[] dates = responseData.split("/");
         SharedPreferences.Editor editor = getSharedPreferences("BigDates", MODE_PRIVATE).edit();
-        editor.putString("temperature", dates[0]);
-        editor.putString("humidity", dates[1]);
-        editor.putString("pressure", dates[2]);
-        editor.putString("visibility", dates[3]);
-        editor.putString("rainfall", dates[4]);
+
+        String[] dates = responseData.split(";");
+        String[] dates_today = dates[0].split(",");
+        String[] dates_sq = dates_today[0].split("/");      //重庆市区
+        String[] dates_dz = dates_today[1].split("/");      //大足区
+        String[] dates_wl = dates_today[2].split("/");      //武隆区
+        String[] dates_fj = dates_today[3].split("/");      //奉节区
+
+        editor.putString("temperature_sq", dates_sq[0]);
+        editor.putString("humidity_sq", dates_sq[1]);
+        editor.putString("pressure_sq", dates_sq[2]);
+        editor.putString("visibility_sq", dates_sq[3]);
+        editor.putString("rainfall_sq", dates_sq[4]);
+
+        editor.putString("temperature_dz", dates_dz[0]);
+        editor.putString("humidity_dz", dates_dz[1]);
+        editor.putString("pressure_dz", dates_dz[2]);
+        editor.putString("visibility_dz", dates_dz[3]);
+        editor.putString("rainfall_dz", dates_dz[4]);
+
+        editor.putString("temperature_wl", dates_dz[0]);
+        editor.putString("humidity_wl", dates_dz[1]);
+        editor.putString("pressure_wl", dates_dz[2]);
+        editor.putString("visibility_wl", dates_dz[3]);
+        editor.putString("rainfall_wl", dates_dz[4]);
+
+        editor.putString("temperature_wl", dates_dz[0]);
+        editor.putString("humidity_wl", dates_dz[1]);
+        editor.putString("pressure_wl", dates_dz[2]);
+        editor.putString("visibility_wl", dates_dz[3]);
+        editor.putString("rainfall_wl", dates_dz[4]);
+
         editor.apply();
     }
 }

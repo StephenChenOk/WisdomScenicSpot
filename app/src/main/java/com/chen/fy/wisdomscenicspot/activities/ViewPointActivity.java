@@ -17,9 +17,11 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.ViewPointAdapter;
 import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
+import com.chen.fy.wisdomscenicspot.comparators.WeatherComparator;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -31,6 +33,8 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
     private RecyclerView recyclerView;
     private List<ViewPointInfo> list;
     private Toolbar toolbar;
+
+    private WeatherComparator weatherComparator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,13 +52,6 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         ViewPointAdapter viewPointAdapter = new ViewPointAdapter(list);
         viewPointAdapter.setItemClickLister(this);
         recyclerView.setAdapter(viewPointAdapter);
-
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                getDates();
-//            }
-//        }).start();
 
         getDates();
     }
@@ -95,50 +92,50 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         ViewPointInfo viewPointInfo1 = new ViewPointInfo();
         viewPointInfo1.setName("磁器口古镇");
         viewPointInfo1.setAddress("重庆市沙坪坝区磁器口古镇");
-        viewPointInfo1.setNumber(10719);
-        viewPointInfo1.setDistance(325.15);
+        viewPointInfo1.setScore(4.3);
+        viewPointInfo1.setDistance(285.15);
 
         ViewPointInfo viewPointInfo2 = new ViewPointInfo();
         viewPointInfo2.setName("解放碑步行街");
         viewPointInfo2.setAddress("重庆市渝中区解放碑周边区域");
-        viewPointInfo2.setNumber(7825);
+        viewPointInfo2.setScore(4.5);
         viewPointInfo2.setDistance(219.15);
 
         ViewPointInfo viewPointInfo3 = new ViewPointInfo();
         viewPointInfo3.setName("武隆天生三桥");
         viewPointInfo3.setAddress("重庆市武隆区仙女山镇游客接待中心");
-        viewPointInfo3.setNumber(5950);
+        viewPointInfo3.setScore(4.6);
         viewPointInfo3.setDistance(200.13);
 
         ViewPointInfo viewPointInfo4 = new ViewPointInfo();
         viewPointInfo4.setName("大足石刻");
         viewPointInfo4.setAddress("重庆市大足区宝顶镇大足石刻风景区");
-        viewPointInfo4.setNumber(3550);
-        viewPointInfo4.setDistance(30.17);
+        viewPointInfo4.setScore(4.6);
+        viewPointInfo4.setDistance(237.17);
 
         ViewPointInfo viewPointInfo5 = new ViewPointInfo();
         viewPointInfo5.setName("白公馆");
         viewPointInfo5.setAddress("沙坪坝区壮志路治法三村63号");
-        viewPointInfo5.setNumber(2550);
+        viewPointInfo5.setScore(4.3);
         viewPointInfo5.setDistance(138.15);
 
         ViewPointInfo viewPointInfo6 = new ViewPointInfo();
         viewPointInfo6.setName("长江索道");
         viewPointInfo6.setAddress("重庆市渝中区新华路151号");
-        viewPointInfo6.setNumber(4550);
-        viewPointInfo6.setDistance(177.15);
+        viewPointInfo6.setScore(4.2);
+        viewPointInfo6.setDistance(257.15);
 
         ViewPointInfo viewPointInfo7 = new ViewPointInfo();
         viewPointInfo7.setName("南山风景区");
         viewPointInfo7.setAddress("重庆市南岸区南山镇南山公园附近");
-        viewPointInfo7.setNumber(1550);
+        viewPointInfo7.setScore(4.4);
         viewPointInfo7.setDistance(240.15);
 
         ViewPointInfo viewPointInfo8 = new ViewPointInfo();
         viewPointInfo8.setName("白帝城景区");
         viewPointInfo8.setAddress("奉节县夔门街道办事处瞿塘峡社区白帝城景区");
-        viewPointInfo8.setNumber(1715);
-        viewPointInfo8.setDistance(260.15);
+        viewPointInfo8.setScore(4.5);
+        viewPointInfo8.setDistance(320.15);
 
         list.add(viewPointInfo1);
         list.add(viewPointInfo2);
@@ -148,6 +145,9 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         list.add(viewPointInfo6);
         list.add(viewPointInfo7);
         list.add(viewPointInfo8);
+
+        weatherComparator = new WeatherComparator();
+        Collections.sort(list, weatherComparator);
     }
 
     /**
@@ -160,6 +160,26 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
         Log.d("BigDates",preferences.getString("pressure", ""));
         Log.d("BigDates",preferences.getString("visibility", ""));
         Log.d("BigDates",preferences.getString("rainfall", ""));
+    }
+
+    /**
+     * 计算景点推荐权值
+     *
+     * @param score       景点评分
+     * @param rainfull    是否降雨
+     * @param temperature 温度
+     * @param humidity    湿度
+     * @param visibility  可见度
+     */
+    private double getViewPointWeight(double score, int rainfull, double temperature, double humidity, double visibility) {
+
+        score = score * 100;
+        rainfull = -rainfull * 200;
+        temperature = -temperature * 50;
+        humidity = -humidity * 100;
+        visibility = visibility / 200;
+
+        return score + rainfull + temperature + humidity + visibility;
     }
 
     @Override

@@ -1,11 +1,9 @@
 package com.chen.fy.wisdomscenicspot.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +29,11 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
     private TextView tv_visibility_detail;
 
     private TextView tv_viewpoint_detail;
+
+    private String rainfull;
+    private String temperature;
+    private String humidity;
+    private String visibility;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,14 +108,14 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
         }
     }
 
-    private void initDate(){
+    private void initDate() {
         SharedPreferences preferences = getSharedPreferences("BigDates", MODE_PRIVATE);
-        String rainfull = preferences.getString("rainfall", "");
-        String temperature = preferences.getString("temperature", "");
-        String humidity = preferences.getString("humidity", "");
-        String visibility = preferences.getString("visibility", "");
+        rainfull = preferences.getString("rainfall", "");
+        temperature = preferences.getString("temperature", "");
+        humidity = preferences.getString("humidity", "");
+        visibility = preferences.getString("visibility", "");
 
-        switch (rainfull){
+        switch (rainfull) {
             case "0":   //无雨
                 rainfull = "无雨";
                 break;
@@ -121,6 +124,10 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 break;
         }
 
+        setWeatherDates(rainfull, temperature, humidity, visibility);
+    }
+
+    private void setWeatherDates(String rainfull, String temperature, String humidity, String visibility) {
         tv_rainfall_detail.setText(rainfull);
         tv_temperature_detail.setText(String.format("%s℃", temperature));
         tv_humidity_detail.setText(String.format("%s％", humidity));
@@ -134,10 +141,10 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 finish();
                 break;
             case R.id.btn_today_weather:
-                Toast.makeText(this,"今日天气...",Toast.LENGTH_SHORT).show();
+                setWeatherDates(rainfull, temperature, humidity, visibility);
                 break;
             case R.id.btn_tomorrow_weather:
-                Toast.makeText(this,"明日天气...",Toast.LENGTH_SHORT).show();
+                setWeatherDates("有雨","26" , "79", "13105");
                 break;
         }
     }

@@ -54,8 +54,8 @@ public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.View
         Glide.with(myContext).load(ImageUtil.getImageId(viewPointInfo.getName())).into(viewHolder.image_iv);
         viewHolder.name_tv.setText(viewPointInfo.getName());
         viewHolder.address_tv.setText(viewPointInfo.getAddress());
-        viewHolder.number_tv.setText(viewPointInfo.getNumber() + "");
-        viewHolder.distance_tv.setText(String.format("%skm", viewPointInfo.getDistance()));
+        viewHolder.number_tv.setText(viewPointInfo.getScore()+" 分");
+        viewHolder.distance_tv.setText(String.format("%s km", viewPointInfo.getDistance()));
 
         viewHolder.detail_iv.setOnClickListener(new MyOnClickListener(i));
         viewHolder.detail_tv.setOnClickListener(new MyOnClickListener(i));

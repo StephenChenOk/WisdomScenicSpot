@@ -4,13 +4,10 @@ public class ViewPointInfo {
 
     private String name;
     private String address;
-    private int number;
+    private double score;
     private double distance;
 
-    private double temperature;  //温度
-    private double humidity;     //湿度
-    private double visibility;   //能见度
-    private boolean rainfall;     //降雨
+    private double weight;  //天气情况权值
 
 
     public String getName() {
@@ -29,12 +26,12 @@ public class ViewPointInfo {
         this.address = address;
     }
 
-    public int getNumber() {
-        return number;
+    public double getScore() {
+        return score;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setScore(double score) {
+        this.score = score;
     }
 
     public double getDistance() {
@@ -45,35 +42,11 @@ public class ViewPointInfo {
         this.distance = distance;
     }
 
-    public double getTemperature() {
-        return temperature;
+    public double getWeight() {
+        return weight;
     }
 
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
-
-    public double getHumidity() {
-        return humidity;
-    }
-
-    public void setHumidity(double humidity) {
-        this.humidity = humidity;
-    }
-
-    public double getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(double visibility) {
-        this.visibility = visibility;
-    }
-
-    public boolean isRainfall() {
-        return rainfall;
-    }
-
-    public void setRainfall(boolean rainfall) {
-        this.rainfall = rainfall;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }
