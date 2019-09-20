@@ -257,8 +257,10 @@ public class MapActivity extends AppCompatActivity {
         //设置地图的放缩级别
         // aMap.moveCamera(CameraUpdateFactory.zoomTo(20));
         if (getIntent() != null) {
-            navigateTo(getIntent().getDoubleExtra("Latitude", 25.266431),
-                    getIntent().getDoubleExtra("Longitude", 110.295181));
+            double latitude = getIntent().getDoubleExtra("Latitude", 25.266431);
+            double longitude = getIntent().getDoubleExtra("Longitude", 110.295181);
+            navigateTo(latitude, longitude);
+            Log.d("navigateTo", latitude+","+ longitude);
         }
         aMap.showIndoorMap(true);
     }
@@ -1011,7 +1013,8 @@ public class MapActivity extends AppCompatActivity {
 
     private void setScanRule() {
         //获取蓝牙设备名称
-        String[] names = {"1836242", "1836157", "1836027"};
+        //String[] names = {"1836242", "1836157", "1836027"};
+        String[] names = {"1836032", "1836072", "1836027"};
 
         //设置扫描规则
         BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
@@ -1031,10 +1034,11 @@ public class MapActivity extends AppCompatActivity {
             super.onLeScan(bleDevice);
             if (bleDevice.getName() != null) {
                 switch (bleDevice.getName()) {
-                    case "1836242":
+                    //case "1836242":
+                    case "1836072":
                         startPushScenic(bleDevice.getRssi(), "狮岭朝霞");
                         break;
-                    case "1836157":
+                    case "1836032":
                         startPushScenic(bleDevice.getRssi(), "水晶宫");
                         break;
                     case "1836027":
@@ -1063,7 +1067,7 @@ public class MapActivity extends AppCompatActivity {
     private void startPushScenic(int RSSI, String scenery) {
         long currentTime = System.currentTimeMillis();
         Log.d("startPushScenic:", String.valueOf(RSSI));
-        if (RSSI > -53 && pushFlag && (currentTime - preTime) > 2 * 1000) {
+        if (RSSI > -62 && pushFlag && (currentTime - preTime) > 5 * 1000) {
             initXPopup(scenery);
             pushFlag = false;
             preTime = System.currentTimeMillis();

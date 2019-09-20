@@ -39,30 +39,6 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/beijing_cd"
-                android:layout_width="wrap_content"
-                android:layout_height="220dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="40dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="180dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/beijing" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="143dp"
-                    android:layout_marginTop="195dp"
-                    android:text="北京"
-                    android:textColor="#000"
-                    android:textSize="18sp" />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
                 android:id="@+id/shanghai_cd"
                 android:layout_width="wrap_content"
                 android:layout_height="220dp"
@@ -82,6 +58,30 @@
                     android:layout_marginLeft="143dp"
                     android:layout_marginTop="195dp"
                     android:text="上海"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/beijing_cd"
+                android:layout_width="wrap_content"
+                android:layout_height="220dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="40dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/beijing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="143dp"
+                    android:layout_marginTop="195dp"
+                    android:text="北京"
                     android:textColor="#000"
                     android:textSize="18sp" />
             </android.support.v7.widget.CardView>

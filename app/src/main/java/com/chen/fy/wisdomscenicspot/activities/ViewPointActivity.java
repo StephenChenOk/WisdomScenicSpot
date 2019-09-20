@@ -73,15 +73,23 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
             switch (getIntent().getStringExtra("目的地")) {
                 case "重庆":
                     toolbar.setTitle("重庆");
+                    initCQ();
+                    break;
+                case "上海":
+                    toolbar.setTitle("上海");
+                    initSH();
                     break;
                 case "北京":
                     toolbar.setTitle("北京");
                     break;
-                case "上海":
-                    toolbar.setTitle("上海");
-                    break;
             }
         }
+    }
+
+    /**
+     * 得到重庆的景点信息
+     */
+    private void initCQ() {
         //2 初始化RecyclerView显示的数据
         if (list == null) {
             list = new ArrayList<>();
@@ -151,6 +159,52 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
     }
 
     /**
+     * 得到上海的景点信息
+     */
+    private void initSH(){
+        //2 初始化RecyclerView显示的数据
+        if (list == null) {
+            list = new ArrayList<>();
+        }
+        if (!list.isEmpty()) {
+            list.clear();
+        }
+        ViewPointInfo viewPointInfo1 = new ViewPointInfo();
+        viewPointInfo1.setName("外滩");
+        viewPointInfo1.setAddress("上海市黄浦区中山东一路（临黄浦江）");
+        viewPointInfo1.setScore(4.7);
+        viewPointInfo1.setDistance(385.15);
+
+        ViewPointInfo viewPointInfo2 = new ViewPointInfo();
+        viewPointInfo2.setName("上海迪士尼度假区");
+        viewPointInfo2.setAddress("上海市浦东新区川沙新镇上海迪士尼度假区");
+        viewPointInfo2.setScore(4.6);
+        viewPointInfo2.setDistance(219.15);
+
+        ViewPointInfo viewPointInfo3 = new ViewPointInfo();
+        viewPointInfo3.setName("南京路步行街");
+        viewPointInfo3.setAddress("上海市黄浦区河南中路");
+        viewPointInfo3.setScore(4.6);
+        viewPointInfo3.setDistance(320.13);
+
+        ViewPointInfo viewPointInfo4 = new ViewPointInfo();
+        viewPointInfo4.setName("上海长风海洋世界");
+        viewPointInfo4.setAddress("普陀区大渡河路451号（长风公园4号门）");
+        viewPointInfo4.setScore(4.4);
+        viewPointInfo4.setDistance(337.17);
+
+
+        list.add(viewPointInfo1);
+        list.add(viewPointInfo2);
+        list.add(viewPointInfo3);
+        list.add(viewPointInfo4);
+
+        weatherComparator = new WeatherComparator();
+        Collections.sort(list, weatherComparator);
+
+    }
+
+    /**
      * 获取天气数据
      */
     private void getDates() {
@@ -192,57 +246,55 @@ public class ViewPointActivity extends AppCompatActivity implements ItemClickLis
 
     @Override
     public void onItemClick(int i) {
-        Intent intent;
         switch (list.get(i).getName()) {
+            //重庆
             case "磁器口古镇":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.578936);
-                intent.putExtra("Longitude", 106.452215);
-                startActivity(intent);
+                toDestination(29.578936, 106.452215);
                 break;
             case "解放碑步行街":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.557564);
-                intent.putExtra("Longitude", 106.577233);
-                startActivity(intent);
+                toDestination(29.557564, 106.577233);
                 break;
             case "武隆天生三桥":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.429943);
-                intent.putExtra("Longitude", 107.803549);
-                startActivity(intent);
+                toDestination(29.429943, 107.803549);
                 break;
             case "大足石刻":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.74814);
-                intent.putExtra("Longitude", 105.795545);
-                startActivity(intent);
+                toDestination(29.74814, 105.795545);
                 break;
             case "白公馆":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.576473);
-                intent.putExtra("Longitude", 106.432065);
-                startActivity(intent);
+                toDestination(29.576473, 106.432065);
                 break;
             case "长江索道":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.556249);
-                intent.putExtra("Longitude", 106.586634);
-                startActivity(intent);
+                toDestination(29.556249, 106.586634);
                 break;
             case "南山风景区":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 29.556989);
-                intent.putExtra("Longitude", 106.623053);
-                startActivity(intent);
+                toDestination(29.556989, 106.623053);
                 break;
             case "白帝城景区":
-                intent = new Intent(this, MapActivity.class);
-                intent.putExtra("Latitude", 31.045283);
-                intent.putExtra("Longitude", 109.571948);
-                startActivity(intent);
+                toDestination(31.045283, 109.571948);
+                break;
+
+                //上海
+            case "外滩":
+                toDestination(31.233462, 121.492156);
+                break;
+            case "上海迪士尼度假区":
+                toDestination(31.141269, 121.661699);
+                break;
+            case "南京路步行街":
+                toDestination(31.235986, 121.479503);
+                break;
+            case "上海长风海洋世界":
+                toDestination(31.225079, 121.397016);
                 break;
         }
+    }
+
+    private void toDestination(double latitude, double longitude) {
+        Intent intent;
+        intent = new Intent(this, MapActivity.class);
+        intent.putExtra("Latitude", latitude);
+        intent.putExtra("Longitude", longitude);
+        startActivity(intent);
     }
 
     @Override

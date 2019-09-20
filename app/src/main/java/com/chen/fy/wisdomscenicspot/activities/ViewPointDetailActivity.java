@@ -73,39 +73,51 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
             Glide.with(this).load(ImageUtil.getImageId(name)).into(imageView);
         }
         switch (name) {
+            //重庆
             case "磁器口古镇":
-                toolbar.setTitle("磁器口古镇");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getQCK());
+                initDetailInfo("磁器口古镇", ScenicDescribeUtils.getQCK());
                 break;
             case "解放碑步行街":
-                toolbar.setTitle("解放碑步行街");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getJFB());
+                initDetailInfo("解放碑步行街", ScenicDescribeUtils.getJFB());
                 break;
             case "武隆天生三桥":
-                toolbar.setTitle("武隆天生三桥");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getSQ());
+                initDetailInfo("武隆天生三桥", ScenicDescribeUtils.getSQ());
                 break;
             case "大足石刻":
-                toolbar.setTitle("大足石刻");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getDZSK());
+                initDetailInfo("大足石刻", ScenicDescribeUtils.getDZSK());
                 break;
             case "白公馆":
-                toolbar.setTitle("白公馆");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getBGG());
+                initDetailInfo("白公馆", ScenicDescribeUtils.getBGG());
                 break;
             case "长江索道":
-                toolbar.setTitle("长江索道");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getCJSD());
+                initDetailInfo("长江索道", ScenicDescribeUtils.getCJSD());
                 break;
             case "南山风景区":
-                toolbar.setTitle("南山风景区");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getNS());
+                initDetailInfo("南山风景区", ScenicDescribeUtils.getNS());
                 break;
             case "白帝城景区":
-                toolbar.setTitle("白帝城景区");
-                tv_viewpoint_detail.setText(ScenicDescribeUtils.getBDC());
+                initDetailInfo("白帝城景区", ScenicDescribeUtils.getBDC());
+                break;
+
+            //上海
+            case "外滩":
+                initDetailInfo("外滩", ScenicDescribeUtils.getWT());
+                break;
+            case "上海迪士尼度假区":
+                initDetailInfo("上海迪士尼度假区", ScenicDescribeUtils.getDSN());
+                break;
+            case "南京路步行街":
+                initDetailInfo("南京路步行街", ScenicDescribeUtils.getNJL_BXJ());
+                break;
+            case "上海长风海洋世界":
+                initDetailInfo("上海长风海洋世界", ScenicDescribeUtils.getCF_HYSJ());
                 break;
         }
+    }
+
+    private void initDetailInfo(String name, String qck) {
+        toolbar.setTitle(name);
+        tv_viewpoint_detail.setText(qck);
     }
 
     private void initDate() {
@@ -141,9 +153,11 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 finish();
                 break;
             case R.id.btn_today_weather:
+                Toast.makeText(this,"今日天气",Toast.LENGTH_LONG).show();
                 setWeatherDates(rainfull, temperature, humidity, visibility);
                 break;
             case R.id.btn_tomorrow_weather:
+                Toast.makeText(this,"明日天气",Toast.LENGTH_LONG).show();
                 setWeatherDates("有雨","26" , "79", "13105");
                 break;
         }

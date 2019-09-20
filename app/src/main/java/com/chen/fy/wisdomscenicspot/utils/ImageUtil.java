@@ -15,11 +15,13 @@ public class ImageUtil {
 
     //把图片名称与图片资源id一一对应起来
     static {
+        //桂林
         imageMap.put("象鼻山", R.drawable.elephant_hill);
         imageMap.put("普贤塔", R.drawable.px_town);
         imageMap.put("太平天国纪念馆", R.drawable.jng);
         imageMap.put("云峰寺", R.drawable.yfs);
 
+        //重庆
         imageMap.put("磁器口古镇", R.drawable.ci_qi_kou);
         imageMap.put("解放碑步行街", R.drawable.jie_fang_bei);
         imageMap.put("武隆天生三桥", R.drawable.san_qiao);
@@ -28,6 +30,12 @@ public class ImageUtil {
         imageMap.put("长江索道", R.drawable.suo_dao);
         imageMap.put("南山风景区", R.drawable.nan_shan);
         imageMap.put("白帝城景区", R.drawable.bai_di_cheng);
+
+        //上海
+        imageMap.put("外滩", R.drawable.wai_tan);
+        imageMap.put("上海迪士尼度假区", R.drawable.di_shi_ni);
+        imageMap.put("南京路步行街", R.drawable.nan_jing_lu_bxj);
+        imageMap.put("上海长风海洋世界", R.drawable.chang_feng);
     }
 
     //获取相应的图片资源id

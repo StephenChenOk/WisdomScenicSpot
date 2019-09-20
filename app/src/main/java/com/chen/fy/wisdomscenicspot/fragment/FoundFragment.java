@@ -31,8 +31,8 @@ public class FoundFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
 
         chongqi = view.findViewById(R.id.chongqi_cd);
-        beijing = view.findViewById(R.id.beijing_cd);
         shanghai = view.findViewById(R.id.shanghai_cd);
+        beijing = view.findViewById(R.id.beijing_cd);
 
         chongqi.setOnClickListener(this);
         beijing.setOnClickListener(this);
@@ -52,13 +52,16 @@ public class FoundFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.chongqi_cd:
-                Intent intent = new Intent(getActivity(), ViewPointActivity.class);
-                intent.putExtra("目的地","重庆");
-                startActivity(intent);
-                break;
-            case R.id.beijing_cd:
+                Intent intent1 = new Intent(getActivity(), ViewPointActivity.class);
+                intent1.putExtra("目的地","重庆");
+                startActivity(intent1);
                 break;
             case R.id.shanghai_cd:
+                Intent intent2 = new Intent(getActivity(), ViewPointActivity.class);
+                intent2.putExtra("目的地","上海");
+                startActivity(intent2);
+                break;
+            case R.id.beijing_cd:
                 break;
         }
     }
