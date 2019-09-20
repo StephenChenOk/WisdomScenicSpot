@@ -195,7 +195,7 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
             //上海
             case "外滩":               //上海市区
                 initDetailInfo("外滩", ScenicDescribeUtils.getWT(), 2);
-                setWeatherDates(preferences.getString("rainfall_sh_sq1", "")
+                setWeatherDates_youyu(preferences.getString("rainfall_sh_sq1", "")
                         ,preferences.getString("temperature_sh_sq1", "")
                         ,preferences.getString("humidity_sh_sq1", "")
                         ,preferences.getString("visibility_sh_sq1", "")
@@ -203,7 +203,7 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 break;
             case "上海迪士尼度假区":    //浦东新区
                 initDetailInfo("上海迪士尼度假区", ScenicDescribeUtils.getDSN(), 2);
-                setWeatherDates(preferences.getString("rainfall_sh_pd", "")
+                setWeatherDates_youyu(preferences.getString("rainfall_sh_pd", "")
                         ,preferences.getString("temperature_sh_pd", "")
                         ,preferences.getString("humidity_sh_pd", "")
                         ,preferences.getString("visibility_sh_pd", "")
@@ -211,7 +211,7 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 break;
             case "南京路步行街":      //上海市区
                 initDetailInfo("南京路步行街", ScenicDescribeUtils.getNJL_BXJ(), 2);
-                setWeatherDates(preferences.getString("rainfall_sh_sq1", "")
+                setWeatherDates_youyu(preferences.getString("rainfall_sh_sq1", "")
                         ,preferences.getString("temperature_sh_sq1", "")
                         ,preferences.getString("humidity_sh_sq1", "")
                         ,preferences.getString("visibility_sh_sq1", "")
@@ -219,7 +219,7 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 break;
             case "上海长风海洋世界":    //上海市区
                 initDetailInfo("上海长风海洋世界", ScenicDescribeUtils.getCF_HYSJ(), 2);
-                setWeatherDates(preferences.getString("rainfall_sh_sq2", "")
+                setWeatherDates_youyu(preferences.getString("rainfall_sh_sq2", "")
                         ,preferences.getString("temperature_sh_sq2", "")
                         ,preferences.getString("humidity_sh_sq2", "")
                         ,preferences.getString("visibility_sh_sq2", "")
@@ -227,7 +227,7 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 break;
             case "朱家角古镇景区":     //青浦区
                 initDetailInfo("朱家角古镇景区", ScenicDescribeUtils.getZJJ(), 2);
-                setWeatherDates(preferences.getString("rainfall_sh_qp", "")
+                setWeatherDates_youyu(preferences.getString("rainfall_sh_qp", "")
                         ,preferences.getString("temperature_sh_qp", "")
                         ,preferences.getString("humidity_sh_qp", "")
                         ,preferences.getString("visibility_sh_qp", "")
@@ -356,7 +356,7 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
             case "0":
                 tv_rainfall_detail.setText("无雨");
                 //获取更换的图片
-                Drawable drawable1=getResources().getDrawable(R.drawable.sun_1);
+                Drawable drawable1=getResources().getDrawable(R.drawable.duo_yun_1);
                 //setBounds(x,y,width,height)
                 drawable1.setBounds(0,0,drawable1.getMinimumWidth(),drawable1.getMinimumHeight());
                 //mDownLoad是控件的名称,setCompoundDrawables(left,top,right,bottom)
@@ -372,9 +372,42 @@ public class ViewPointDetailActivity extends AppCompatActivity implements View.O
                 tv_rainfall_detail.setCompoundDrawables(null,drawable2,null,null);
                 break;
         }
-        tv_temperature_detail.setText(String.format("%s℃", temperature));
-        tv_humidity_detail.setText(String.format("%s％", humidity));
-        tv_visibility_detail.setText(String.format("%sm", visibility));
+        tv_temperature_detail.setText(String.format("%s ℃", temperature));
+        tv_humidity_detail.setText(String.format("%s ％", humidity));
+        tv_visibility_detail.setText(String.format("%s m", visibility));
+    }
+
+    private void setWeatherDates_youyu(String rainfull, String temperature, String humidity, String visibility) {
+        tv_rainfall_detail.setText("无雨");
+        //获取更换的图片
+        Drawable drawable1=getResources().getDrawable(R.drawable.duo_yun_1);
+        //setBounds(x,y,width,height)
+        drawable1.setBounds(0,0,drawable1.getMinimumWidth(),drawable1.getMinimumHeight());
+        //mDownLoad是控件的名称,setCompoundDrawables(left,top,right,bottom)
+        tv_rainfall_detail.setCompoundDrawables(null,drawable1,null,null);
+//        switch (rainfull){
+//            case "0":
+//                tv_rainfall_detail.setText("无雨");
+//                //获取更换的图片
+//                Drawable drawable1=getResources().getDrawable(R.drawable.sun_1);
+//                //setBounds(x,y,width,height)
+//                drawable1.setBounds(0,0,drawable1.getMinimumWidth(),drawable1.getMinimumHeight());
+//                //mDownLoad是控件的名称,setCompoundDrawables(left,top,right,bottom)
+//                tv_rainfall_detail.setCompoundDrawables(null,drawable1,null,null);
+//                break;
+//            case "1":
+//                tv_rainfall_detail.setText("有雨");
+//                //获取更换的图片
+//                Drawable drawable2=getResources().getDrawable(R.drawable.rain_1);
+//                //setBounds(x,y,width,height)
+//                drawable2.setBounds(0,0,drawable2.getMinimumWidth(),drawable2.getMinimumHeight());
+//                //mDownLoad是控件的名称,setCompoundDrawables(left,top,right,bottom)
+//                tv_rainfall_detail.setCompoundDrawables(null,drawable2,null,null);
+//                break;
+//        }
+        tv_temperature_detail.setText(String.format("%s ℃", temperature));
+        tv_humidity_detail.setText(String.format("%s ％", humidity));
+        tv_visibility_detail.setText(String.format("%s m", visibility));
     }
 
     @Override

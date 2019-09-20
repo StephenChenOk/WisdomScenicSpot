@@ -180,7 +180,7 @@
                             android:layout_height="27dp"
                             android:layout_marginLeft="2dp"
                             android:layout_toRightOf="@+id/found_sh_21_tv"
-                            android:src="@drawable/rain_1" />
+                            android:src="@drawable/duo_yun_1" />
 
                         <TextView
                             android:id="@+id/found_sh_22_tv"
