@@ -36,6 +36,7 @@ public class ImageUtil {
         imageMap.put("上海迪士尼度假区", R.drawable.di_shi_ni);
         imageMap.put("南京路步行街", R.drawable.nan_jing_lu_bxj);
         imageMap.put("上海长风海洋世界", R.drawable.chang_feng);
+        imageMap.put("朱家角古镇景区", R.drawable.zj_jz);
     }
 
     //获取相应的图片资源id

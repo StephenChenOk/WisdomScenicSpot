@@ -1013,8 +1013,8 @@ public class MapActivity extends AppCompatActivity {
 
     private void setScanRule() {
         //获取蓝牙设备名称
-        //String[] names = {"1836242", "1836157", "1836027"};
-        String[] names = {"1836032", "1836072", "1836027"};
+        String[] names = {"1836242", "1836157", "1836027"};
+        //String[] names = {"1836032", "1836072", "1836027"};
 
         //设置扫描规则
         BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
@@ -1034,11 +1034,11 @@ public class MapActivity extends AppCompatActivity {
             super.onLeScan(bleDevice);
             if (bleDevice.getName() != null) {
                 switch (bleDevice.getName()) {
-                    //case "1836242":
-                    case "1836072":
+                    case "1836242":
+                    //case "1836072":       1836242", "1836157", "1836027
                         startPushScenic(bleDevice.getRssi(), "狮岭朝霞");
                         break;
-                    case "1836032":
+                    case "1836157":
                         startPushScenic(bleDevice.getRssi(), "水晶宫");
                         break;
                     case "1836027":
@@ -1067,7 +1067,7 @@ public class MapActivity extends AppCompatActivity {
     private void startPushScenic(int RSSI, String scenery) {
         long currentTime = System.currentTimeMillis();
         Log.d("startPushScenic:", String.valueOf(RSSI));
-        if (RSSI > -62 && pushFlag && (currentTime - preTime) > 5 * 1000) {
+        if (RSSI > -54 && pushFlag && (currentTime - preTime) > 3 * 1000) {
             initXPopup(scenery);
             pushFlag = false;
             preTime = System.currentTimeMillis();
