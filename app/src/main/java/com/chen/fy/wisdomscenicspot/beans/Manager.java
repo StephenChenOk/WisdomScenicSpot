@@ -49,5 +49,4 @@ public class Manager extends LitePalSupport {
     public void setPwSalt(String pwSalt) {
         this.pwSalt = pwSalt;
     }
-
 }

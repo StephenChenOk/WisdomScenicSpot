@@ -34,5 +34,4 @@ public class Consts {
      */
     public static final String SOCKET_URL = "47.102.153.115";
     public static final int PORT = 8989;
-
 }

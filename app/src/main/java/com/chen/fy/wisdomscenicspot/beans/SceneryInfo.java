@@ -39,4 +39,3 @@ public class SceneryInfo {
         this.distance = distance;
     }
 }
-

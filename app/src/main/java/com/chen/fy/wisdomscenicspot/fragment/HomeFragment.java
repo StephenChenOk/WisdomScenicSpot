@@ -347,4 +347,3 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     @Override
     public void onLongClick(int position) { }
 }
-

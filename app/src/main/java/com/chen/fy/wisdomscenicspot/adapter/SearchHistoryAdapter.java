@@ -71,8 +71,6 @@ public class SearchHistoryAdapter extends RecyclerView.Adapter<SearchHistoryAdap
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_title = itemView.findViewById(R.id.title_history_search_adapter_item);
-
         }
     }
-
 }

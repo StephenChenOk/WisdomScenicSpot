@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/chongqi_cd"
+                android:layout_width="wrap_content"
+                android:layout_height="275dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/chongqi" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="200dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/found_text_box"
+                        android:gravity="center"
+                        android:text="重庆"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:id="@+id/found_cq_21_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="9月21日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/found_cq_21_iv"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toRightOf="@+id/found_cq_21_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+                        <TextView
+                            android:id="@+id/found_cq_22_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_toRightOf="@+id/found_cq_21_iv"
+                            android:text="9月22日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toRightOf="@+id/found_cq_22_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+                        <TextView
+                            android:id="@+id/found_cq_23_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="38dp"
+                            android:text="9月23日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/found_cq_23_iv"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_toRightOf="@+id/found_cq_23_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+                        <TextView
+                            android:id="@+id/found_cq_24_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="38dp"
+                            android:layout_toRightOf="@+id/found_cq_23_iv"
+                            android:text="9月24日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_toRightOf="@+id/found_cq_24_tv"
+                            android:src="@drawable/yin_1" />
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/shanghai_cd"
+                android:layout_width="wrap_content"
+                android:layout_height="275dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/shangahi" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="200dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/found_text_box"
+                        android:gravity="center"
+                        android:text="上海"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:id="@+id/found_sh_21_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="9月21日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/found_sh_21_iv"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toRightOf="@+id/found_sh_21_tv"
+                            android:src="@drawable/rain_1" />
+
+                        <TextView
+                            android:id="@+id/found_sh_22_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_toRightOf="@+id/found_sh_21_iv"
+                            android:text="9月22日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toRightOf="@+id/found_sh_22_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+                        <TextView
+                            android:id="@+id/found_sh_23_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="38dp"
+                            android:text="9月23日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/found_sh_23_iv"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_toRightOf="@+id/found_sh_23_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+                        <TextView
+                            android:id="@+id/found_sh_24_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="38dp"
+                            android:layout_toRightOf="@+id/found_sh_23_iv"
+                            android:text="9月24日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="1dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_toRightOf="@+id/found_sh_24_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/beijing_cd"
+                android:layout_width="wrap_content"
+                android:layout_height="275dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/beijing" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="200dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/found_text_box"
+                        android:gravity="center"
+                        android:text="北京"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <TextView
+                            android:id="@+id/found_bj_21_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="9月21日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/found_bj_21_iv"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toRightOf="@+id/found_bj_21_tv"
+                            android:src="@drawable/duo_yun_1" />
+
+                        <TextView
+                            android:id="@+id/found_bj_22_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_toRightOf="@+id/found_bj_21_iv"
+                            android:text="9月22日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_toRightOf="@+id/found_bj_22_tv"
+                            android:src="@drawable/sun_1" />
+
+                        <TextView
+                            android:id="@+id/found_bj_23_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="38dp"
+                            android:text="9月23日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:id="@+id/found_bj_23_iv"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_toRightOf="@+id/found_bj_23_tv"
+                            android:src="@drawable/sun_1" />
+
+                        <TextView
+                            android:id="@+id/found_bj_24_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="38dp"
+                            android:layout_toRightOf="@+id/found_bj_23_iv"
+                            android:text="9月24日"
+                            android:textColor="#333"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_toRightOf="@+id/found_bj_24_tv"
+                            android:src="@drawable/sun_1" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

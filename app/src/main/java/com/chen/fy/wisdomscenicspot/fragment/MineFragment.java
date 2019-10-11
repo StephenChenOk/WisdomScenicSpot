@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,6 +114,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         if (getContext() != null) {
             SharedPreferences preferences = getContext().getSharedPreferences("login_state", MODE_PRIVATE);
             userId = preferences.getString("userId", "");
+            Log.d("userId:",userId);
         }
     }
 
@@ -134,6 +136,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             } else {
                 headIcon.setImageResource(R.drawable.user_12);
             }
+        }else {
+            headIcon.setImageResource(R.drawable.user_12);
         }
     }
 
@@ -159,4 +163,3 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         }
     }
 }
-

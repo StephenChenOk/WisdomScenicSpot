@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText et_userId_login;
     private EditText et_password_login;
 
+    private ImageView return_logo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         et_userId_login = findViewById(R.id.et_userId_login);
         et_password_login = findViewById(R.id.et_password_login);
+
+        return_logo = findViewById(R.id.iv_return_login);
+        return_logo.setOnClickListener(this);
+
         Button btn_login = findViewById(R.id.btn_login);
         TextView register_login_btn = findViewById(R.id.register_login_btn);
         btn_login.setOnClickListener(this);
@@ -50,6 +57,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.register_login_btn:
                 Intent intent = new Intent(this,RegisterActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.iv_return_login:
+                finish();
                 break;
         }
     }

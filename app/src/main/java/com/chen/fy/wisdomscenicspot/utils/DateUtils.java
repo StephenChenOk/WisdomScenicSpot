@@ -18,5 +18,4 @@ public class DateUtils {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
         return simpleDateFormat.format(date);
     }
-
 }

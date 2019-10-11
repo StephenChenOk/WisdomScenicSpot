@@ -165,5 +165,4 @@ public class LoginRegisterUtils {
         };
         editText.setFilters(new InputFilter[]{filter});
     }
-
 }

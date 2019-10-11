@@ -47,7 +47,5 @@ public class ImageUtil {
         }
         return 0;
     }
-
-
 }
 

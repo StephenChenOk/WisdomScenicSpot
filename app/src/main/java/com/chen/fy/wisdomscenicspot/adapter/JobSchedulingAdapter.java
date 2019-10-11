@@ -84,6 +84,4 @@ public class JobSchedulingAdapter extends RecyclerView.Adapter<JobSchedulingAdap
             tv_title = itemView.findViewById(R.id.title_job_scheduling);
         }
     }
-
-
 }

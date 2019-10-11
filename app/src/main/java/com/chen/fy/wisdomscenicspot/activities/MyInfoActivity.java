@@ -214,7 +214,6 @@ public class MyInfoActivity extends TakePhotoActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.out_my_info:               //点击退出账号
-                setResult(RESULT_OK);
                 //登入状态清空
                 SharedPreferences.Editor editor = getSharedPreferences("login_state",MODE_PRIVATE).edit();
                 editor.putString("userId","");

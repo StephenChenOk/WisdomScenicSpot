@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
         Intent intent = new Intent(this, BigDatesIntentServices.class);
         startService(intent);
+
     }
 
     @Override

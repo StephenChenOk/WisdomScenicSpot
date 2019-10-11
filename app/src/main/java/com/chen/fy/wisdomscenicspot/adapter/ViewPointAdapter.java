@@ -129,5 +129,4 @@ public class ViewPointAdapter extends RecyclerView.Adapter<ViewPointAdapter.View
             }
         }
     }
-
 }

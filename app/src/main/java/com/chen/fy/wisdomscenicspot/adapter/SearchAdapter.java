@@ -79,5 +79,4 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             tv_address = itemView.findViewById(R.id.address_search_adapter_item);
         }
     }
-
 }

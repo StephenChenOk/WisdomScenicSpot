@@ -36,7 +36,6 @@ public class HttpUtils {
         //enqueue方法中已经自行开启了子线程
         client.newCall(request).enqueue(callback);
     }
-
     // HttpUtils.senOkHttpRequest("http://192.168.43.178/get_data.json", new okhttp3.Callback() {
 //                        @Override
 //                        public void onFailure(@NonNull Call call, @NonNull IOException e) {

@@ -1013,8 +1013,8 @@ public class MapActivity extends AppCompatActivity {
 
     private void setScanRule() {
         //获取蓝牙设备名称
-        String[] names = {"1836242", "1836157", "1836027"};
-        //String[] names = {"1836032", "1836072", "1836027"};
+        //String[] names = {"1836242", "1836157", "1836027"};
+        String[] names = {"1836032", "1836072", "1836027"};
 
         //设置扫描规则
         BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
@@ -1034,14 +1034,14 @@ public class MapActivity extends AppCompatActivity {
             super.onLeScan(bleDevice);
             if (bleDevice.getName() != null) {
                 switch (bleDevice.getName()) {
-                    case "1836242":
-                    //case "1836072":       1836242", "1836157", "1836027
+                    //case "1836242":
+                    case "1836072":       //1836242", "1836157", "1836027
                         startPushScenic(bleDevice.getRssi(), "狮岭朝霞");
                         break;
                     case "1836157":
                         startPushScenic(bleDevice.getRssi(), "水晶宫");
                         break;
-                    case "1836027":
+                    case "1836032":
                         startPushScenic(bleDevice.getRssi(), "红罗宝帐");
                         break;
                 }
