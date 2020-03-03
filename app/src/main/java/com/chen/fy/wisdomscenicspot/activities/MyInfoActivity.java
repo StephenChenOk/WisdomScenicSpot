@@ -17,10 +17,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.FragmentManager;
 
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.Visitor;
+import com.chen.fy.wisdomscenicspot.model.Visitor;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
@@ -37,7 +36,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.shaohui.bottomdialog.BottomDialog;
 
 public class MyInfoActivity extends TakePhotoActivity implements View.OnClickListener {
 

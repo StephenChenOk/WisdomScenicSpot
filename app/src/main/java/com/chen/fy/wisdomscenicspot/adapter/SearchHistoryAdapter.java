@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo;
+import com.chen.fy.wisdomscenicspot.model.SearchHistoryInfo;
 
 import java.util.ArrayList;
 

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.SceneryInfo;
+import com.chen.fy.wisdomscenicspot.model.SceneryInfo;
 import com.chen.fy.wisdomscenicspot.utils.ImageUtil;
 
 import java.util.List;

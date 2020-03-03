@@ -4,7 +4,6 @@
     <!--主界面状态栏-->
     <style name="MyTheme" parent="AppTheme">
 
-
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">false</item>
     </style>

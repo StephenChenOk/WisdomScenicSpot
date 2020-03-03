@@ -258,10 +258,10 @@ public class FeedbackActivity extends TakePhotoActivity {
         //setType(MultipartBody.FORM)
         String result = "error";
         RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)                    //以文件形式上传
+                .setType(MultipartBody.FORM)                               //以文件形式上传
                 .addFormDataPart("requestType","景区反馈")    //上传的类型
                 .addFormDataPart("place", address)                  //地点名称
-                .addFormDataPart("detailed_place", location)        //所在位置
+                .addFormDataPart("detailed_place", location)       //所在位置
                 .addFormDataPart("content", title)                  //问题描述
                 .addFormDataPart("contact_info", phone)             //电话号码
                 .addFormDataPart("image", imagePath,                         //图片

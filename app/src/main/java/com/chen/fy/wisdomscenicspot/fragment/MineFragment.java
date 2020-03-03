@@ -13,15 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
+import com.chen.fy.wisdomscenicspot.activities.FeedBackMineActivity;
 import com.chen.fy.wisdomscenicspot.activities.LoginActivity;
+import com.chen.fy.wisdomscenicspot.activities.MapMineActivity;
 import com.chen.fy.wisdomscenicspot.activities.MyInfoActivity;
-import com.chen.fy.wisdomscenicspot.beans.Manager;
-import com.chen.fy.wisdomscenicspot.beans.Visitor;
+import com.chen.fy.wisdomscenicspot.activities.ThankingMineActivity;
+import com.chen.fy.wisdomscenicspot.model.Visitor;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import org.litepal.LitePal;
@@ -39,7 +40,10 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private CircleImageView headIcon;
     private TextView userName;
     private TextView infoText;
-    private TextView tv_user_manager;
+
+    private LinearLayout mapBox;
+    private LinearLayout feedbackBox;
+    private LinearLayout thankingBox;
 
     private View mView;
 
@@ -85,9 +89,17 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         userName = mView.findViewById(R.id.user_name_mine);
         infoText = mView.findViewById(R.id.info_text_mine);
 
+        mapBox = mView.findViewById(R.id.map_mine_box);
+        feedbackBox = mView.findViewById(R.id.feedback_mine_box);
+        thankingBox = mView.findViewById(R.id.thanking_mine_box);
+
         headIcon.setOnClickListener(this);
         userName.setOnClickListener(this);
         infoText.setOnClickListener(this);
+
+        mapBox.setOnClickListener(this);
+        feedbackBox.setOnClickListener(this);
+        thankingBox.setOnClickListener(this);
     }
 
 
@@ -159,6 +171,19 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                         startActivityForResult(intent, 2);
                     }
                 }
+                break;
+
+            case R.id.map_mine_box:
+                Intent intent1 = new Intent(getActivity(), MapMineActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.feedback_mine_box:
+                Intent intent2 = new Intent(getActivity(), FeedBackMineActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.thanking_mine_box:
+                Intent intent3 = new Intent(getActivity(), ThankingMineActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.activities.ViewPointDetailActivity;
-import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
+import com.chen.fy.wisdomscenicspot.model.ViewPointInfo;
 import com.chen.fy.wisdomscenicspot.utils.ImageUtil;
 
 import java.util.List;

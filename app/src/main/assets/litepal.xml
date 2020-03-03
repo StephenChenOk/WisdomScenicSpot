@@ -8,10 +8,10 @@
 
     <!--用于指定所有映射集合-->
     <list>
-        <mapping class="com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo"/>
-        <mapping class="com.chen.fy.wisdomscenicspot.beans.Visitor"/>
-        <mapping class="com.chen.fy.wisdomscenicspot.beans.Manager"/>
-        <mapping class="com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo"/>
+        <mapping class="com.chen.fy.wisdomscenicspot.model.SearchHistoryInfo"/>
+        <mapping class="com.chen.fy.wisdomscenicspot.model.Visitor"/>
+        <mapping class="com.chen.fy.wisdomscenicspot.model.Manager"/>
+        <mapping class="com.chen.fy.wisdomscenicspot.model.JobSchedulingInfo"/>
     </list>
 
 </litepal>

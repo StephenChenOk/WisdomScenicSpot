@@ -12,7 +12,7 @@ import android.view.View;
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.JobSchedulingAdapter;
-import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
+import com.chen.fy.wisdomscenicspot.model.JobSchedulingInfo;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import org.litepal.LitePal;

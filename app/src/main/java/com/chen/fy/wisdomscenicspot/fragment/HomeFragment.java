@@ -3,6 +3,7 @@ package com.chen.fy.wisdomscenicspot.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 
 import com.chen.fy.wisdomscenicspot.R;
@@ -25,7 +24,7 @@ import com.chen.fy.wisdomscenicspot.activities.MapActivity;
 import com.chen.fy.wisdomscenicspot.activities.SearchActivity;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.SceneryAdapter;
-import com.chen.fy.wisdomscenicspot.beans.SceneryInfo;
+import com.chen.fy.wisdomscenicspot.model.SceneryInfo;
 import com.chen.fy.wisdomscenicspot.adapter.MyPagerAdapter;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
@@ -74,7 +73,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     /**
      * 让图片自己动起来,采用异步handel,因为在Thread中不可以进行UI操作,所有可以用handel实行异步UI操作
      */
-    public static Handler handler = new Handler(){
+    public static Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

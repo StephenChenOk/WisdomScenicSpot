@@ -1,6 +1,6 @@
 package com.chen.fy.wisdomscenicspot.comparators;
 
-import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
+import com.chen.fy.wisdomscenicspot.model.ViewPointInfo;
 import java.util.Comparator;
 
 /**

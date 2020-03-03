@@ -1,4 +1,4 @@
-package com.chen.fy.wisdomscenicspot.beans;
+package com.chen.fy.wisdomscenicspot.model;
 
 /**
  * 每个区的天气情况

@@ -6,8 +6,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.application.MyApplication;
-import com.chen.fy.wisdomscenicspot.beans.Manager;
-import com.chen.fy.wisdomscenicspot.beans.Visitor;
+import com.chen.fy.wisdomscenicspot.model.Manager;
+import com.chen.fy.wisdomscenicspot.model.Visitor;
 
 import org.litepal.LitePal;
 

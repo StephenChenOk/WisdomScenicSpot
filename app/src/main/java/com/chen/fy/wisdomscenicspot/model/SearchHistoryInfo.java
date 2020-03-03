@@ -1,14 +1,29 @@
-package com.chen.fy.wisdomscenicspot.beans;
+package com.chen.fy.wisdomscenicspot.model;
 
 import org.litepal.crud.LitePalSupport;
 
-public class JobSchedulingInfo extends LitePalSupport {
+public class SearchHistoryInfo extends LitePalSupport{
 
+    /**
+     * id表示
+     */
     private int id;
-    private String address;
-    private String date;
+    /**
+     * 搜索内容
+     */
     private String title;
+    /**
+     * 搜索时间
+     */
+    private long date;
+
+    /**
+     * 经度
+     */
     private double latitude;
+    /**
+     * 纬度
+     */
     private double longitude;
 
     public int getId() {
@@ -19,28 +34,20 @@ public class JobSchedulingInfo extends LitePalSupport {
         this.id = id;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public double getLatitude() {

@@ -2,22 +2,19 @@ package com.chen.fy.wisdomscenicspot.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.ViewPointAdapter;
-import com.chen.fy.wisdomscenicspot.beans.AreaWeatherInfo;
-import com.chen.fy.wisdomscenicspot.beans.ViewPointInfo;
+import com.chen.fy.wisdomscenicspot.model.AreaWeatherInfo;
+import com.chen.fy.wisdomscenicspot.model.ViewPointInfo;
 import com.chen.fy.wisdomscenicspot.comparators.WeatherComparator;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 

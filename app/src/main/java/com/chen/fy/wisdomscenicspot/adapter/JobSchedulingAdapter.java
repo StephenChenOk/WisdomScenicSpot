@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
+import com.chen.fy.wisdomscenicspot.model.JobSchedulingInfo;
 
 import java.util.ArrayList;
 

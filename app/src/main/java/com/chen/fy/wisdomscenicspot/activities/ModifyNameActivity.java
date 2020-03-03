@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.Visitor;
+import com.chen.fy.wisdomscenicspot.model.Visitor;
 import com.chen.fy.wisdomscenicspot.utils.LoginRegisterUtils;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 

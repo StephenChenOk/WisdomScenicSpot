@@ -92,10 +92,15 @@
         <activity
             android:name=".activities.ViewPointDetailActivity"
             android:theme="@style/MyTheme" />
+
+        <activity android:name=".activities.FeedBackMineActivity"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".activities.MapMineActivity"
+            android:theme="@style/MyTheme"/>
+        <activity android:name=".activities.ThankingMineActivity"
+            android:theme="@style/MyTheme"/>
+
         <service android:name=".services.BigDatesIntentServices"/>
-
-
-
 
         <meta-data
             android:name="com.amap.api.v2.apikey"

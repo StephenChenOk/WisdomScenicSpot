@@ -3,14 +3,13 @@ package com.chen.fy.wisdomscenicspot.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.Visitor;
+import com.chen.fy.wisdomscenicspot.model.Visitor;
 import com.chen.fy.wisdomscenicspot.utils.LoginRegisterUtils;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 

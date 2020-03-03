@@ -22,7 +22,7 @@ import com.chen.fy.wisdomscenicspot.R;
 import com.chen.fy.wisdomscenicspot.adapter.ItemClickListener;
 import com.chen.fy.wisdomscenicspot.adapter.SearchAdapter;
 import com.chen.fy.wisdomscenicspot.adapter.SearchHistoryAdapter;
-import com.chen.fy.wisdomscenicspot.beans.SearchHistoryInfo;
+import com.chen.fy.wisdomscenicspot.model.SearchHistoryInfo;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 
 import org.litepal.LitePal;

@@ -1,30 +1,20 @@
 package com.chen.fy.wisdomscenicspot.activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.LocationManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
-import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +38,6 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.maps.model.TileOverlayOptions;
-import com.amap.api.maps.utils.overlay.SmoothMoveMarker;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeAddress;
 import com.amap.api.services.geocoder.GeocodeQuery;
@@ -57,10 +46,8 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chen.fy.wisdomscenicspot.R;
-import com.chen.fy.wisdomscenicspot.beans.JobSchedulingInfo;
 import com.chen.fy.wisdomscenicspot.consts.Consts;
 import com.chen.fy.wisdomscenicspot.utils.AStarUtils;
-import com.chen.fy.wisdomscenicspot.utils.DateUtils;
 import com.chen.fy.wisdomscenicspot.utils.RoadPlanningUtils;
 import com.chen.fy.wisdomscenicspot.utils.UiUtils;
 import com.clj.fastble.BleManager;
@@ -202,7 +189,7 @@ public class MapActivity extends AppCompatActivity {
         /*
          * 地图上各种功能按钮
          */
-        ImageView iv_camera = findViewById(R.id.iv_camera);
+//        ImageView iv_camera = findViewById(R.id.iv_camera);
         ImageView iv_road_sign = findViewById(R.id.iv_road_sign);
         ImageView iv_feedback = findViewById(R.id.iv_feedback);
 
@@ -212,7 +199,7 @@ public class MapActivity extends AppCompatActivity {
         iv_road_sign_logo.setOnClickListener(myOnClickListener);
         tv_road_sign_go.setOnClickListener(myOnClickListener);
 
-        iv_camera.setOnClickListener(myOnClickListener);
+        // iv_camera.setOnClickListener(myOnClickListener);
         iv_road_sign.setOnClickListener(myOnClickListener);
         iv_feedback.setOnClickListener(myOnClickListener);
 
@@ -229,9 +216,8 @@ public class MapActivity extends AppCompatActivity {
      * 控件交互,手势交互
      */
     private void initUiSettings() {
-        /*
-      实现控件交互,手势交互等
-     */
+
+        //实现控件交互,手势交互等
         UiSettings mUiSettings = aMap.getUiSettings();
 
         //1 定位按钮
@@ -260,7 +246,6 @@ public class MapActivity extends AppCompatActivity {
             double latitude = getIntent().getDoubleExtra("Latitude", 25.266431);
             double longitude = getIntent().getDoubleExtra("Longitude", 110.295181);
             navigateTo(latitude, longitude);
-            Log.d("navigateTo", latitude+","+ longitude);
         }
         aMap.showIndoorMap(true);
     }
@@ -271,7 +256,6 @@ public class MapActivity extends AppCompatActivity {
     private void navigateTo(double latitude, double longitude) {
         nowLatitude = latitude;
         nowLongitude = longitude;
-        //aMap = mMapView.getMap();//得到aMap对象
         LatLng latLng = new LatLng(latitude, longitude);//构造一个位置
         aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 19));
     }
@@ -463,7 +447,7 @@ public class MapActivity extends AppCompatActivity {
                 end = "桂林抗战遗址";
                 break;
             default:
-                Toast.makeText(this,"输入错误...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "输入错误...", Toast.LENGTH_SHORT).show();
                 return;
         }
         if (polyline != null) {
@@ -897,10 +881,10 @@ public class MapActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.iv_camera:
-                    Intent intent1 = new Intent(MapActivity.this, ScenicIdentifyActivity.class);
-                    startActivity(intent1);
-                    break;
+                //   case R.id.iv_camera:
+//                    Intent intent1 = new Intent(MapActivity.this, ScenicIdentifyActivity.class);
+//                    startActivity(intent1);
+                //                 break;
                 case R.id.iv_road_sign:
                     setRoadLogo();
                     break;
@@ -927,7 +911,7 @@ public class MapActivity extends AppCompatActivity {
                 case R.id.indoor_position_box:   //景物推送
 //                    Intent indoorPositionIntent = new Intent(MapActivity.this, IndoorPositionActivity.class);
 //                    startActivity(indoorPositionIntent);
-                    Toast.makeText(MapActivity.this, "开启景物推送", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MapActivity.this, "开启景物推送", Toast.LENGTH_SHORT).show();
                     checkPermissions();
                     break;
                 case R.id.title_job_scheduling_dialog: //工作调度弹窗详细情况说明
@@ -1067,7 +1051,7 @@ public class MapActivity extends AppCompatActivity {
     private void startPushScenic(int RSSI, String scenery) {
         long currentTime = System.currentTimeMillis();
         Log.d("startPushScenic:", String.valueOf(RSSI));
-        if (RSSI > -54 && pushFlag && (currentTime - preTime) > 3 * 1000) {
+        if (RSSI > -65 && pushFlag && (currentTime - preTime) > 3 * 1000) {
             initXPopup(scenery);
             pushFlag = false;
             preTime = System.currentTimeMillis();

@@ -442,7 +442,6 @@ public class ScenicIdentifyActivity extends TakePhotoActivity {
 
         /**
          * 当后台任务执行完毕时调用
-         *
          * @param result 后台执行任务的返回值
          */
         @Override

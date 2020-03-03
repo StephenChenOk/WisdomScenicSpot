@@ -1,4 +1,4 @@
-package com.chen.fy.wisdomscenicspot.beans;
+package com.chen.fy.wisdomscenicspot.model;
 
 import org.litepal.crud.LitePalSupport;
 
