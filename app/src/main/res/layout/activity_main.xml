@@ -94,19 +94,19 @@
             android:background="@drawable/function_item_bg_selector"
             android:orientation="vertical">
 
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_camera"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:src="@drawable/photo3" />-->
+            <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:src="@drawable/photo3" />
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="拍照识别"-->
-<!--                android:textColor="#444"-->
-<!--                android:textSize="9sp" />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拍照识别"
+                android:textColor="#444"
+                android:textSize="9sp" />
 
             <View
                 android:layout_width="match_parent"

@@ -189,7 +189,7 @@ public class MapActivity extends AppCompatActivity {
         /*
          * 地图上各种功能按钮
          */
-//        ImageView iv_camera = findViewById(R.id.iv_camera);
+        ImageView iv_camera = findViewById(R.id.iv_camera);
         ImageView iv_road_sign = findViewById(R.id.iv_road_sign);
         ImageView iv_feedback = findViewById(R.id.iv_feedback);
 
@@ -199,7 +199,7 @@ public class MapActivity extends AppCompatActivity {
         iv_road_sign_logo.setOnClickListener(myOnClickListener);
         tv_road_sign_go.setOnClickListener(myOnClickListener);
 
-        // iv_camera.setOnClickListener(myOnClickListener);
+        iv_camera.setOnClickListener(myOnClickListener);
         iv_road_sign.setOnClickListener(myOnClickListener);
         iv_feedback.setOnClickListener(myOnClickListener);
 
@@ -881,10 +881,10 @@ public class MapActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                //   case R.id.iv_camera:
-//                    Intent intent1 = new Intent(MapActivity.this, ScenicIdentifyActivity.class);
-//                    startActivity(intent1);
-                //                 break;
+                case R.id.iv_camera:
+                    Intent intent1 = new Intent(MapActivity.this, ScenicIdentifyActivity.class);
+                    startActivity(intent1);
+                    break;
                 case R.id.iv_road_sign:
                     setRoadLogo();
                     break;
@@ -911,7 +911,7 @@ public class MapActivity extends AppCompatActivity {
                 case R.id.indoor_position_box:   //景物推送
 //                    Intent indoorPositionIntent = new Intent(MapActivity.this, IndoorPositionActivity.class);
 //                    startActivity(indoorPositionIntent);
-//                    Toast.makeText(MapActivity.this, "开启景物推送", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapActivity.this, "开启景物推送", Toast.LENGTH_SHORT).show();
                     checkPermissions();
                     break;
                 case R.id.title_job_scheduling_dialog: //工作调度弹窗详细情况说明
